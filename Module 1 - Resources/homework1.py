@@ -76,7 +76,18 @@ def concatenate(seqs):
 
 
 def transpose(matrix):
-    pass
+    result_list = []
+    # a single dimensional row list to temporarily hold the
+    # transposed column values
+    temp_list = []
+    for j in range(len(matrix[0])):
+        for i in range(len(matrix)):
+            temp_list.append(matrix[i][j])
+        result_list.append(temp_list)
+        temp_list = []
+    return result_list
+# print(transpose([[1,2,3]]))
+# print(transpose([[1,2],[3,4],[5,6]]))
 
 ############################################################
 # Section 3: Sequence Slicing
