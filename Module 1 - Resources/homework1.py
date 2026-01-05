@@ -95,15 +95,36 @@ def transpose(matrix):
 
 
 def copy(seq):
-    pass
+    # Using slicing to copy the entire sequence from index 0 to the end
+    # inclusively and return the copied sequence.
+    result = seq[0:]
+    return result
+# print(copy((1,2,3)))
+# print(copy("abc"))
+# x = [0,0,0]
+# y = copy(x)
+# print(x,y)
+# x[0] = 1
+# print(x,y)
 
 
 def all_but_last(seq):
-    pass
+    result = seq[0:len(seq)-1]
+    return result
+# print(all_but_last("abc"))
+# print(all_but_last((1,2,3)))
+# print(all_but_last(""))
+# print(all_but_last([]))
 
 
 def every_other(seq):
-    pass
+    result = seq[0:len(seq):2]
+    return result
+# print(every_other([1,2,3,4,5]))
+# print(every_other("abcde"))
+# print(every_other([]))
+# print(every_other([1,2,3,4,5,6]))
+# print(every_other("abcdef"))
 
 ############################################################
 # Section 4: Combinatorial Algorithms
