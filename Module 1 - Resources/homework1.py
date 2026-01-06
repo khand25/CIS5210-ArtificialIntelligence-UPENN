@@ -178,15 +178,66 @@ def slices(seq):
 
 
 def normalize(text):
-    pass
+    # Convert the input String to lowercase format
+    temp_string = text.lower()
+    # Now remove leading and trailing whitespace
+    temp_string2 = temp_string.strip()
+    # Create a list of string words here by splitting the temp_string2
+    # by any spaces as an element in the list
+    temp_list = temp_string2.split()
+    # Rejoin the list of words into a single string value where each previous
+    # list element is separated by a single space character.
+    result_string = " ".join(temp_list)
+    return result_string
+# print(normalize("This is an example."))
+# print(normalize("  Extra  SPACE     "))
+# print(normalize("This is\nan\texample."))
+# print(normalize(" hellO,    WoRLD!"))
 
 
 def no_vowels(text):
-    pass
+    # Vowels: 'a', 'e', 'i', 'o', 'u' (both uppercase and lowercase)
+    result = text.replace("a", "")
+    result = result.replace("e", "")
+    result = result.replace("i", "")
+    result = result.replace("o", "")
+    result = result.replace("u", "")
+    result = result.replace("A", "")
+    result = result.replace("E", "")
+    result = result.replace("I", "")
+    result = result.replace("O", "")
+    result = result.replace("U", "")
+    return result
+# print(no_vowels("This Is An Example."))
+# print(no_vowels("HELLO world!"))
+# print(no_vowels("We love Python!"))
+# print(no_vowels(""))
 
 
 def digits_to_words(text):
-    pass
+    # dictionary to map digits characters in input text to their
+    # corresponding English word representation
+    dictionary_digit_map = {'0': 'zero', '1': 'one', '2': 'two', '3': 'three',
+                            '4': 'four', '5': 'five', '6': 'six', '7': 'seven',
+                            '8': 'eight', '9': 'nine'}
+    # Initialize an empty result string to later return
+    result_string = ""
+    # Loop thorugh each character in the input text
+    for character in text:
+        # On each iteration check if the current character
+        # is a digit found as a key from the dictionary,
+        # if so grab the value of the key and
+        # concatenate it to the result string with an space character.
+        if character in dictionary_digit_map.keys():
+            result_string = result_string + dictionary_digit_map[character]
+            result_string = result_string + " "
+    # Remove trailing spaces
+    result_string = result_string.strip()
+    return result_string
+# print(digits_to_words("Zip Code: 19104"))
+# print(digits_to_words("Pi is 3.14156..."))
+# print(digits_to_words("Yello!"))
+# print(digits_to_words(""))
 
 
 def to_mixed_case(name):
