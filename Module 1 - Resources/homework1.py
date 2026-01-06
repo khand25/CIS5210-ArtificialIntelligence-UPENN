@@ -241,8 +241,51 @@ def digits_to_words(text):
 
 
 def to_mixed_case(name):
-    pass
+    # Handle the edge case where the input parameter only consists
+    # of underscores
+    all_underscores = True
+    for element in name:
+        if element != '_':
+            all_underscores = False
+    if all_underscores:
+        return ""
+    if '_' not in name:
+        return name
+    # Remove all leading and trailing underscores first
+    name = name.strip('_')
+    # Split the input string by underscores to get a list of words
+    # where each element is a word
+    # list_words = name.split('_')
+    # Used to store the final result string
+    result = ""
+    # Boolean varaible used to decide when to capitalize the next letter
+    capitalize_next_letter = False
+    # iterate through the string name iterable and on each character
+    # check if it is an underscore, if so then set the boolean variable
+    # to True to capitlize the next character afterwards
+    # Otherwise skip to next iteration of a character that is not an underscore
+    for character in name:
+        if character == '_':
+            capitalize_next_letter = True
+        else:
+            if result == "":
+                # Identify that we are at the first character
+                # of the result string and must
+                # make it lowercase
+                result = result + character.lower()
+            elif capitalize_next_letter:
+                result = result + character.upper()
+                capitalize_next_letter = False
+            else:
+                result = result + character.lower()
+    return result
 
+
+# print(to_mixed_case("to_mixed_case"))
+# print(to_mixed_case("__EXAMPLE__NAME__"))
+# print(to_mixed_case("alreadyMixedCase"))
+# print(to_mixed_case("___"))
+# print(to_mixed_case(""))
 ############################################################
 # Section 6: Polynomials
 ############################################################
@@ -251,13 +294,41 @@ def to_mixed_case(name):
 class Polynomial(object):
 
     def __init__(self, polynomial):
-        pass
+        # Constructor method to initialize
+        # the calling object as a polynomial object
+        # with its polynomial instance variable
+        # being assigned to the input parameter polynomial.
+        # Which is assumed to be a list of tuples coordinate pairs
+        # Convert the list of tuples for the calling
+        # object's polynomial instance variable value
+        # to a tuple of tuples (using tuple init function) and return it
+        self.polynomial = tuple(polynomial)
 
     def get_polynomial(self):
-        pass
+        # Getter method to return the calling object's polynomial
+        # instance variable value
+        return self.polynomial
 
     def __neg__(self):
-        pass
+        # Grab the calling object's polynomial instance variable
+        # memory address using the getter method
+        poly = self.get_polynomial()
+        # Create a new result list to hold the negated coefficient
+        result = []
+        # Remember that a poly is a refrence to a tuple of tuples
+        # 2d tuple structure
+        # iterate through each element in the outer tuple (rows)
+        # and on each iteration grab the coefficient and power values
+        # from the inner tuple (columns) and append a new tuple
+        # with the negated coefficient and original power value
+        # to the result list. Finally return a new Polynomial object
+        # initialized with the result list 
+        # converted to a tuple of tuples
+        for i in range(len(poly)):
+            coef, power = poly[i]
+            result.append((-coef, power))
+        return Polynomial(tuple(result))
+        
 
     def __add__(self, other):
         pass
@@ -276,7 +347,14 @@ class Polynomial(object):
 
     def __str__(self):
         pass
-
+p = Polynomial([(2,1), (1,0)])
+print(p.get_polynomial())
+q = -(-p )
+print(q.get_polynomial())
+q = Polynomial([])
+print(q.get_polynomial())
+q = -q
+print(q.get_polynomial())
 ############################################################
 # Section 7: Python Packages
 ############################################################
