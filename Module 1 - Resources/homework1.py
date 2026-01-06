@@ -132,15 +132,45 @@ def every_other(seq):
 
 
 def prefixes(seq):
-    pass
+    # Input parameter is some sort of iterable sequence (like a list)
+    # Loop through the sequence
+    # of the i values indicies
+    # being 0 to the length
+    # of the sequence (inclusively)
+    # and on each iteration yield the slice of the
+    # sequence from index 0 to index i (not inclusively).
+    # When we use the 'yeild' keyword,
+    # we will essentially
+    # pause the for loop and greater prefixes function, return
+    # the sliced iterable outside of this prefixes
+    # functions (as an iterable sequence) and then resume the for loop
+    # inside the function again to continue doing
+    # this same process until the for loop is done.
+    for i in range(0, len(seq) + 1, 1):
+        yield seq[0:i]
+# print(list(prefixes([1,2,3])))
+# print(list(prefixes("abc")))
+# print(list(prefixes([])))
+# print(list(prefixes([1,2])))
 
 
 def suffixes(seq):
-    pass
+    for i in range(0, len(seq)+1, 1):
+        yield seq[i:len(seq)]
+# print(list(suffixes([1,2,3])))
+# print(list(suffixes("abc")))
+# print(list(suffixes([])))
+# print(list(suffixes([1,2])))
 
 
 def slices(seq):
-    pass
+    for i in range(0, len(seq), 1):
+        for j in range(i+1, len(seq)+1, 1):
+            yield seq[i:j]
+# print(list(slices([1,2,3])))
+# print(list(slices("abc")))
+# print(list(slices([])))
+# print(list(slices([1,2])))
 
 ############################################################
 # Section 5: Text Processing
