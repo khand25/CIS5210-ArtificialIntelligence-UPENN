@@ -60,18 +60,18 @@ based on the total length of all the strings being joined."""
 
 def extract_and_apply(lst, p, f):
     return [f(x) for x in lst if p(x)]
+# this nested list comprehension will iterate thorugh a
+# list argument and each
+# element in the list arugment will be assigned to element1 using a for
+# each loop. There is a possibility that element1
+# could be another iterable
+# so we will iterate through element1
+# and assign each element to element2 in another
+# nested for each loop. We will finally append each element2 to a new list
+# and return that new list.
 
 
 def concatenate(seqs):
-    # this nested list comprehension will iterate thorugh a
-    # list argument and each
-    # element in the list arugment will be assigned to element1 using a for
-    # each loop. There is a possibility that element1
-    # could be another iterable
-    # so we will iterate through element1
-    # and assign each element to element2 in another
-    # nested for each loop. We will finally append each element2 to a new list
-    # and return that new list.
     return [element2 for element1 in seqs for element2 in element1]
 
 
@@ -80,6 +80,12 @@ def transpose(matrix):
     # a single dimensional row list to temporarily hold the
     # transposed column values
     temp_list = []
+    # Iterate through each column
+    # Then nested iterate through each row
+    # Within the body of the nested loop
+    # append the current element to the temp_list
+    # And later append the 1d list to the 2d list as
+    # a new value
     for j in range(len(matrix[0])):
         for i in range(len(matrix)):
             temp_list.append(matrix[i][j])
@@ -155,6 +161,20 @@ def prefixes(seq):
 
 
 def suffixes(seq):
+    # Input parameter is some sort of iterable sequence (like a list)
+    # Loop through the sequence
+    # of the i values indicies
+    # being 0 to the length
+    # of the sequence (inclusively)
+    # and on each iteration yield the slice of the
+    # sequence from index 0 to index i (not inclusively).
+    # When we use the 'yield' keyword,
+    # we will essentially
+    # pause the for loop and greater suffixes function, return
+    # the sliced iterable outside of this prefixes
+    # functions (as an iterable sequence) and then resume the for loop
+    # inside the function again to continue doing
+    # this same process until the for loop is done.
     for i in range(0, len(seq)+1, 1):
         yield seq[i:len(seq)]
 # print(list(suffixes([1,2,3])))
@@ -197,6 +217,8 @@ def normalize(text):
 
 def no_vowels(text):
     # Vowels: 'a', 'e', 'i', 'o', 'u' (both uppercase and lowercase)
+    # Use set of replace functions to remove all vowels from the input
+    # text
     result = text.replace("a", "")
     result = result.replace("e", "")
     result = result.replace("i", "")
@@ -322,22 +344,71 @@ class Polynomial(object):
         # from the inner tuple (columns) and append a new tuple
         # with the negated coefficient and original power value
         # to the result list. Finally return a new Polynomial object
-        # initialized with the result list 
+        # initialized with the result list
         # converted to a tuple of tuples
         for i in range(len(poly)):
             coef, power = poly[i]
             result.append((-coef, power))
         return Polynomial(tuple(result))
-        
 
     def __add__(self, other):
-        pass
+        # Grab the calling object's polynomial instance variable
+        # for both the current calling object and the other object
+        poly1 = self.get_polynomial()
+        poly2 = other.get_polynomial()
+        result = []
+        for element in poly1:
+            result.append(element)
+        # result.append(poly1)
+        for element in poly2:
+            result.append(element)
+        # result.append(poly2)
+
+        # Convert list of tuples to a tuples of tuples
+        # And return a new Polynomial object initialized with that
+        return Polynomial(tuple(result))
 
     def __sub__(self, other):
-        pass
+        # Grab the calling object's polynomial instance variable
+        # for both the current calling object and the other object
+        poly1 = self.get_polynomial()
+        poly2 = other.get_polynomial()
+        result = []
+        # Append the tuples from poly1 to the result list as is
+        for element in poly1:
+            result.append(element)
+        # Loop through the tuples in poly2 and assing a new tuple pair
+        # to the current tuple element where the first value is negated
+        # and second value is the same.
+        for element in poly2:
+            element = (-element[0], element[1])
+            result.append(element)
+        # Convert list of tuples to a tuples of tuples
+        # And return a new Polynomial object initialized with that
+        return Polynomial(tuple(result))
 
     def __mul__(self, other):
-        pass
+        # Grab the calling object's polynomial instance variable
+        # for both the current calling object and the other object
+        # which is a tuples of tuples
+        poly1 = self.get_polynomial()
+        poly2 = other.get_polynomial()
+        result = []
+        # Loop through each tuple element in poly1
+        # Grab the coefficient and power values coordinate pairs
+        for i in range(len(poly1)):
+            coeffecient1 = poly1[i][0]
+            power1 = poly1[i][1]
+            # In the inner looop, loop through each tuple element in poly2
+            # Grab the coefficient and power values coordinate pairs
+            # Use distributive multiplication to multiply the two polynomials
+            for j in range(len(poly2)):
+                coeffecient2 = poly2[j][0]
+                power2 = poly2[j][1]
+                new_coeffecient = coeffecient1 * coeffecient2
+                new_power = power1 + power2
+                result.append((new_coeffecient, new_power))
+        return Polynomial(tuple(result))
 
     def __call__(self, x):
         pass
@@ -347,14 +418,39 @@ class Polynomial(object):
 
     def __str__(self):
         pass
-p = Polynomial([(2,1), (1,0)])
-print(p.get_polynomial())
-q = -(-p )
+# p = Polynomial([(2,1), (1,0)])
+# print(p.get_polynomial())
+# q = -(-p )
+# print(q.get_polynomial())
+# q = Polynomial([])
+# print(q.get_polynomial())
+# q = -q
+# print(q.get_polynomial())
+# p = Polynomial([(2,1), (1,0)])
+# q = p + p
+# print(q.get_polynomial())
+# q = Polynomial([(4,3), (3,2)])
+# r = p + q
+# print(r.get_polynomial())
+
+
+p = Polynomial([(2,1),(1,0)])
+q = p - p
 print(q.get_polynomial())
-q = Polynomial([])
+p = Polynomial([(2,1),(1,0)])
+q = Polynomial([(4,3),(3,2)])
+r = p - q
+print(r.get_polynomial())
+
+p = Polynomial([(2,1),(1,0)])
+q = p * p
 print(q.get_polynomial())
-q = -q
-print(q.get_polynomial())
+
+p = Polynomial([(2,1),(1,0)])
+q = Polynomial([(4,3),(3,2)])
+r = p * q
+print(r.get_polynomial())
+
 ############################################################
 # Section 7: Python Packages
 ############################################################
