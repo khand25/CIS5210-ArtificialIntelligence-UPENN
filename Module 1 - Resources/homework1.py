@@ -411,10 +411,52 @@ class Polynomial(object):
         return Polynomial(tuple(result))
 
     def __call__(self, x):
-        pass
+        result = 0
+        for element in self.get_polynomial():
+            cf, pw = element  # use python tuple unpacking
+            result = result + (cf * (x ** pw))
+        return result
 
     def simplify(self):
-        pass
+        # empty dictionary to hold the combined like terms in the form
+        # of power: coeffecient key value pairs
+        poly_terms = {}
+        # iterate through the tuples in the calling object's
+        # polynomial instance variable
+        for element in self.get_polynomial():
+            coefficent = element[0]
+            power = element[1]
+            current_coefficent = poly_terms.get(power)
+            # if we don't have a specifc term for the power we seek
+            # then use 0 + the coefficent grabbed from the tuple
+            # otherwise add the current coefficent value
+            # to the new coefficent value from the tuple as a new
+            # key value pair in the dictionary
+            if current_coefficent is None:
+                poly_terms[power] = 0 + coefficent
+            else:
+                poly_terms[power] = current_coefficent + coefficent
+        # Now create a result list to hold the combined like terms
+        result = []
+        for power in poly_terms:
+            coefficent = poly_terms[power]
+            # Only append non zero coefficent terms to the result list
+            # as per the
+            # assignment instructions
+            if coefficent != 0:
+                result.append((coefficent, power))
+        # check if result list is empty after simplification
+        if len(result) == 0:
+            self.polynomial = ((0, 0), )
+        else:
+            # We have to sort the result list in descending order
+            # by greatest power value first
+            # use the list sort function
+            # use the index 1 of each tuple element
+            # as the key to sort by in reverse order
+            result.sort(key=lambda element: element[1], reverse=True)
+            # Reconvert the result list to a tuple of tuples
+            self.polynomial = tuple(result)
 
     def __str__(self):
         pass
@@ -451,6 +493,25 @@ q = Polynomial([(4,3),(3,2)])
 r = p * q
 print(r.get_polynomial())
 
+p = Polynomial([(2,1), (1,0)])
+print([p(x) for x in range(5)])
+q = -(p*p) + p
+print([q(x) for x in range(5)])
+
+p = Polynomial([(2,1), (1,0)])
+q = -p + (p * p)
+print(q.get_polynomial())
+q.simplify()
+print(q.get_polynomial())
+
+p = Polynomial([(2,1), (1,0)])
+q = p - p
+print(q.get_polynomial())
+q.simplify()
+print(q.get_polynomial())
+q = Polynomial([(0,0)])
+q.simplify()
+print(q.get_polynomial())
 ############################################################
 # Section 7: Python Packages
 ############################################################
