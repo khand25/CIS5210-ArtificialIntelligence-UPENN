@@ -618,12 +618,12 @@ matrix2 = np.array([[5,6,7], [7,8,9], [0,-1,-2]])
 print(sort_array([matrix1, matrix2]))
 
 
-#nltk.download('all')
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('averaged_perceptron_tagger_eng')
-nltk.download('stopwords')
-nltk.download('punkt_tab')
+# nltk.download()
+# nltk.download('punkt')
+# nltk.download('averaged_perceptron_tagger')
+# nltk.download('averaged_perceptron_tagger_eng')
+# nltk.download('stopwords')
+# nltk.download('punkt_tab')
 def POS_tag(sentence):
     sentence = sentence.lower()
     tokens = nltk.word_tokenize(sentence)
