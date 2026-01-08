@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 import nltk
 
 ############################################################
@@ -459,7 +459,62 @@ class Polynomial(object):
             self.polynomial = tuple(result)
 
     def __str__(self):
-        pass
+        poly = self.get_polynomial()
+
+        # Handle the edge case where the polynomial is empty
+        if len(poly) == 0:
+            return ""
+        if len(poly) == 1 and poly[0][0] == 0:
+            return "0"
+
+        result_string = ""
+        # handle first term separately to avoid leading + or - signs
+        element = poly[0]
+        coeffecient = element[0]
+        power = element[1]
+        # Handle first negative term
+        if coeffecient < 0:
+            result_string = result_string + "-"
+        # Take the absolute value of the coeffecient for printing
+        # as sign is already accounted for in the result string
+        # if abs(coeffecient) != 1:
+            # result_string += str(abs(coeffecient))
+        if power == 0:
+            result_string += str(abs(coeffecient))
+        else:
+            if abs(coeffecient) != 1:
+                result_string += str(abs(coeffecient))
+            result_string += "x"
+            if power != 1:
+                result_string += "^" + str(power)
+        result_string += " "
+        # Now handle the rest of the terms after the first term
+        for i in range(1, len(poly)):
+            element = poly[i]
+            coeffecient = element[0]
+            power = element[1]
+            if coeffecient < 0:
+                result_string += "- "
+            else:
+                result_string += "+ "
+
+            if power == 0:
+                result_string += str(abs(coeffecient))
+            else:
+                if abs(coeffecient) != 1:
+                    result_string += str(abs(coeffecient))
+                result_string += "x"
+                if power != 1:
+                    result_string += "^" + str(power)
+            # result_string += str(abs(coeffecient))
+            # if power != 0:
+                # result_string += "x"
+                # if power != 1:
+                    # result_string += "^" + str(power)
+            result_string += " "
+        result_string = result_string.strip()
+        return result_string
+
 # p = Polynomial([(2,1), (1,0)])
 # print(p.get_polynomial())
 # q = -(-p )
@@ -512,17 +567,66 @@ print(q.get_polynomial())
 q = Polynomial([(0,0)])
 q.simplify()
 print(q.get_polynomial())
+
+p = Polynomial([(1,1), (1,0)])
+qs = (p,p + p, -p, -p - p, p * p)
+for q in qs:
+    q.simplify()
+    print(str(q))
+
+p = Polynomial([(0,1), (2,3)])
+print(str(p))
+print(str( p * p))
+print(str(-p * p))
+
+q = Polynomial([(1,1), (2,3)])
+print(str(q))
+print(str(q * q))
+print(str(-q * q))
 ############################################################
 # Section 7: Python Packages
 ############################################################
 
 
 def sort_array(list_of_matrices):
-    pass
+    # Create an empty 1d numpy array to hold all the flattened
+    # matrices concatenated together
+    list_of_flattened_matrices = np.array([], dtype=int)
+    # for i in range(len(list_of_matrices)):
+        # for j in range(len(list_of_matrices[i])):
+            # for k in range(len(list_of_matrices[i][j])):
+               #  result.append(list_of_matrices[i][j][k])
+    # result.sort(reverse=True)
+    # return result
+    for matrix in list_of_matrices:
+        # returns a flattened 1d numpy array where all the 
+        # rows previosuly are now side by side each other
+        # Used numpy's flatten function
+        flattened_matrix = matrix.flatten()
+        # use the numpy concatenate function to concatenate
+        # the current flattened matrix to the list of flattened matrices
+        # and force the data type to be int as per the assignment instructions
+        list_of_flattened_matrices = np.concatenate(
+            (list_of_flattened_matrices, flattened_matrix)).astype(int)
+    # Now sort the final 1d numpy array in descending order
+    # using numpys sort function and return that sorted array
+    sorted_array = np.sort(list_of_flattened_matrices)[::-1]
+    return sorted_array
+# Test cases:
+matrix1 = np.array([[1,2], [3,4]])
+matrix2 = np.array([[5,6,7], [7,8,9], [0,-1,-2]])
+print(sort_array([matrix1, matrix2]))
 
 
+#nltk.download('all')
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('averaged_perceptron_tagger_eng')
+nltk.download('stopwords')
+nltk.download('punkt_tab')
 def POS_tag(sentence):
-    pass
+    sentence = sentence.lower()
+    tokens = nltk.word_tokenize(sentence)
 
 ############################################################
 # Section 8: Feedback
