@@ -1,5 +1,6 @@
 import numpy as np
 import nltk
+from string import punctuation
 
 ############################################################
 # CIS 521: Homework 1
@@ -531,58 +532,58 @@ class Polynomial(object):
 # print(r.get_polynomial())
 
 
-p = Polynomial([(2,1),(1,0)])
-q = p - p
-print(q.get_polynomial())
-p = Polynomial([(2,1),(1,0)])
-q = Polynomial([(4,3),(3,2)])
-r = p - q
-print(r.get_polynomial())
+# p = Polynomial([(2,1),(1,0)])
+# q = p - p
+# print(q.get_polynomial())
+# p = Polynomial([(2,1),(1,0)])
+# q = Polynomial([(4,3),(3,2)])
+# r = p - q
+# print(r.get_polynomial())
 
-p = Polynomial([(2,1),(1,0)])
-q = p * p
-print(q.get_polynomial())
+# p = Polynomial([(2,1),(1,0)])
+# q = p * p
+# print(q.get_polynomial())
 
-p = Polynomial([(2,1),(1,0)])
-q = Polynomial([(4,3),(3,2)])
-r = p * q
-print(r.get_polynomial())
+# p = Polynomial([(2,1),(1,0)])
+# q = Polynomial([(4,3),(3,2)])
+# r = p * q
+# print(r.get_polynomial())
 
-p = Polynomial([(2,1), (1,0)])
-print([p(x) for x in range(5)])
-q = -(p*p) + p
-print([q(x) for x in range(5)])
+# p = Polynomial([(2,1), (1,0)])
+# print([p(x) for x in range(5)])
+# q = -(p*p) + p
+# print([q(x) for x in range(5)])
 
-p = Polynomial([(2,1), (1,0)])
-q = -p + (p * p)
-print(q.get_polynomial())
-q.simplify()
-print(q.get_polynomial())
+# p = Polynomial([(2,1), (1,0)])
+# q = -p + (p * p)
+# print(q.get_polynomial())
+# q.simplify()
+# print(q.get_polynomial())
 
-p = Polynomial([(2,1), (1,0)])
-q = p - p
-print(q.get_polynomial())
-q.simplify()
-print(q.get_polynomial())
-q = Polynomial([(0,0)])
-q.simplify()
-print(q.get_polynomial())
+# p = Polynomial([(2,1), (1,0)])
+# q = p - p
+# print(q.get_polynomial())
+# q.simplify()
+# print(q.get_polynomial())
+# q = Polynomial([(0,0)])
+# q.simplify()
+# print(q.get_polynomial())
 
-p = Polynomial([(1,1), (1,0)])
-qs = (p,p + p, -p, -p - p, p * p)
-for q in qs:
-    q.simplify()
-    print(str(q))
+# p = Polynomial([(1,1), (1,0)])
+# qs = (p,p + p, -p, -p - p, p * p)
+# for q in qs:
+# q.simplify()
+# print(str(q))
 
-p = Polynomial([(0,1), (2,3)])
-print(str(p))
-print(str( p * p))
-print(str(-p * p))
+# p = Polynomial([(0,1), (2,3)])
+# print(str(p))
+# print(str( p * p))
+# print(str(-p * p))
 
-q = Polynomial([(1,1), (2,3)])
-print(str(q))
-print(str(q * q))
-print(str(-q * q))
+# q = Polynomial([(1,1), (2,3)])
+# print(str(q))
+# print(str(q * q))
+# print(str(-q * q))
 ############################################################
 # Section 7: Python Packages
 ############################################################
@@ -593,13 +594,13 @@ def sort_array(list_of_matrices):
     # matrices concatenated together
     list_of_flattened_matrices = np.array([], dtype=int)
     # for i in range(len(list_of_matrices)):
-        # for j in range(len(list_of_matrices[i])):
-            # for k in range(len(list_of_matrices[i][j])):
-               #  result.append(list_of_matrices[i][j][k])
+    # for j in range(len(list_of_matrices[i])):
+    # for k in range(len(list_of_matrices[i][j])):
+    #  result.append(list_of_matrices[i][j][k])
     # result.sort(reverse=True)
     # return result
     for matrix in list_of_matrices:
-        # returns a flattened 1d numpy array where all the 
+        # returns a flattened 1d numpy array where all the
         # rows previosuly are now side by side each other
         # Used numpy's flatten function
         flattened_matrix = matrix.flatten()
@@ -613,9 +614,11 @@ def sort_array(list_of_matrices):
     sorted_array = np.sort(list_of_flattened_matrices)[::-1]
     return sorted_array
 # Test cases:
-matrix1 = np.array([[1,2], [3,4]])
-matrix2 = np.array([[5,6,7], [7,8,9], [0,-1,-2]])
-print(sort_array([matrix1, matrix2]))
+
+
+# matrix1 = np.array([[1,2], [3,4]])
+# matrix2 = np.array([[5,6,7], [7,8,9], [0,-1,-2]])
+# print(sort_array([matrix1, matrix2]))
 
 
 # nltk.download()
@@ -625,8 +628,19 @@ print(sort_array([matrix1, matrix2]))
 # nltk.download('stopwords')
 # nltk.download('punkt_tab')
 def POS_tag(sentence):
+    # Convert the input sentence to lowercase
     sentence = sentence.lower()
+    # Tokenize input senetence into words
     tokens = nltk.word_tokenize(sentence)
+    stop_words = set(nltk.corpus.stopwords.words('english'))
+
+    filtered_tokens = []
+    for word in tokens:
+        if word not in stop_words and word not in punctuation:
+            filtered_tokens.append(word)
+    # Use nltk pos_tag function to tag the filtered tokens
+    pos_tagged_tokens = nltk.pos_tag(filtered_tokens)
+    return pos_tagged_tokens
 
 ############################################################
 # Section 8: Feedback
@@ -635,19 +649,23 @@ def POS_tag(sentence):
 
 # Just an approximation is fine.
 feedback_question_1 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I spent approximately 13 hours on this homework.
 """
 
 feedback_question_2 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+Working on the Polynomial class was the most challenging part.
+This is because,
+it had the most parts and required implementing
+the several methods from the class
+according to the assignment instructions. This was actaully my first time
+working with classes in Python, so I had to do a lot of research. Specifically,
+implementing the __str__ method to return a string representation and
+__simplify__ method to combine like terms was tricky.
 """
 
 feedback_question_3 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I liked working on the list comprehensions and improving my skills with them.
+I also liked the section on Text Processing as I can most
+definitely see myself using those functions in future situations
+to clean up text data when needed.
 """
