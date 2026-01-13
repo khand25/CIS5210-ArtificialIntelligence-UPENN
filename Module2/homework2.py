@@ -7,10 +7,11 @@
 ############################################################
 
 # Include your imports here, if any are used.
+import math
 
 ############################################################
 
-student_name = "Type your full name here."
+student_name = "Danyal Razaa Khan"
 
 ############################################################
 # Section 1: N-Queens
@@ -18,11 +19,31 @@ student_name = "Type your full name here."
 
 
 def num_placements_all(n):
-    pass
+    # Return the number of ways to place n queens on an n x n chessboard
+    # We can find this result by using the statistics formula for combinations
+    # C = n! / (k! * (n-k)!)
+    # where n is the total number of chess squares
+    # (n*n) and k is the number of queens
+    # updating the formula gives us:
+    # C = (n)^2! / (n! * (n^2 - n)!)
+    # where now n is k and n
+    total_num_placements = math.factorial(n * n)
+    temp_denominator = math.factorial((n * n) - n)
+    total_denominator = math.factorial(n) * temp_denominator
+    total_num_placements = total_num_placements // total_denominator
+    return total_num_placements
 
 
 def num_placements_one_per_row(n):
-    pass
+    # Trying to count the number of boards with n queens
+    # such that there is exactly one queen in each row.
+    # Because there is one queen in each row,
+    # And n number of rows
+    # And n number of columns tiles
+    # The first row has n options for placing a queen
+    # so the value would be n^n
+    num_placements_per_row = n ** n
+    return num_placements_per_row
 
 
 def n_queens_valid(board):
