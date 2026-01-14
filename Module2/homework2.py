@@ -158,10 +158,23 @@ def n_queens_helper(n, board):
 class LightsOutPuzzle(object):
 
     def __init__(self, board):
-        pass
+        result_list = []
+        for row in board:
+            temp = []
+            for element in row:
+                temp.append(element)
+            result_list.append(temp)
+        self.board = result_list
 
     def get_board(self):
-        pass
+        # return self.board
+        result_list = []
+        for row in self.board:
+            temp = []
+            for element in row:
+                temp.append(element)
+            result_list.append(temp)
+        return result_list
 
     def perform_move(self, row, col):
         pass
@@ -180,6 +193,15 @@ class LightsOutPuzzle(object):
 
     def find_solution(self):
         pass
+
+
+b = [[True, False], [False, True]]
+p = LightsOutPuzzle(b)
+print(p.get_board())
+
+b = [[True, True], [True, True]]
+p = LightsOutPuzzle(b)
+print(p.get_board())
 
 
 def create_puzzle(rows, cols):
