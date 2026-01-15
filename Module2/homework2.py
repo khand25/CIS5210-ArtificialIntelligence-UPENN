@@ -158,7 +158,15 @@ def n_queens_helper(n, board):
 class LightsOutPuzzle(object):
 
     def __init__(self, board):
+        # Create an empty 1d list used to store the
+        # 2d board
         result_list = []
+        # iterate through board and for each row
+        # create a temp 1d list, iterate through the current
+        # row (1d list), and for each element, append it to the
+        # temp list to which we later append the temp list
+        # to the result_list
+        # Essentially we are creating a deep copy of the board
         for row in board:
             temp = []
             for element in row:
@@ -168,7 +176,15 @@ class LightsOutPuzzle(object):
 
     def get_board(self):
         # return self.board
+        # Create an empty 1d list used to store the
+        # 2d board
         result_list = []
+        # iterate through board and for each row
+        # create a temp 1d list, iterate through the current
+        # row (1d list), and for each element, append it to the
+        # temp list to which we later append the temp list
+        # to the result_list
+        # Essentially we are creating a deep copy of the board
         for row in self.board:
             temp = []
             for element in row:
@@ -177,13 +193,33 @@ class LightsOutPuzzle(object):
         return result_list
 
     def perform_move(self, row, col):
-        pass
+        # Toggled the light on for
+        # the current posistion
+        self.board[row][col] = not self.board[row][col]
+        # Toggle light to opposite value for left neigbor
+        # based on what light was switched on or off for the
+        # given value
+        if col - 1 >= 0:
+            self.board[row][col - 1] = not self.board[row][col - 1]
+        if col + 1 < len(self.board[0]):
+            self.board[row][col + 1] = not self.board[row][col + 1]
+        if row - 1 >= 0:
+            self.board[row - 1][col] = not self.board[row - 1][col]
+        if row + 1 < len(self.board):
+            self.board[row + 1][col] = not self.board[row + 1][col]
 
     def scramble(self):
-        pass
+        for i in range(0, len(self.board), 1):
+            for j in range(0, len(self.board[i]), 1):
+                if random.random() < 0.5:
+                    self.perform_move(i, j)
 
     def is_solved(self):
-        pass
+        for i in range(0, len(self.board), 1):
+            for j in range(0, len(self.board[i]), 1):
+                if self.board[i][j] is True:
+                    return False
+        return True
 
     def copy(self):
         pass
@@ -205,12 +241,40 @@ print(p.get_board())
 
 
 def create_puzzle(rows, cols):
-    pass
+    result_list = []
+    for i in range(0, rows, 1):
+        temp = []
+        for j in range(0, cols, 1):
+            temp.append(False)
+        result_list.append(temp)
+    return LightsOutPuzzle(result_list)
+
+
+p = create_puzzle(2, 2)
+print(p.get_board())
+p = create_puzzle(2, 3)
+print(p.get_board())
+     
+p = create_puzzle(3, 3)
+p.perform_move(1, 1)
+print(p.get_board())
+
+p = create_puzzle(3, 3)
+p.perform_move(0, 0)
+print(p.get_board())
+
+# Test case for is_solved function
+b = [[True, False], [False, True]]
+p = LightsOutPuzzle(b)
+print(p.is_solved())
+
+b = [[False, False], [False, False]]
+p = LightsOutPuzzle(b)
+print(p.is_solved())
 
 ############################################################
 # Section 3: Linear Disk Movement
 ############################################################
-
 
 def solve_identical_disks(length, n):
     pass
