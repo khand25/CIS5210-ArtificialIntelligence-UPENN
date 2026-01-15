@@ -222,10 +222,43 @@ class LightsOutPuzzle(object):
         return True
 
     def copy(self):
-        pass
+        result_board = []
+        # iterate through current board
+        # and manually copy over all
+        # elements into result_board
+        for i in range(0, len(self.board), 1):
+            temp = []
+            for j in range (0, len(self.board[i]), 1):
+                temp.append(self.board[i][j])
+            result_board.append(temp)
+        return LightsOutPuzzle(result_board)
 
     def successors(self):
-        pass
+        # create a result list used to store
+        # the corrdinate puzzle pairs
+        result_list = []
+        # Iterate through the current
+        # board 
+        for i in range(0, len(self.board), 1):
+            for j in range(0, len(self.board[i]), 1):
+                # call our previous deep copy function
+                # to create a new puzzle object in memory
+                # contining exact same board as the current
+                # instance variable
+                updated_puzzle = self.copy()
+                # Call the move function from above
+                # to generate the sucessor puzzle
+                # on the same puzzle object
+                updated_puzzle.perform_move(i,j)
+                row_col = (i,j)
+                # generate coordinate puzzle pair
+                new_element = (row_col,updated_puzzle)
+                # append value to the result list as
+                # a pair of coordinate puzzle
+                result_list.append(new_element)
+        return result_list
+            
+
 
     def find_solution(self):
         pass
@@ -271,6 +304,20 @@ print(p.is_solved())
 b = [[False, False], [False, False]]
 p = LightsOutPuzzle(b)
 print(p.is_solved())
+
+# Test case for copy function
+p = create_puzzle(3, 3)
+p2 = p.copy()
+print(p.get_board() == p2.get_board())
+p = create_puzzle(3, 3)
+p2 = p.copy()
+p.perform_move(1, 1)
+print(p.get_board() == p2.get_board())
+
+# Test case for successor function
+for i in range(2, 6):
+    p = create_puzzle(i, i + 1)
+    print(len(list(p.successors())))
 
 ############################################################
 # Section 3: Linear Disk Movement
