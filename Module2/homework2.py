@@ -229,7 +229,7 @@ class LightsOutPuzzle(object):
         # elements into result_board
         for i in range(0, len(self.board), 1):
             temp = []
-            for j in range (0, len(self.board[i]), 1):
+            for j in range(0, len(self.board[i]), 1):
                 temp.append(self.board[i][j])
             result_board.append(temp)
         return LightsOutPuzzle(result_board)
@@ -239,7 +239,7 @@ class LightsOutPuzzle(object):
         # the corrdinate puzzle pairs
         result_list = []
         # Iterate through the current
-        # board 
+        # board
         for i in range(0, len(self.board), 1):
             for j in range(0, len(self.board[i]), 1):
                 # call our previous deep copy function
@@ -250,49 +250,62 @@ class LightsOutPuzzle(object):
                 # Call the move function from above
                 # to generate the sucessor puzzle
                 # on the same puzzle object
-                updated_puzzle.perform_move(i,j)
-                row_col = (i,j)
+                updated_puzzle.perform_move(i, j)
+                row_col = (i, j)
                 # generate coordinate puzzle pair
-                new_element = (row_col,updated_puzzle)
+                new_element = (row_col, updated_puzzle)
                 # append value to the result list as
                 # a pair of coordinate puzzle
                 result_list.append(new_element)
         return result_list
-            
 
-    def tuple_board_helper(self,board):
+    def tuple_board_helper(self, board):
+        # This helper function will convert the current
+        # board into a tuples of tuples to more
+        # easily itneract with puzzle pieces and the queue
+        # function
         result = []
         for row in board:
             result.append(tuple(row))
         return tuple(result)
-    
+
     # Retreived queue module information from:
     # https://www.geeksforgeeks.org/python/queue-in-python/
     def find_solution(self):
         # Retrieve a tuple version of the board
         # for limiting changes to it
         inital_state = self.tuple_board_helper(self.board)
-
+        # if the current board is already a solution
+        # determined by our previous solved function,
+        # then return an empty list to indicate
+        # no additonal solution to be found
         if self.is_solved():
             return []
+        # create a FIFO queue to store the frontier of states
         frontier_queue = queue.Queue()
         # Add the Updated board to the
         # frontier queue
         frontier_queue.put(inital_state)
         values_in_front = {inital_state}
+        # set to limited duplicates visited states
         visited_states = set()
 
-        parent = {inital_state:(None, None)}
-
+        parent = {inital_state: (None, None)}
+        # BFS iteration of the board
         while not frontier_queue.empty():
             # retreive the current board from the FIFO
             # queue
             current_state = frontier_queue.get()
+            # remove the current state from the dictionary
+            # as it already been explored
             values_in_front.remove(current_state)
-
+            # current state should not have been already visited.
+            # if already visited, then either we have no solution or already
+            # found a solution
             if current_state not in visited_states:
                 visited_states.add(current_state)
-
+                # create a new LightsOutPuzzle as the current board
+                # could be a solution
                 current_board = []
                 for element in current_state:
                     # make the current element
@@ -300,10 +313,12 @@ class LightsOutPuzzle(object):
                     temp = list(element)
                     current_board.append(temp)
                 current_puzzle = LightsOutPuzzle(current_board)
-
+                # Check to see if the new puzzle is actually a solution
                 if current_puzzle.is_solved():
                     valid_moves = []
                     state = current_state
+                    # as long as the parent state, was not empty
+                    # lets try to add the current move to the dictionary
                     while parent[state][0] is not None:
                         previous_state = parent[state][0]
                         valid_move = parent[state][1]
@@ -311,18 +326,17 @@ class LightsOutPuzzle(object):
                         state = previous_state
                     valid_moves.reverse()
                     return valid_moves
+                # grab the sucessors solutions from our sucessors function
+                # above and recontinue BFS iteration for them
                 for move, new_p in current_puzzle.successors():
                     new_state = self.tuple_board_helper(new_p.board)
 
-                    if new_state not in visited_states and new_state not in values_in_front:
-                        parent[new_state]  = (current_state, move)
-                        frontier_queue.put(new_state)  
-                        values_in_front.add(new_state)
+                    if new_state not in visited_states:
+                        if new_state not in values_in_front:
+                            parent[new_state] = (current_state, move)
+                            frontier_queue.put(new_state)
+                            values_in_front.add(new_state)
         return None
-
-
-        
-
 
 
 b = [[True, False], [False, True]]
@@ -348,7 +362,7 @@ p = create_puzzle(2, 2)
 print(p.get_board())
 p = create_puzzle(2, 3)
 print(p.get_board())
-     
+
 p = create_puzzle(3, 3)
 p.perform_move(1, 1)
 print(p.get_board())
@@ -380,9 +394,22 @@ for i in range(2, 6):
     p = create_puzzle(i, i + 1)
     print(len(list(p.successors())))
 
+# Test case for find_solution
+p = create_puzzle(2, 3)
+for row in range(2):
+    for col in range(3):
+        p.perform_move(row, col)
+print(p.find_solution())
+
+b = [[False, False, False], [False, False, False]]
+b[0][0] = True
+p = LightsOutPuzzle(b)
+print(p.find_solution() is None)
+
 ############################################################
 # Section 3: Linear Disk Movement
 ############################################################
+
 
 def solve_identical_disks(length, n):
     pass
