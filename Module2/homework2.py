@@ -9,6 +9,7 @@
 # Include your imports here, if any are used.
 import math
 import random
+import queue
 
 ############################################################
 
@@ -259,9 +260,69 @@ class LightsOutPuzzle(object):
         return result_list
             
 
-
+    def tuple_board_helper(self,board):
+        result = []
+        for row in board:
+            result.append(tuple(row))
+        return tuple(result)
+    
+    # Retreived queue module information from:
+    # https://www.geeksforgeeks.org/python/queue-in-python/
     def find_solution(self):
-        pass
+        # Retrieve a tuple version of the board
+        # for limiting changes to it
+        inital_state = self.tuple_board_helper(self.board)
+
+        if self.is_solved():
+            return []
+        frontier_queue = queue.Queue()
+        # Add the Updated board to the
+        # frontier queue
+        frontier_queue.put(inital_state)
+        values_in_front = {inital_state}
+        visited_states = set()
+
+        parent = {inital_state:(None, None)}
+
+        while not frontier_queue.empty():
+            # retreive the current board from the FIFO
+            # queue
+            current_state = frontier_queue.get()
+            values_in_front.remove(current_state)
+
+            if current_state not in visited_states:
+                visited_states.add(current_state)
+
+                current_board = []
+                for element in current_state:
+                    # make the current element
+                    # a list
+                    temp = list(element)
+                    current_board.append(temp)
+                current_puzzle = LightsOutPuzzle(current_board)
+
+                if current_puzzle.is_solved():
+                    valid_moves = []
+                    state = current_state
+                    while parent[state][0] is not None:
+                        previous_state = parent[state][0]
+                        valid_move = parent[state][1]
+                        valid_moves.append(valid_move)
+                        state = previous_state
+                    valid_moves.reverse()
+                    return valid_moves
+                for move, new_p in current_puzzle.successors():
+                    new_state = self.tuple_board_helper(new_p.board)
+
+                    if new_state not in visited_states and new_state not in values_in_front:
+                        parent[new_state]  = (current_state, move)
+                        frontier_queue.put(new_state)  
+                        values_in_front.add(new_state)
+        return None
+
+
+        
+
 
 
 b = [[True, False], [False, True]]
