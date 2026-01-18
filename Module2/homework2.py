@@ -412,6 +412,8 @@ print(p.find_solution() is None)
 
 # Retrieved BFS information/example from:
 # https://www.geeksforgeeks.org/dsa/breadth-first-search-or-bfs-for-a-graph/
+
+
 def solve_identical_disks(length, n):
     # edge case if no disks are given to
     # the function
@@ -422,14 +424,17 @@ def solve_identical_disks(length, n):
     # tiles present
     if n > length:
         return None
-    
+
     temp = []
     for i in range(0, n, 1):
         temp.append(i)
     # intial state will include all the
     # disks as a tuple
     intial_state = tuple(temp)
-
+    # generate the goal state posistions
+    # of disks where the disks should
+    # be placed toward the right end of the
+    # linear board
     temp = []
     for i in range(length - n, length, 1):
         temp.append(i)
@@ -440,7 +445,8 @@ def solve_identical_disks(length, n):
     # as the problem is already solved
     if intial_state == goal_state:
         return []
-
+    # queue used to implement the
+    # BFS iteration
     frontier_queue = queue.Queue()
     frontier_queue.put(intial_state)
 
@@ -450,25 +456,99 @@ def solve_identical_disks(length, n):
     parent_state = {intial_state: (None, None)}
     # BFS iteration of the board
     while not frontier_queue.empty():
+        # retreive the current (rightmost) disk
+        # from the board
         current_state = frontier_queue.get()
-        values_in_front.remove(current_state)
-
+        # delete the current state from the frontier
+        # as now it is being explored
+        values_in_front.discard(current_state)
+        # continue BFS iteration as long as
+        # the current disk has not been explored
+        # yet
         if current_state not in visited_states:
             visited_states.add(current_state)
-
+            # if we reach the end of the linear board
+            # where no more horizontal moves are possible,
+            # mark the move
             if current_state == goal_state:
 
                 valid_moves = []
                 cur = current_state
+                # while the previous board space is not
+                # empty and does contain another linear
+                # disk
                 while parent_state[cur][0] is not None:
+                    # variable unpacking
                     previous_move = parent_state[cur][0]
                     current_move = parent_state[cur][1]
                     valid_moves.append(current_move)
                     cur = previous_move
                 valid_moves.reverse()
+                # return list of moves to the edge
+                # of the baord in a sequence of moves
+                # starting from left to right (where)
+                # the reversal function is needed!
                 return valid_moves
             occupied_currently = set(current_state)
 
+            # generate the sucessors to the current
+            # state
+            # keep track of the index and position of
+            # the current disk
+            index = 0
+            for posistion in current_state:
+                # direction loop controlling left
+                # hand side linear disk being
+                # able to crossover linear disk
+                # on the right
+                for distance in range(-1, 2, 2):
+                    total1 = posistion + distance
+                    # record new distance covered if it is valid
+                    # within the constraints of the problem
+                    # distance to travel for disk1
+                    if total1 >= 0 and total1 < length:
+                        if total1 not in occupied_currently:
+                            new_posistions = list(current_state)
+                            new_posistions[index] = total1
+                            new_posistions.sort()
+                            new_state = tuple(new_posistions)
+                            # if the new state exlpored has not
+                            # been seen, then record it in the queue
+                            if new_state not in visited_states:
+                                if new_state not in values_in_front:
+                                    temp = (current_state, (posistion, total1))
+                                    parent_state[new_state] = temp
+                                    frontier_queue.put(new_state)
+                                    values_in_front.add(new_state)
+
+                        middle = posistion + distance
+                        total2 = posistion + (2 * distance)
+                        # record new distance covered if it is valid
+                        # within the constraints of the problem
+                        # distance to travel for disk2
+                        if total2 >= 0 and total2 < length:
+                            if total2 not in occupied_currently:
+                                if middle in occupied_currently:
+                                    new_posistions = list(current_state)
+                                    new_posistions[index] = total2
+                                    new_posistions.sort()
+                                    new_state = tuple(new_posistions)
+                                    if new_state not in visited_states:
+                                        if new_state not in values_in_front:
+                                            temp = (current_state,
+                                                    (posistion, total2))
+                                            parent_state[new_state] = temp
+                                            frontier_queue.put(new_state)
+                                            values_in_front.add(new_state)
+                index += 1
+    return None
+
+
+# Test cases for solve_identical_disks
+print(solve_identical_disks(4, 2))
+print(solve_identical_disks(5, 2))
+print(solve_identical_disks(4, 3))
+print(solve_identical_disks(5, 3))
 
 
 def solve_distinct_disks(length, n):
