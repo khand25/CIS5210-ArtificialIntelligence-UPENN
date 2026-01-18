@@ -445,9 +445,31 @@ def solve_identical_disks(length, n):
     frontier_queue.put(intial_state)
 
     values_in_front = {intial_state}
-    # set to limited duplicates visited states
+    # set to limit duplicates visited states
     visited_states = set()
     parent_state = {intial_state: (None, None)}
+    # BFS iteration of the board
+    while not frontier_queue.empty():
+        current_state = frontier_queue.get()
+        values_in_front.remove(current_state)
+
+        if current_state not in visited_states:
+            visited_states.add(current_state)
+
+            if current_state == goal_state:
+
+                valid_moves = []
+                cur = current_state
+                while parent_state[cur][0] is not None:
+                    previous_move = parent_state[cur][0]
+                    current_move = parent_state[cur][1]
+                    valid_moves.append(current_move)
+                    cur = previous_move
+                valid_moves.reverse()
+                return valid_moves
+            occupied_currently = set(current_state)
+
+
 
 def solve_distinct_disks(length, n):
     pass
