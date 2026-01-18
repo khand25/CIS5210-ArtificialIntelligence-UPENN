@@ -269,7 +269,7 @@ class LightsOutPuzzle(object):
             result.append(tuple(row))
         return tuple(result)
 
-    # Retreived queue module information from:
+    # Retrieved queue module information from:
     # https://www.geeksforgeeks.org/python/queue-in-python/
     def find_solution(self):
         # Retrieve a tuple version of the board
@@ -287,10 +287,10 @@ class LightsOutPuzzle(object):
         # frontier queue
         frontier_queue.put(inital_state)
         values_in_front = {inital_state}
-        # set to limited duplicates visited states
+        # set to limit duplicates visited states
         visited_states = set()
 
-        parent = {inital_state: (None, None)}
+        parent_state = {inital_state: (None, None)}
         # BFS iteration of the board
         while not frontier_queue.empty():
             # retreive the current board from the FIFO
@@ -319,9 +319,9 @@ class LightsOutPuzzle(object):
                     state = current_state
                     # as long as the parent state, was not empty
                     # lets try to add the current move to the dictionary
-                    while parent[state][0] is not None:
-                        previous_state = parent[state][0]
-                        valid_move = parent[state][1]
+                    while parent_state[state][0] is not None:
+                        previous_state = parent_state[state][0]
+                        valid_move = parent_state[state][1]
                         valid_moves.append(valid_move)
                         state = previous_state
                     valid_moves.reverse()
@@ -333,7 +333,7 @@ class LightsOutPuzzle(object):
 
                     if new_state not in visited_states:
                         if new_state not in values_in_front:
-                            parent[new_state] = (current_state, move)
+                            parent_state[new_state] = (current_state, move)
                             frontier_queue.put(new_state)
                             values_in_front.add(new_state)
         return None
@@ -410,10 +410,44 @@ print(p.find_solution() is None)
 # Section 3: Linear Disk Movement
 ############################################################
 
-
+# Retrieved BFS information/example from:
+# https://www.geeksforgeeks.org/dsa/breadth-first-search-or-bfs-for-a-graph/
 def solve_identical_disks(length, n):
-    pass
+    # edge case if no disks are given to
+    # the function
+    if n <= 0:
+        return []
+    # edge case if total number of
+    # disks are mre than the total number of
+    # tiles present
+    if n > length:
+        return None
+    
+    temp = []
+    for i in range(0, n, 1):
+        temp.append(i)
+    # intial state will include all the
+    # disks as a tuple
+    intial_state = tuple(temp)
 
+    temp = []
+    for i in range(length - n, length, 1):
+        temp.append(i)
+    goal_state = tuple(temp)
+
+    # if the disks are not needed to be
+    # moved further, then no need of solutions
+    # as the problem is already solved
+    if intial_state == goal_state:
+        return []
+
+    frontier_queue = queue.Queue()
+    frontier_queue.put(intial_state)
+
+    values_in_front = {intial_state}
+    # set to limited duplicates visited states
+    visited_states = set()
+    parent_state = {intial_state: (None, None)}
 
 def solve_distinct_disks(length, n):
     pass
