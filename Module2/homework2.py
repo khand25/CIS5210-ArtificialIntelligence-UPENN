@@ -210,12 +210,19 @@ class LightsOutPuzzle(object):
             self.board[row + 1][col] = not self.board[row + 1][col]
 
     def scramble(self):
+        # using the given probablitly idea
+        # fron the problem description, iterate through the
+        # board and only 50% of the time perform
+        # some random move
         for i in range(0, len(self.board), 1):
             for j in range(0, len(self.board[i]), 1):
                 if random.random() < 0.5:
                     self.perform_move(i, j)
 
     def is_solved(self):
+        # iterate through the board and every cell, if
+        # we see a single True value, then return False
+        # otherwise True
         for i in range(0, len(self.board), 1):
             for j in range(0, len(self.board[i]), 1):
                 if self.board[i][j] is True:
@@ -223,6 +230,8 @@ class LightsOutPuzzle(object):
         return True
 
     def copy(self):
+        # referencing its own
+        # unquie memory address in memoery
         result_board = []
         # iterate through current board
         # and manually copy over all
@@ -339,16 +348,18 @@ class LightsOutPuzzle(object):
         return None
 
 
-b = [[True, False], [False, True]]
-p = LightsOutPuzzle(b)
-print(p.get_board())
+# b = [[True, False], [False, True]]
+# p = LightsOutPuzzle(b)
+# print(p.get_board())
 
-b = [[True, True], [True, True]]
-p = LightsOutPuzzle(b)
-print(p.get_board())
+# b = [[True, True], [True, True]]
+# p = LightsOutPuzzle(b)
+# print(p.get_board())
 
 
 def create_puzzle(rows, cols):
+    # create an entire new lights out puzzle
+    # that containst all Off blocks
     result_list = []
     for i in range(0, rows, 1):
         temp = []
@@ -358,53 +369,53 @@ def create_puzzle(rows, cols):
     return LightsOutPuzzle(result_list)
 
 
-p = create_puzzle(2, 2)
-print(p.get_board())
-p = create_puzzle(2, 3)
-print(p.get_board())
+# p = create_puzzle(2, 2)
+# print(p.get_board())
+# p = create_puzzle(2, 3)
+# print(p.get_board())
 
-p = create_puzzle(3, 3)
-p.perform_move(1, 1)
-print(p.get_board())
+# p = create_puzzle(3, 3)
+# p.perform_move(1, 1)
+# print(p.get_board())
 
-p = create_puzzle(3, 3)
-p.perform_move(0, 0)
-print(p.get_board())
+# p = create_puzzle(3, 3)
+# p.perform_move(0, 0)
+# print(p.get_board())
 
 # Test case for is_solved function
-b = [[True, False], [False, True]]
-p = LightsOutPuzzle(b)
-print(p.is_solved())
+# b = [[True, False], [False, True]]
+# p = LightsOutPuzzle(b)
+# print(p.is_solved())
 
-b = [[False, False], [False, False]]
-p = LightsOutPuzzle(b)
-print(p.is_solved())
+# b = [[False, False], [False, False]]
+# p = LightsOutPuzzle(b)
+# print(p.is_solved())
 
 # Test case for copy function
-p = create_puzzle(3, 3)
-p2 = p.copy()
-print(p.get_board() == p2.get_board())
-p = create_puzzle(3, 3)
-p2 = p.copy()
-p.perform_move(1, 1)
-print(p.get_board() == p2.get_board())
+# p = create_puzzle(3, 3)
+# p2 = p.copy()
+# print(p.get_board() == p2.get_board())
+# p = create_puzzle(3, 3)
+# p2 = p.copy()
+# p.perform_move(1, 1)
+# print(p.get_board() == p2.get_board())
 
 # Test case for successor function
-for i in range(2, 6):
-    p = create_puzzle(i, i + 1)
-    print(len(list(p.successors())))
+# for i in range(2, 6):
+# p = create_puzzle(i, i + 1)
+# print(len(list(p.successors())))
 
 # Test case for find_solution
-p = create_puzzle(2, 3)
-for row in range(2):
-    for col in range(3):
-        p.perform_move(row, col)
-print(p.find_solution())
+# p = create_puzzle(2, 3)
+# for row in range(2):
+# for col in range(3):
+# p.perform_move(row, col)
+# print(p.find_solution())
 
-b = [[False, False, False], [False, False, False]]
-b[0][0] = True
-p = LightsOutPuzzle(b)
-print(p.find_solution() is None)
+# b = [[False, False, False], [False, False, False]]
+# b[0][0] = True
+# p = LightsOutPuzzle(b)
+# print(p.find_solution() is None)
 
 ############################################################
 # Section 3: Linear Disk Movement
@@ -545,14 +556,148 @@ def solve_identical_disks(length, n):
 
 
 # Test cases for solve_identical_disks
-print(solve_identical_disks(4, 2))
-print(solve_identical_disks(5, 2))
-print(solve_identical_disks(4, 3))
-print(solve_identical_disks(5, 3))
+# print(solve_identical_disks(4, 2))
+# print(solve_identical_disks(5, 2))
+# print(solve_identical_disks(4, 3))
+# print(solve_identical_disks(5, 3))
 
 
 def solve_distinct_disks(length, n):
-    pass
+    # edge case if no disks are given to
+    # the function
+    if n <= 0:
+        return []
+    # edge case if total number of
+    # disks are more than the total number of
+    # tiles present
+    if n > length:
+        return None
+
+    temp = []
+    for i in range(0, n, 1):
+        temp.append(i)
+    # intial state will include all the
+    # disks as a tuple
+    intial_state = tuple(temp)
+    # generate the goal state posistions
+    # of disks where the disks should
+    # be placed toward the right end of the
+    # linear board
+    temp = []
+    # key difference from the function above where
+    # now the goal state is now from disk n-1
+    # to length of the board -n as opposed to from right
+    # to left. Reverse order of goal states now
+    for i in range(0, n, 1):
+        temp.append((length - 1) - i)
+    goal_state = tuple(temp)
+
+    # if already solved
+    if intial_state == goal_state:
+        return []
+    # queue used to implement the
+    # BFS iteration
+    frontier_queue = queue.Queue()
+    frontier_queue.put(intial_state)
+
+    values_in_front = {intial_state}
+    # set to limit duplicates visited states
+    visited_states = set()
+    parent_state = {intial_state: (None, None)}
+
+    # BFS iteration of the board
+    while not frontier_queue.empty():
+        # retreive the current (rightmost) disk
+        # from the board
+        current_state = frontier_queue.get()
+        # delete the current state from the frontier
+        # as now it has been explored
+        values_in_front.discard(current_state)
+        # continue BFS iteration as long as
+        # the current disk has not been explored
+        # yet
+        if current_state not in visited_states:
+            visited_states.add(current_state)
+            # if we reach the end of the linear
+            # board, where no more horizontal moves
+            # are possible, mark the move
+            if current_state == goal_state:
+                valid_moves = []
+                cur = current_state
+                # while the previous board space is
+                # not empty and does contain another
+                # linear disk
+                while parent_state[cur][0] is not None:
+                    # variable unpacking
+                    previous_move = parent_state[cur][0]
+                    current_move = parent_state[cur][1]
+                    valid_moves.append(current_move)
+                    cur = previous_move
+                valid_moves.reverse()
+                # return a list of moves to the edge
+                # of the baord in a sequence of
+                # moves starting from left to right
+                # (where) the reversal function is
+                # needed
+                return valid_moves
+            occupied_currently = set(current_state)
+            # generate sucessors to the current state
+            # keep track of the index and posistion of
+            # the current disk
+            index = 0
+            for posistion in current_state:
+                # direction loop controlling left
+                # hand side linear disk being able
+                # to crossover linear disk on the
+                # right
+                for distance in range(-1, 2, 2):
+                    total1 = posistion + distance
+                    # record new distance covered it is
+                    # valid within the constraints of the
+                    # problem distance to travel for disk1
+                    if total1 >= 0 and total1 < length:
+                        if total1 not in occupied_currently:
+                            new_posistions = list(current_state)
+                            new_posistions[index] = total1
+                            new_state = tuple(new_posistions)
+                            # if the new state explored
+                            # has not been seen, then record
+                            # it in the queue
+                            if new_state not in visited_states:
+                                if new_state not in values_in_front:
+                                    temp = (current_state, (posistion, total1))
+                                    parent_state[new_state] = temp
+                                    frontier_queue.put(new_state)
+                                    values_in_front.add(new_state)
+                    # jumping between linear disks
+                    middle = posistion + distance
+                    # record new distance covered if it is valid
+                    # within the constraints of the problem
+                    # distance to travel for disk2
+                    total2 = posistion + (2 * distance)
+                    if total2 >= 0 and total2 < length:
+                        if total2 not in occupied_currently:
+                            if middle in occupied_currently:
+                                new_posistions = list(current_state)
+                                new_posistions[index] = total2
+                                new_state = tuple(new_posistions)
+
+                                if new_state not in visited_states:
+                                    if new_state not in values_in_front:
+                                        temp = (current_state,
+                                                (posistion, total2))
+                                        parent_state[new_state] = temp
+                                        frontier_queue.put(new_state)
+                                        values_in_front.add(new_state)
+                index += 1
+    return None
+
+
+# Test cases:
+# print(solve_distinct_disks(4, 2))
+# print(solve_distinct_disks(5, 2))
+# print(solve_distinct_disks(4, 3))
+# print(solve_distinct_disks(5, 3))
 
 ############################################################
 # Section 4: Feedback
@@ -560,20 +705,23 @@ def solve_distinct_disks(length, n):
 
 
 # Just an approximation is fine.
-feedback_question_1 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+feedback_question_1 = """ I Spent around 15 hours working on this assignment
 """
 
 feedback_question_2 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+Implementing the find solutions function for the lights
+out puzzle and also the find identical/distinct disks
+for the linear disk problem was the most challenging part.
+This is because, it had required me to spent a couple
+of hours researching into BFS search, its purposes, and the
+conceptual idea in how to go forward to implement in
+Python. I also found an annoying bug in my solve_distinct
+disk function code resutling in only one valid move
+rather than the entire list of moves.
 """
 
 feedback_question_3 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I liked working through the lights out puzzle class methods
+as it had better reinforced my Python Object Oriented Programming skills
+which I knew how to apply from Java and now in python as well!
 """
