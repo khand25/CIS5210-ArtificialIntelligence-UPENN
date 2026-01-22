@@ -232,7 +232,85 @@ class TilePuzzle(object):
 
     # Required
     def find_solutions_iddfs(self):
-        pass
+       if self.is_solved():
+           # if we already have an optimal solution
+           # no need for depth limited search action
+           yield []
+           return
+       depth = 0
+       # initial_key = self.iddfs_helper1(self)
+       # path_seen = {initial_key}
+       path_moves = []
+       while True:
+           temp = list(self.iddfs_helper2(depth,path_moves))
+           list_of_sols = temp
+           if len(list_of_sols) != 0:
+               for solution in list_of_sols:
+                    yield solution
+               return
+           depth += 1
+
+    def iddfs_helper1(self, current_puzzle):
+        # current_state = []
+        # convert the current board from a lists of lists
+        # into a tuples of tuples for constant consistency
+        temp = []
+        current_board = current_puzzle.get_board()
+        for i in range(0, len(current_board), 1):
+            tuple_value = tuple(current_board[i])
+            temp.append(tuple_value)
+        # convert the temp list into a tuple for keeping
+        # consistent values as needed
+        temp = tuple(temp)
+        return temp
+
+    def iddfs_helper2(self, limit, moves):
+        initial_key = self.iddfs_helper1(self)
+        path_seen = {initial_key}
+        path_moves = list(moves)
+
+        if len(path_moves) > limit:
+            return
+        
+        # call our deep copy function to get a deep copy
+        # of the puzzle
+        initial_puzzle = self.copy()
+        for element in path_moves:
+            if initial_puzzle.perform_move(element) is False:
+                return
+        # Remaining depth after accounting for already-taken moves
+        remaining = limit - len(path_moves)
+
+        # Seed visited with the continuation-start state too
+        path_seen = {self.iddfs_helper1(initial_puzzle)}
+
+        # Run depth-limited DFS from that state
+        yield from self.depth_first_search_helper(
+            initial_puzzle, remaining, path_moves, path_seen)
+        
+        
+    def depth_first_search_helper(self, puz, remaining, path_moves, path_seen):
+        # this function will be used to perfrom dfs recurisvely
+        # performs depth limited search to a specfic depth and
+        # returns a solution
+        # goal scenario if we already arrive at a solution
+        if puz.is_solved():
+            temp = list(path_moves)
+            yield temp
+            return
+        # depth cutoff from textbook psudecode
+        if remaining == 0:
+            return
+        for current_move, children in puz.successors():
+            ith_term = self.iddfs_helper1(children)
+
+            if ith_term not in path_seen:
+                path_seen.add(ith_term)
+                path_moves.append(current_move)
+                yield from self.depth_first_search_helper(children, remaining - 1, path_moves, path_seen)
+                path_moves.pop()
+                path_seen.remove(ith_term)
+
 
     # Required
     def find_solution_a_star(self):
@@ -284,6 +362,16 @@ b = [[1,2,3], [4,0,5], [6,7,8]]
 p = TilePuzzle(b)
 for move, new_p in p.successors():
     print(move, new_p.get_board())
+
+# Test case for iddfs problem
+b = [[4,1,2], [0,5,3], [7,8,6]]
+p = TilePuzzle(b)
+solutions = p.find_solutions_iddfs()
+print(next(solutions))
+
+b = [[1,2,3], [4,0,8], [7,6,5]]
+p = TilePuzzle(b)
+print(list(p.find_solutions_iddfs()))
 ############################################################
 # Section 2: Grid Navigation
 ############################################################
