@@ -7,6 +7,7 @@
 ############################################################
 
 # Include your imports here, if any are used.
+import random
 
 ############################################################
 
@@ -37,6 +38,9 @@ class TilePuzzle(object):
 
     # Required
     def __init__(self, board):
+        # intialize two instance varaibles of total rows
+        # and total columns below for easier code reduncy in latter
+        # methods
         self.total_rows = len(board)
         self.total_cols = len(board[0])
 
@@ -96,30 +100,30 @@ class TilePuzzle(object):
             # store_i = self.empty_row
             # store_j = self.empty_col
             # for i in range(0, self.total_rows, 1):
-                # for j in range(0, self.total_cols, 1):
-                    # if self.board[i][j] == 0:
-                        # store_i = i
-                        # store_j = j
+            # for j in range(0, self.total_cols, 1):
+            # if self.board[i][j] == 0:
+            # store_i = i
+            # store_j = j
             # up value from 0 will have the same column value
             # but row -1 value
             if store_i - 1 >= 0:
                 temp = self.board[store_i - 1][store_j]
                 self.board[store_i - 1][store_j] = 0
-                self.empty_row = store_i -1
+                self.empty_row = store_i - 1
                 self.empty_col = store_j
                 self.board[store_i][store_j] = temp
                 return True
             else:
                 return False
-        
+
         if direction == "down":
             # store_i = self
             # store_j = 0
             # for i in range(0, self.total_rows, 1):
-                # for j in range(0, self.total_cols, 1):
-                    # if self.board[i][j] == 0:
-                        # store_i = i
-                        # store_j = j
+            # for j in range(0, self.total_cols, 1):
+            # if self.board[i][j] == 0:
+            # store_i = i
+            # store_j = j
             # down value from 0 will have the same column value
             # but row + 1 value
             if store_i + 1 < self.total_rows:
@@ -131,15 +135,15 @@ class TilePuzzle(object):
                 return True
             else:
                 return False
-            
+
         if direction == "right":
             # store_i = 0
             # store_j = 0
             # for i in range(0, self.total_rows, 1):
-                # for j in range(0, self.total_cols, 1):
-                    # if self.board[i][j] == 0:
-                        # store_i = i
-                        # store_j = j
+            # for j in range(0, self.total_cols, 1):
+            # if self.board[i][j] == 0:
+            # store_i = i
+            # store_j = j
             # right value from 0 will have the same row value
             # but col + 1 value
             if store_j + 1 < self.total_cols:
@@ -151,40 +155,80 @@ class TilePuzzle(object):
                 return True
             else:
                 return False
-        
+
         if direction == "left":
             # store_i = 0
             # store_j = 0
             # for i in range(0, self.total_rows, 1):
-                # for j in range(0, self.total_cols, 1):
-                    # if self.board[i][j] == 0:
-                        # store_i = i
-                        # store_j = j
+            # for j in range(0, self.total_cols, 1):
+            # if self.board[i][j] == 0:
+            # store_i = i
+            # store_j = j
             # left value from 0 will have the same row value
             # but col - 1 value
             if store_j - 1 >= 0:
                 temp = self.board[store_i][store_j - 1]
                 self.board[store_i][store_j - 1] = 0
                 self.empty_row = store_i
-                self.empty_col = store_j -1
+                self.empty_col = store_j - 1
                 self.board[store_i][store_j] = temp
                 return True
             else:
                 return False
 
-
-
     def scramble(self, num_moves):
-        pass
+        # scramble the tile puzzle on each iteration
+        # where we ensure to pick some random idrection value from
+        # the list below and call perform move num_moves
+        # times
+        possible_directions = ["up", "down", "left", "right"]
+        for i in range(0, num_moves, 1):
+            r_value = random.choice(possible_directions)
+            self.perform_move(r_value)
 
     def is_solved(self):
-        pass
+        # keep track of the ascending order of integers
+        # values throughout the board
+        count = 1
+        for i in range(0, len(self.board), 1):
+            for j in range(0, len(self.board[0]), 1):
+                if i == len(self.board) - 1 and j == len(self.board[0]) - 1:
+                    # return the truthiness of if the last element is 0
+                    # or not
+                    return self.board[i][j] == 0
+                # if the current board element is not the
+                # same value as count, then
+                # the board is automatically invalid!
+                if self.board[i][j] != count:
+                    return False
+                count += 1
+        return True
 
     def copy(self):
-        pass
+        # since the get_board function already returns a deep copy
+        # we can simply call it and return it's return value as
+        # as new TilePuzzleObject
+        deep_copy = self.get_board()
+        return TilePuzzle(deep_copy)
 
     def successors(self):
-        pass
+        # list containing all possible valid moves
+        # to perform on a puzzle object
+        possible_directions = ["up", "down", "left", "right"]
+        for element in possible_directions:
+            # create a new puzzle object as a deep copy of the current
+            # puzzle from the calling object to perform moves
+            # on
+            new_puzzle = self.copy()
+            # verify we are to sucessfully perform a move on the board
+            valid_move = new_puzzle.perform_move(element)
+            if valid_move:
+                # we have to use a generator to yield the direction
+                # and new puzzle object as a sequence of tuples
+                result_tuple = (element, new_puzzle)
+                yield result_tuple
+
+
 
     # Required
     def find_solutions_iddfs(self):
@@ -216,7 +260,30 @@ p = create_tile_puzzle(3, 3)
 print(p.perform_move("down"))
 print(p.get_board())
 
+# Test case for scramble and is_solved
+p = TilePuzzle([[1, 2], [3, 0]])
+print(p.is_solved())
+p = TilePuzzle([[0, 1], [3, 2]])
+print(p.is_solved())
 
+# Test case for copy function
+p = create_tile_puzzle(3, 3)
+p2 = p.copy()
+print(p.get_board() == p2.get_board())
+
+p = create_tile_puzzle(3, 3)
+p2 = p.copy()
+p.perform_move("left")
+print(p.get_board() == p2.get_board())
+
+# Test case for sucessors function
+p = create_tile_puzzle(3, 3)
+for move, new_p in p.successors():
+    print(move, new_p.get_board())
+b = [[1,2,3], [4,0,5], [6,7,8]]
+p = TilePuzzle(b)
+for move, new_p in p.successors():
+    print(move, new_p.get_board())
 ############################################################
 # Section 2: Grid Navigation
 ############################################################
