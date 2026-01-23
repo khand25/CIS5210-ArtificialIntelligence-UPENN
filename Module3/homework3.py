@@ -8,6 +8,8 @@
 
 # Include your imports here, if any are used.
 import random
+import math
+from queue import PriorityQueue
 
 ############################################################
 
@@ -411,7 +413,152 @@ print(list(p.find_solutions_iddfs()))
 
 
 def find_path(start, goal, scene):
-    pass
+    # in the case we are given an empty scene
+    if not scene or not scene[0]:
+        return None
+    # start is tuple of coordinates with
+    # (row, column) for the point
+    start_row = start[0]
+    start_col = start[1]
+    # goal is tuple of coordinates with
+    # (row, column) for the point
+    goal_row = goal[0]
+    goal_col = goal[1]
+    # dimensions of the scene to comply to
+    total_rows = len(scene)
+    total_cols = len(scene[0])
+    # if either the start point or the end point
+    # lie outside the scene, return None to indicate
+    # no solution exists
+    if start_row < 0:
+        return None
+    if start_row >= total_rows:
+        return None
+    if start_col < 0:
+        return None
+    if start_col >= total_cols:
+        return None
+
+    if goal_row < 0:
+        return None
+    if goal_row >= total_rows:
+        return None
+    if goal_col < 0:
+        return None
+    if goal_col >= total_cols:
+        return None
+    # We know now at this point, the start and
+    # goal points are actually valid
+    # Check to see if either the start or goal points
+    # lie on a obstacle or not
+    if scene[start_row][start_col]:
+        return None
+    if scene[goal_row][goal_col]:
+        return None
+    # return the goal solution if both the
+    # start and goal coordinates are the same
+    # as each other
+    if start == goal:
+        return [start]
+    counter = 0
+    # A * search : f(n) = g(n) + h(n)
+    # priority_queue needed to implement
+    # A * search
+    priority_q = PriorityQueue()
+    # reteive our h(n) value or best educated
+    # guess value
+    heuristic = find_path_euclidean_heuristic(start, goal) 
+    # place the current function score, counter value
+    # and distance value into the priority_queue 
+    priority_q.put((0.0 + heuristic , counter, start))
+    counter += 1
+    # our cost from the starting origin point
+    g_funct = {start: 0.0}
+    # parent pointer from the previous path
+    came_from = {}
+    # the set of node we have already accounted
+    # for
+    done_nodes = set()
+
+
+
+def find_path_euclidean_heuristic(start, goal):
+    # heurstic function for find_path function
+    # using the euclidean distance formula
+    # start is tuple of coordinates with
+    # (row, column) for the point
+    start_row = start[0]
+    start_col = start[1]
+    # goal is tuple of coordinates with
+    # (row, column) for the point
+    goal_row = goal[0]
+    goal_col = goal[1]
+    # sum of squares
+    sum_of_squares = (goal_row - start_row) ** 2
+    sum_of_squares += (goal_col - start_col) ** 2
+    euclid_dist = math.sqrt(sum_of_squares)
+    return euclid_dist
+
+
+def retrieve_neighbors_with_values(pt, scene):
+
+    # Given a current point (row, col) and a scene grid of booleans,
+    # yield (neighbor_point, step_cost) for all valid moves.
+
+    # Valid moves: 8-directional (U, D, R, L, and diagonals)
+    # Cost: 1.0 for normal moves, sqrt(2) for diagonal
+    # as according to euclidean distances
+
+    # prelimnary work to setup the function correclty
+    row = pt[0]
+    col = pt[1]
+    total_rows = len(scene)
+    total_cols = len(scene[0])
+
+    # possible direction coordinate points
+    # based on the orgin point at (0,0)
+
+    # up, down, left, right, up-left,
+    # up-right, down-left, down-right
+    possible_directions = [(-1, 0), (1, 0), (0, -1), (0, 1),
+                           (-1, -1), (-1, 1), (1, -1), (1, 1)]
+    # iterate through diretional list of tuples
+    for direction in possible_directions:
+        dr = direction[0]
+        dc = direction[1]
+        # perfrom the move cost on the point
+        new_row = row + dr
+        new_col = col + dc
+
+        # check after the move, we are currently
+        # in bounds or not
+        # if so, continue to the next move
+        if new_row < 0 or new_row >= total_rows:
+            continue
+        if new_col < 0 or new_col >= total_cols:
+            continue
+
+        # 2) obstacle check (destination cell must be free)
+        # if empty, then free otherwise True value,
+        # move to the next coordinate
+        if scene[new_row][new_col]:
+            continue
+
+        # cost of the move calculation
+        # we know if we moved in a linear
+        # direction as opposed to a diaognal
+        # direction based on if one of the directional
+        # cols or rows is 0 or not
+        if dr == 0 or dc == 0:
+            cost_of_move = 1.0
+        else:
+            # diagonal move, not unit move
+            cost_of_move = math.sqrt(2)
+
+        # generate the cost of the move in the loop
+        # iteration if we make it this far
+        yield (new_row, new_col), cost_of_move
+
 
 ############################################################
 # Section 3: Linear Disk Movement, Revisited
