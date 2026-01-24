@@ -349,7 +349,97 @@ class TilePuzzle(object):
 
     # Required
     def find_solution_a_star(self):
-        pass
+        # edge case to check is the
+        # board is already solved, so no 
+        # lists of solutions available to 
+        # return
+        if self.is_solved():
+            temp = []
+            return temp
+        # have a deep copy of the currnet self puzzle called 
+        # initial puzzle for not mutations to the calling
+        # object's board
+        initial_puzzle = self.copy()
+        # use our helper form iddfs as we can reuse
+        # this function to convert the board from the
+        # list of lists to a tuples of tuples
+        initial_key = self.iddfs_helper1(initial_puzzle)
+        # priority queue data structure needed for A *
+        # search algorithm
+        p_queue = PriorityQueue()
+        # counter used to count the total number of moves
+        # requried between starting and goal coordinates
+        counter = 0
+
+        # f(n) = g(n) + h(n)
+        # retrieve our h(n) value or best educated
+        # guess value from the manhattan distance 
+        # function
+        heuristic = self.manhattan_heuristic_helper(initial_puzzle)
+        # our cost from the starting origin point
+        g_funct = {initial_key: 0}
+        # place the current function generated distance, counter value
+        # and coordinate posistion into the pq
+        p_queue.put((0.0 + heuristic, counter, initial_key))
+        counter += 1
+        # parent pointer from the previous path
+        came_from = {}
+        # expand a tracked previosly pop key
+        puzzle_key = {initial_key: initial_puzzle}
+        # the set of node we have already accounted
+        # for and explored
+        done_nodes = set()
+        
+
+
+
+
+    def manhattan_heuristic_helper(self, tile_puzzle):
+        # heurstic function for find_solution_a_star 
+        # function using the manhattan distance formula
+        # distance = |x1 - x2| + |y1 - y2|
+        # Tile_puzzle object is refrencesing a null space
+        # in memory, then use the current calling object's
+        # tile puzzle
+        if tile_puzzle is None:
+            tile_puzzle = self
+        # recieve a deep copy of the board
+        # and have it refrenced by current_board
+        current_board = tile_puzzle.get_board()
+        total_rows = len(current_board)
+        total_cols = len(current_board[0])
+        # dictionary to keep track of the list of
+        # tile coordinates and thier associated
+        # tile number together
+        posistion_goal = {}
+        # now keep track of the ending coordinates
+        # values with respect to the manhattan distance
+        # calculation
+        for i in range(1, total_rows * total_cols):
+            goal_row = (i - 1) // total_cols
+            goal_col = (i - 1) % total_cols
+            posistion_goal[i] = (goal_row, goal_col)
+        # actually manhattan distance calculation
+        sum_manhattan = 0
+        # iterate throgh the board, and as long as we are not on the empty tile,
+        # then apply the manahattan distance forumal for every point
+        # with respect to it's desitnation point
+        for i in range(0, total_rows, 1):
+            for j in range(0, total_cols, 1):
+                # if the current board tile is not
+                # the empty tile
+                if current_board[i][j] != 0:
+                    row_goal = posistion_goal[current_board[i][j]][0]
+                    col_goal = posistion_goal[current_board[i][j]][1]
+                    sum_manhattan += abs(i - row_goal)
+                    sum_manhattan += abs(j - col_goal)
+        return sum_manhattan
+
+
+
+
+
+
 
 
 p = TilePuzzle([[1, 2], [3, 0]])
