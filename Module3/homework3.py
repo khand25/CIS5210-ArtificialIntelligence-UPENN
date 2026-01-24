@@ -450,7 +450,8 @@ def find_path(start, goal, scene):
     # We know now at this point, the start and
     # goal points are actually valid
     # Check to see if either the start or goal points
-    # lie on a obstacle or not
+    # lie on a obstacle or not.
+    # Otherwise no possible solution is available
     if scene[start_row][start_col]:
         return None
     if scene[goal_row][goal_col]:
@@ -460,16 +461,18 @@ def find_path(start, goal, scene):
     # as each other
     if start == goal:
         return [start]
+    # counter used to count the total number of moves
+    # requried between starting and goal coordinates
     counter = 0
     # A * search : f(n) = g(n) + h(n)
     # priority_queue needed to implement
     # A * search
     priority_q = PriorityQueue()
-    # reteive our h(n) value or best educated
-    # guess value
-    heuristic = find_path_euclidean_heuristic(start, goal) 
-    # place the current function score, counter value
-    # and distance value into the priority_queue 
+    # retrieve our h(n) value or best educated
+    # guess value from the euclidean distance function
+    heuristic = find_path_euclidean_heuristic(start, goal)
+    # place the current function generated distance, counter value
+    # and coordinate posistion into the pq
     priority_q.put((0.0 + heuristic , counter, start))
     counter += 1
     # our cost from the starting origin point
@@ -477,14 +480,58 @@ def find_path(start, goal, scene):
     # parent pointer from the previous path
     came_from = {}
     # the set of node we have already accounted
-    # for
+    # for and explored
     done_nodes = set()
-
+    while priority_q.empty() is False:
+        # pq unpacking of values
+        funct, temp, current_value = priority_q.get()
+        # if the current_value is an element of
+        # already explored nodes then continue
+        # exploring the priority queue
+        if current_value in done_nodes:
+            continue
+        
+        # goal test of where we have an optimal
+        # path we wish to return
+        if current_value == goal:
+            # reconstruct the previous explored
+            # path
+            explored_path = [current_value]
+            # new valid path we can add to list of
+            # explored paths
+            while current_value != start:
+                current_value = came_from[current_value]
+                explored_path.append(current_value)
+            # ideal return order of moves
+            explored_path.reverse()
+            return explored_path
+        done_nodes.add(current_value)
+        # call our neighbor cost function generator and on 
+        # each iteration calculate an estimate g score
+        # to fully perform a * search
+        for nbor, cost in retrieve_neighbors_with_values(current_value, scene):
+            estimate_g = g_funct[current_value] + cost
+            # if the neibor's path was never recorded previosoly or
+            # the guess cost is less than the actually, then we
+            # need to run the alogrithm again
+            if (nbor not in g_funct) or (estimate_g < g_funct[nbor]):
+                came_from[nbor] = current_value
+                g_funct[nbor] = estimate_g
+                # update the ideal distance
+                updated_h = find_path_euclidean_heuristic(nbor, goal)
+                # update the pq to include the new heuristic value,
+                # distance from points
+                priority_q.put((estimate_g + updated_h, counter, nbor))
+                counter += 1
+    # if we reaach this point, then there is no path between the start and goal
+    # points that avoids obstacles
+    return None
 
 
 def find_path_euclidean_heuristic(start, goal):
     # heurstic function for find_path function
     # using the euclidean distance formula
+    # sqrt((x2 - x1)^2 + (y2 - y1)^2)
     # start is tuple of coordinates with
     # (row, column) for the point
     start_row = start[0]
@@ -503,7 +550,7 @@ def find_path_euclidean_heuristic(start, goal):
 def retrieve_neighbors_with_values(pt, scene):
 
     # Given a current point (row, col) and a scene grid of booleans,
-    # yield (neighbor_point, step_cost) for all valid moves.
+    # generate (neighbor_point, step_cost) for all valid moves.
 
     # Valid moves: 8-directional (U, D, R, L, and diagonals)
     # Cost: 1.0 for normal moves, sqrt(2) for diagonal
@@ -558,6 +605,17 @@ def retrieve_neighbors_with_values(pt, scene):
         # generate the cost of the move in the loop
         # iteration if we make it this far
         yield (new_row, new_col), cost_of_move
+
+
+# Test case for the find path function:
+scene = [[False, False, False],
+         [False, True, False],
+         [False, False, False]]
+print(find_path((0, 0), (2, 1), scene))
+scene = [[False, True, False],
+         [False, True, False],
+         [False, True, False]]
+print(find_path((0, 0), (0, 2), scene))
 
 
 ############################################################
