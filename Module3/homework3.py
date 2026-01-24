@@ -467,13 +467,13 @@ def find_path(start, goal, scene):
     # A * search : f(n) = g(n) + h(n)
     # priority_queue needed to implement
     # A * search
-    priority_q = PriorityQueue()
+    frontier = PriorityQueue()
     # retrieve our h(n) value or best educated
     # guess value from the euclidean distance function
     heuristic = find_path_euclidean_heuristic(start, goal)
     # place the current function generated distance, counter value
     # and coordinate posistion into the pq
-    priority_q.put((0.0 + heuristic , counter, start))
+    frontier.put((0.0 + heuristic , counter, start))
     counter += 1
     # our cost from the starting origin point
     g_funct = {start: 0.0}
@@ -482,9 +482,9 @@ def find_path(start, goal, scene):
     # the set of node we have already accounted
     # for and explored
     done_nodes = set()
-    while priority_q.empty() is False:
+    while frontier.empty() is False:
         # pq unpacking of values
-        funct, temp, current_value = priority_q.get()
+        funct, temp, current_value = frontier.get()
         # if the current_value is an element of
         # already explored nodes then continue
         # exploring the priority queue
@@ -521,7 +521,7 @@ def find_path(start, goal, scene):
                 updated_h = find_path_euclidean_heuristic(nbor, goal)
                 # update the pq to include the new heuristic value,
                 # distance from points
-                priority_q.put((estimate_g + updated_h, counter, nbor))
+                frontier.put((estimate_g + updated_h, counter, nbor))
                 counter += 1
     # if we reaach this point, then there is no path between the start and goal
     # points that avoids obstacles
