@@ -858,6 +858,22 @@ def distinct_disks_helper1(current_state, length):
                         new_state = tuple(new_locations)
                         yield (posistion, posistion2), new_state
 
+def distinct_disks_heuristic(current_state, posistion_goal):
+    # heuristic function used by the solve_distinct
+    # function above to provide a great estimate
+    # for the optimal move
+    # guarentee the disk can atmost move up to two
+    # moves to avoid the other disk
+    total_distance = 0
+    index = 0
+    for disk_i in current_state:
+        # index += 1
+        distance = abs(disk_i - posistion_goal[index])
+        total_distance += (distance + 1) // 2
+        # total_distance = total_distance // 2
+        index += 1
+    return total_distance
+ 
 ############################################################
 # Section 4: Feedback
 ############################################################
