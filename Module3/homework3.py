@@ -961,6 +961,11 @@ def solve_distinct_disks(length, n):
     # no solution available
     return None
 
+# Test cases for solve distinct disks:
+print(solve_distinct_disks(4, 2))
+print(solve_distinct_disks(5, 2))
+print(solve_distinct_disks(4, 3))
+print(solve_distinct_disks(5, 3))
  
 ############################################################
 # Section 4: Feedback
