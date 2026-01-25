@@ -891,6 +891,8 @@ def solve_distinct_disks(length, n):
     p_queue.put((heuristic, counter, intial_state))
     counter += 1
     # parent pointer from the previous path
+    # parent disk to the next disk
+    # mapping
     came_from = {}
     # the set of nodes we have already accounted
     # for and explored
@@ -910,21 +912,34 @@ def solve_distinct_disks(length, n):
         if current_value == goal_state:
             # reconstruct the previous explored
             # path
-            explored_path = [current_value]
+            list_of_moves = []
+            parent_pointer = current_value
             # new valid path we can add to list of
             # explored paths
-            while current_value != intial_state:
-                current_value = came_from[current_value]
-                explored_path.append(current_value)
+            while parent_pointer != intial_state:
+                parent_state = came_from[parent_pointer][0]
+                current_move = came_from[parent_pointer][1]
+                list_of_moves.append(current_move)
+                parent_pointer = parent_state
             # ideal return order of moves
-            explored_path.reverse()
-            return explored_path
+            list_of_moves.reverse()
+            return list_of_moves
         # add the previsouly explored node
         # disk to the visited disks
         done_nodes.add(current_value)
 
         # expand the sucessors to children disks
         # to explore for solutions
+        # call our sucessors function generator and on
+        # each iteration calculate an estimate g score
+        # to fully perform a * search
+        for c_move, new_state in distinct_disks_helper1(current_value, length):
+            # avoid pushing the same duplicate state
+            # into already visited nodes so far
+            if new_state in done_nodes:
+                continue
+            estimate_g = g_funct[current_value] + 1
+
         
 
         
