@@ -783,7 +783,80 @@ print(find_path((0, 0), (0, 2), scene))
 
 
 def solve_distinct_disks(length, n):
-    pass
+    # Hw2 code brought in:
+    # edge case if no disks are given to
+    # the function
+    if n <= 0:
+        return []
+    # edge case if total number of
+    # disks are more than the total number of
+    # tiles present
+    if n > length:
+        return None
+
+    temp = []
+    for i in range(0, n, 1):
+        temp.append(i)
+    # intial state will include all the
+    # disks as a tuple
+    intial_state = tuple(temp)
+    # generate the goal state posistions
+    # of disks where the disks should
+    # be placed toward the right end of the
+    # linear board
+    temp = []
+    # key difference from the function above where
+    # now the goal state is now from disk n-1
+    # to length of the board -n as opposed to from right
+    # to left. Reverse order of goal states now
+    for i in range(0, n, 1):
+        temp.append((length - 1) - i)
+    goal_state = tuple(temp)
+
+    # if already solved, no further solutions
+    # exist
+    if intial_state == goal_state:
+        return []
+    
+def distinct_disks_helper1(current_state, length):
+    # current_state is the posistion of the
+    # all the disks in the board. current_state[i]
+    # is the current disk we wish to move specifcally
+    occupied_currently = set(current_state)
+    # generate sucessors to the current state
+    # keep track of the index and posistion of
+    # the current disk
+    for i in range(0, len(current_state), 1):
+        posistion = current_state[i]
+        # direction loop controlling left
+        # hand side linear disk being able
+        # to crossover linear disk on the
+        # right
+        for distance in range(-1, 2, 2):
+            posistion2 = posistion + distance
+            # record new distance covered if it is
+            # valid within the constraints of the
+            # problem distance to travel for disk1
+            if posistion2 >= 0 and posistion2 < length:
+                if posistion2 not in occupied_currently:
+                    new_locations = list(current_state)
+                    new_locations[i] = posistion2
+                    new_state = tuple(new_locations)
+                    yield (posistion, posistion2), new_state
+            # grab the midpoint distance between the two
+            # disks
+            middle = posistion + distance
+            posistion2 = posistion + (2 * distance)
+            # record new distance covered if it is
+            # valid within the constraints of the
+            # problem distance to travel for disk1
+            if posistion2 >= 0 and posistion2 < length:
+                if posistion2 not in occupied_currently:
+                    if middle in occupied_currently:
+                        new_locations = list(current_state)
+                        new_locations[i] = posistion2
+                        new_state = tuple(new_locations)
+                        yield (posistion, posistion2), new_state
 
 ############################################################
 # Section 4: Feedback
