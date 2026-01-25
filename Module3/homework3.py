@@ -781,43 +781,6 @@ print(find_path((0, 0), (0, 2), scene))
 # Section 3: Linear Disk Movement, Revisited
 ############################################################
 
-
-def solve_distinct_disks(length, n):
-    # Hw2 code brought in:
-    # edge case if no disks are given to
-    # the function
-    if n <= 0:
-        return []
-    # edge case if total number of
-    # disks are more than the total number of
-    # tiles present
-    if n > length:
-        return None
-
-    temp = []
-    for i in range(0, n, 1):
-        temp.append(i)
-    # intial state will include all the
-    # disks as a tuple
-    intial_state = tuple(temp)
-    # generate the goal state posistions
-    # of disks where the disks should
-    # be placed toward the right end of the
-    # linear board
-    temp = []
-    # key difference from the function above where
-    # now the goal state is now from disk n-1
-    # to length of the board -n as opposed to from right
-    # to left. Reverse order of goal states now
-    for i in range(0, n, 1):
-        temp.append((length - 1) - i)
-    goal_state = tuple(temp)
-
-    # if already solved, no further solutions
-    # exist
-    if intial_state == goal_state:
-        return []
-    
 def distinct_disks_helper1(current_state, length):
     # current_state is the posistion of the
     # all the disks in the board. current_state[i]
@@ -873,6 +836,101 @@ def distinct_disks_heuristic(current_state, posistion_goal):
         # total_distance = total_distance // 2
         index += 1
     return total_distance
+
+
+def solve_distinct_disks(length, n):
+    # Hw2 code brought in:
+    # edge case if no disks are given to
+    # the function
+    if n <= 0:
+        return []
+    # edge case if total number of
+    # disks are more than the total number of
+    # tiles present
+    if n > length:
+        return None
+
+    temp = []
+    for i in range(0, n, 1):
+        temp.append(i)
+    # intial state will include all the
+    # disks as a tuple
+    intial_state = tuple(temp)
+    # generate the goal state posistions
+    # of disks where the disks should
+    # be placed toward the right end of the
+    # linear board
+    temp = []
+    # key difference from the function above where
+    # now the goal state is now from disk n-1
+    # to length of the board -n as opposed to from right
+    # to left. Reverse order of goal states now
+    for i in range(0, n, 1):
+        temp.append((length - 1) - i)
+    goal_state = tuple(temp)
+
+    # if already solved, no further solutions
+    # exist
+    if intial_state == goal_state:
+        return []
+    # priority queue data structure needed for A *
+    # search algorithm
+    p_queue = PriorityQueue()
+    # counter used to count the total number of moves
+    # requried between starting and goal coordinates
+    counter = 0
+
+    # f(n) = g(n) + h(n)
+    # retrieve our h(n) value or best educated
+    # guess value from the heuristic function below
+    heuristic = distinct_disks_heuristic(intial_state, goal_state)
+    # our cost from the starting origin point
+    g_funct = {intial_state: 0}
+    # place the current function generated distance, counter value
+    # and coordinate posistion into the pq
+    p_queue.put((heuristic, counter, intial_state))
+    counter += 1
+    # parent pointer from the previous path
+    came_from = {}
+    # the set of nodes we have already accounted
+    # for and explored
+    done_nodes = set()
+    # A * search alogorithm main loop
+    while p_queue.empty() is False:
+        # pq unpacking of values
+        funct, temp, current_value = p_queue.get()
+        # if the current_value is an element of
+        # already explored nodes then continue
+        # exploring the priority queue
+        if current_value in done_nodes:
+            continue
+        # if we already have moved the disks to the
+        # rhs of the board, we have found a solution
+        # to return
+        if current_value == goal_state:
+            # reconstruct the previous explored
+            # path
+            explored_path = [current_value]
+            # new valid path we can add to list of
+            # explored paths
+            while current_value != intial_state:
+                current_value = came_from[current_value]
+                explored_path.append(current_value)
+            # ideal return order of moves
+            explored_path.reverse()
+            return explored_path
+        # add the previsouly explored node
+        # disk to the visited disks
+        done_nodes.add(current_value)
+
+        # expand the sucessors to children disks
+        # to explore for solutions
+        
+
+        
+
+
+
  
 ############################################################
 # Section 4: Feedback
