@@ -939,12 +939,27 @@ def solve_distinct_disks(length, n):
             if new_state in done_nodes:
                 continue
             estimate_g = g_funct[current_value] + 1
-
-        
-
-        
-
-
+            # if the child's path was never recorded previously or
+            # the guess cost is less than the actual cost, then we
+            # need to run the algorithm again
+            if (new_state not in g_funct) or (estimate_g < g_funct[new_state]):
+                # calculate a new g function value based on the updated
+                # esitamted g function value
+                g_funct[new_state] = estimate_g
+                # reference the previous state for easy path
+                # reconstruction
+                came_from[new_state] = (current_value, c_move)
+                # update the ideal distance heuristic
+                new_heuristic = distinct_disks_heuristic(new_state, goal_state)
+                # update the function value to apply again
+                funct = estimate_g + new_heuristic
+                # update the pq to include the new heuristic value,
+                # distance between disks
+                p_queue.put((funct, counter, new_state))
+                counter += 1
+     # if we reach this point, then there is no  optimal path
+    # no solution available
+    return None
 
  
 ############################################################
