@@ -350,13 +350,13 @@ class TilePuzzle(object):
     # Required
     def find_solution_a_star(self):
         # edge case to check is the
-        # board is already solved, so no 
-        # lists of solutions available to 
+        # board is already solved, so no
+        # lists of solutions available to
         # return
         if self.is_solved():
             temp = []
             return temp
-        # have a deep copy of the currnet self puzzle called 
+        # have a deep copy of the currnet self puzzle called
         # initial puzzle for not mutations to the calling
         # object's board
         initial_puzzle = self.copy()
@@ -373,7 +373,7 @@ class TilePuzzle(object):
 
         # f(n) = g(n) + h(n)
         # retrieve our h(n) value or best educated
-        # guess value from the manhattan distance 
+        # guess value from the manhattan distance
         # function
         heuristic = self.manhattan_heuristic_helper(initial_puzzle)
         # our cost from the starting origin point
@@ -389,13 +389,77 @@ class TilePuzzle(object):
         # the set of node we have already accounted
         # for and explored
         done_nodes = set()
-        
 
+        while p_queue.empty() is False:
+            # pq unpacking of values
+            funct, tie_value, current_value = p_queue.get()
+            # if the current_value is an element of
+            # already explored nodes then continue
+            # exploring the priority queue
+            if current_value in done_nodes:
+                continue
 
+            # goal test of where we have an optimal
+            # path we wish to return
+            current_puzzle = puzzle_key[current_value]
+            # explored_path = [current_value]
+            # new valid path we can add to list of
+            # explored paths
+            if current_puzzle.is_solved():
+                list_of_moves = []
+                pointer_key = current_value
+                # backtrack from goal key back to the initial key
+                # for relaxation of edges
+                while pointer_key != initial_key:
+                    parent_key = came_from[pointer_key][0]
+                    move = came_from[pointer_key][1]
+                    list_of_moves.append(move)
+                    # reset the pointer to the previos
+                    # explored node
+                    pointer_key = parent_key
+                # ideal return order of moves. Now we have
+                # a list of proper moves between starting
+                # tile to ending tile
+                list_of_moves.reverse()
+                return list_of_moves
 
+            # add the current unexplored node to list
+            # nodes already explored
+            done_nodes.add(current_value)
+            # call our sucessors function generator and on
+            # each iteration calculate an estimate g score
+            # to fully perform a * search
+            for element, new_puzzle in current_puzzle.successors():
+                new_key = self.iddfs_helper1(new_puzzle)
+                # avoid pushing the same duplicate state
+                # into already visited nodes so far
+                if new_key in done_nodes:
+                    continue
+                # uniform cost for swipping the tile pieces
+                estimate_g = g_funct[current_value] + 1
+                # if the child's path was never recorded previously or
+                # the guess cost is less than the actually, then we
+                # need to run the algorithm again
+                if (new_key not in g_funct) or (estimate_g < g_funct[new_key]):
+                    g_funct[new_key] = estimate_g
+                    # reference the previous state for easy path
+                    # reconstruction
+                    came_from[new_key] = (current_value, element)
+                    # new puzzle stored
+                    puzzle_key[new_key] = new_puzzle
+                    # update the ideal distance manhattan heuristic
+                    updated_h = self.manhattan_heuristic_helper(new_puzzle)
+                    f_value = estimate_g + updated_h
+                    # update the pq to include the new heuristic value,
+                    # distance from tiles
+                    p_queue.put((f_value, counter, new_key))
+                    counter += 1
+        # if we reach this point, then there is no  optimal path
+        # no solution available
+        return None
 
     def manhattan_heuristic_helper(self, tile_puzzle):
-        # heurstic function for find_solution_a_star 
+        # heurstic function for find_solution_a_star
         # function using the manhattan distance formula
         # distance = |x1 - x2| + |y1 - y2|
         # Tile_puzzle object is refrencesing a null space
@@ -421,25 +485,21 @@ class TilePuzzle(object):
             posistion_goal[i] = (goal_row, goal_col)
         # actually manhattan distance calculation
         sum_manhattan = 0
-        # iterate throgh the board, and as long as we are not on the empty tile,
-        # then apply the manahattan distance forumal for every point
+        # iterate through the board, and as long as
+        # we are not on the empty tile,
+        # then apply the manahattan distance formula for every point
         # with respect to it's desitnation point
         for i in range(0, total_rows, 1):
             for j in range(0, total_cols, 1):
                 # if the current board tile is not
-                # the empty tile
+                # the empty tile, then we can apply the
+                # formula
                 if current_board[i][j] != 0:
                     row_goal = posistion_goal[current_board[i][j]][0]
                     col_goal = posistion_goal[current_board[i][j]][1]
                     sum_manhattan += abs(i - row_goal)
                     sum_manhattan += abs(j - col_goal)
         return sum_manhattan
-
-
-
-
-
-
 
 
 p = TilePuzzle([[1, 2], [3, 0]])
@@ -497,6 +557,15 @@ print(next(solutions))
 b = [[1, 2, 3], [4, 0, 8], [7, 6, 5]]
 p = TilePuzzle(b)
 print(list(p.find_solutions_iddfs()))
+
+# Test case for find solutions a*
+b = [[4, 1, 2], [0, 5, 3], [7, 8, 6]]
+p = TilePuzzle(b)
+print(p.find_solution_a_star())
+
+b = [[1, 2, 3], [4 , 0, 5], [6, 7, 8]]
+p = TilePuzzle(b)
+print(p.find_solution_a_star())
 ############################################################
 # Section 2: Grid Navigation
 ############################################################
@@ -563,7 +632,7 @@ def find_path(start, goal, scene):
     heuristic = find_path_euclidean_heuristic(start, goal)
     # place the current function generated distance, counter value
     # and coordinate posistion into the pq
-    frontier.put((0.0 + heuristic , counter, start))
+    frontier.put((0.0 + heuristic, counter, start))
     counter += 1
     # our cost from the starting origin point
     g_funct = {start: 0.0}
@@ -580,7 +649,7 @@ def find_path(start, goal, scene):
         # exploring the priority queue
         if current_value in done_nodes:
             continue
-        
+
         # goal test of where we have an optimal
         # path we wish to return
         if current_value == goal:
@@ -596,7 +665,7 @@ def find_path(start, goal, scene):
             explored_path.reverse()
             return explored_path
         done_nodes.add(current_value)
-        # call our neighbor cost function generator and on 
+        # call our neighbor cost function generator and on
         # each iteration calculate an estimate g score
         # to fully perform a * search
         for nbor, cost in retrieve_neighbors_with_values(current_value, scene):
@@ -613,7 +682,7 @@ def find_path(start, goal, scene):
                 # distance from points
                 frontier.put((estimate_g + updated_h, counter, nbor))
                 counter += 1
-    # if we reaach this point, then there is no path between the start and goal
+    # if we reach this point, then there is no path between the start and goal
     # points that avoids obstacles
     return None
 
