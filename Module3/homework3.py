@@ -438,7 +438,7 @@ class TilePuzzle(object):
                 # uniform cost for swipping the tile pieces
                 estimate_g = g_funct[current_value] + 1
                 # if the child's path was never recorded previously or
-                # the guess cost is less than the actually, then we
+                # the guess cost is less than the actual cost, then we
                 # need to run the algorithm again
                 if (new_key not in g_funct) or (estimate_g < g_funct[new_key]):
                     g_funct[new_key] = estimate_g
@@ -563,7 +563,7 @@ b = [[4, 1, 2], [0, 5, 3], [7, 8, 6]]
 p = TilePuzzle(b)
 print(p.find_solution_a_star())
 
-b = [[1, 2, 3], [4 , 0, 5], [6, 7, 8]]
+b = [[1, 2, 3], [4, 0, 5], [6, 7, 8]]
 p = TilePuzzle(b)
 print(p.find_solution_a_star())
 ############################################################
@@ -670,7 +670,7 @@ def find_path(start, goal, scene):
         # to fully perform a * search
         for nbor, cost in retrieve_neighbors_with_values(current_value, scene):
             estimate_g = g_funct[current_value] + cost
-            # if the neibor's path was never recorded previosoly or
+            # if the neighbor's path was never recorded previosoly or
             # the guess cost is less than the actually, then we
             # need to run the alogrithm again
             if (nbor not in g_funct) or (estimate_g < g_funct[nbor]):
