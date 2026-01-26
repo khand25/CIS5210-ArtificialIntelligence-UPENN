@@ -502,70 +502,70 @@ class TilePuzzle(object):
         return sum_manhattan
 
 
-p = TilePuzzle([[1, 2], [3, 0]])
-print(p.get_board())
-p = TilePuzzle([[0, 1], [3, 2]])
-print(p.get_board())
+# p = TilePuzzle([[1, 2], [3, 0]])
+# print(p.get_board())
+# p = TilePuzzle([[0, 1], [3, 2]])
+# print(p.get_board())
 
 # Test case for create_tile_puzzle
-p = create_tile_puzzle(3, 3)
-print(p.get_board())
+# p = create_tile_puzzle(3, 3)
+# print(p.get_board())
 
-p = create_tile_puzzle(2, 4)
-print(p.get_board())
+# p = create_tile_puzzle(2, 4)
+# print(p.get_board())
 
 # Test case for perform a move
-p = create_tile_puzzle(3, 3)
-print(p.perform_move("Up"))
-print(p.get_board())
+# p = create_tile_puzzle(3, 3)
+# print(p.perform_move("Up"))
+# print(p.get_board())
 
-p = create_tile_puzzle(3, 3)
-print(p.perform_move("down"))
-print(p.get_board())
+# p = create_tile_puzzle(3, 3)
+# print(p.perform_move("down"))
+# print(p.get_board())
 
 # Test case for scramble and is_solved
-p = TilePuzzle([[1, 2], [3, 0]])
-print(p.is_solved())
-p = TilePuzzle([[0, 1], [3, 2]])
-print(p.is_solved())
+# p = TilePuzzle([[1, 2], [3, 0]])
+# print(p.is_solved())
+# p = TilePuzzle([[0, 1], [3, 2]])
+# print(p.is_solved())
 
 # Test case for copy function
-p = create_tile_puzzle(3, 3)
-p2 = p.copy()
-print(p.get_board() == p2.get_board())
+# p = create_tile_puzzle(3, 3)
+# p2 = p.copy()
+# print(p.get_board() == p2.get_board())
 
-p = create_tile_puzzle(3, 3)
-p2 = p.copy()
-p.perform_move("left")
-print(p.get_board() == p2.get_board())
+# p = create_tile_puzzle(3, 3)
+# p2 = p.copy()
+# p.perform_move("left")
+# print(p.get_board() == p2.get_board())
 
 # Test case for sucessors function
-p = create_tile_puzzle(3, 3)
-for move, new_p in p.successors():
-    print(move, new_p.get_board())
-b = [[1, 2, 3], [4, 0, 5], [6, 7, 8]]
-p = TilePuzzle(b)
-for move, new_p in p.successors():
-    print(move, new_p.get_board())
+# p = create_tile_puzzle(3, 3)
+# for move, new_p in p.successors():
+# print(move, new_p.get_board())
+# b = [[1, 2, 3], [4, 0, 5], [6, 7, 8]]
+# p = TilePuzzle(b)
+# for move, new_p in p.successors():
+# print(move, new_p.get_board())
 
 # Test case for iddfs problem
-b = [[4, 1, 2], [0, 5, 3], [7, 8, 6]]
-p = TilePuzzle(b)
-solutions = p.find_solutions_iddfs()
-print(next(solutions))
+# b = [[4, 1, 2], [0, 5, 3], [7, 8, 6]]
+# p = TilePuzzle(b)
+# solutions = p.find_solutions_iddfs()
+# print(next(solutions))
 
-b = [[1, 2, 3], [4, 0, 8], [7, 6, 5]]
-p = TilePuzzle(b)
-print(list(p.find_solutions_iddfs()))
+# b = [[1, 2, 3], [4, 0, 8], [7, 6, 5]]
+# p = TilePuzzle(b)
+# print(list(p.find_solutions_iddfs()))
 
 # Test case for find solutions a*
-b = [[4, 1, 2], [0, 5, 3], [7, 8, 6]]
-p = TilePuzzle(b)
-print(p.find_solution_a_star())
+# b = [[4, 1, 2], [0, 5, 3], [7, 8, 6]]
+# p = TilePuzzle(b)
+# print(p.find_solution_a_star())
 
-b = [[1, 2, 3], [4, 0, 5], [6, 7, 8]]
-p = TilePuzzle(b)
-print(p.find_solution_a_star())
+# b = [[1, 2, 3], [4, 0, 5], [6, 7, 8]]
+# p = TilePuzzle(b)
+# print(p.find_solution_a_star())
 ############################################################
 # Section 2: Grid Navigation
 ############################################################
@@ -767,14 +767,14 @@ def retrieve_neighbors_with_values(pt, scene):
 
 
 # Test case for the find path function:
-scene = [[False, False, False],
-         [False, True, False],
-         [False, False, False]]
-print(find_path((0, 0), (2, 1), scene))
-scene = [[False, True, False],
-         [False, True, False],
-         [False, True, False]]
-print(find_path((0, 0), (0, 2), scene))
+# scene = [[False, False, False],
+# [False, True, False],
+# [False, False, False]]
+# print(find_path((0, 0), (2, 1), scene))
+# scene = [[False, True, False],
+# [False, True, False],
+# [False, True, False]]
+# print(find_path((0, 0), (0, 2), scene))
 
 
 ############################################################
@@ -964,10 +964,10 @@ def solve_distinct_disks(length, n):
 
 
 # Test cases for solve distinct disks:
-print(solve_distinct_disks(4, 2))
-print(solve_distinct_disks(5, 2))
-print(solve_distinct_disks(4, 3))
-print(solve_distinct_disks(5, 3))
+# print(solve_distinct_disks(4, 2))
+# print(solve_distinct_disks(5, 2))
+# print(solve_distinct_disks(4, 3))
+# print(solve_distinct_disks(5, 3))
 
 ############################################################
 # Section 4: Feedback
@@ -976,18 +976,24 @@ print(solve_distinct_disks(5, 3))
 
 # Just an approximation is fine.
 feedback_question_1 = """
-I spent anywhere around 18 - 22 hours working on 
+I spent anywhere around 18 - 22 hours working on
 this homework assignment.
 """
 
 feedback_question_2 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I found the section implementing both the find path functons and
+# find solution a star to be the most challenging. This is because,
+I was not to familar with the a* search algorithm before starting this
+homework assingment. Actaully finding the pusdecode, taking a more detailed
+approach, and understianing the purpose of the heuristic function, made
+the difference when approaching to write these functions.
 """
 
 feedback_question_3 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I liked working on the iddfs alogrithm.
+I liked refering to the textbook's
+psuedocode while completing this implementation
+directly. After completing this function, it had
+given me the confidence to tackle the rest of
+the problems in the homework.
 """
