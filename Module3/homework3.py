@@ -821,6 +821,7 @@ def distinct_disks_helper1(current_state, length):
                         new_state = tuple(new_locations)
                         yield (posistion, posistion2), new_state
 
+
 def distinct_disks_heuristic(current_state, posistion_goal):
     # heuristic function used by the solve_distinct
     # function above to provide a great estimate
@@ -957,16 +958,17 @@ def solve_distinct_disks(length, n):
                 # distance between disks
                 p_queue.put((funct, counter, new_state))
                 counter += 1
-     # if we reach this point, then there is no  optimal path
+    # if we reach this point, then there is no  optimal path
     # no solution available
     return None
+
 
 # Test cases for solve distinct disks:
 print(solve_distinct_disks(4, 2))
 print(solve_distinct_disks(5, 2))
 print(solve_distinct_disks(4, 3))
 print(solve_distinct_disks(5, 3))
- 
+
 ############################################################
 # Section 4: Feedback
 ############################################################
@@ -974,9 +976,8 @@ print(solve_distinct_disks(5, 3))
 
 # Just an approximation is fine.
 feedback_question_1 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I spent anywhere around 18 - 22 hours working on 
+this homework assignment.
 """
 
 feedback_question_2 = """
