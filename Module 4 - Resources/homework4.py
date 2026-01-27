@@ -37,7 +37,12 @@ class DominoesGame(object):
         return self.board
 
     def reset(self):
-        pass
+        for i in range(0, self.total_rows, 1):
+            for j in range(0, self.total_cols, 1):
+                # if we currently have a True value
+                # in the current ith,jth posistion
+                # then set it to False
+                self.board[i][j] = False
 
     def is_legal_move(self, row, col, vertical):
         pass
@@ -74,8 +79,24 @@ b = [[True, False], [True, False]]
 g = DominoesGame(b)
 print(g.get_board())
 
+# Test case for reset
+b = [[False, False], [False, False]]
+g = DominoesGame(b)
+print("Test case for reset")
+print(g.get_board())
+g.reset()
+print(g.get_board())
+b = [[True, False], [True, False]]
+g = DominoesGame(b)
+print(g.get_board())
+g.reset()
+print(g.get_board())
+
 
 def create_dominoes_game(rows, cols):
+    # create a 2d list of all False boolean
+    # values with the same dimensions of the
+    # dominoes board given
     empty_board = []
     for i in range(0, rows, 1):
         temp = []
@@ -88,6 +109,7 @@ def create_dominoes_game(rows, cols):
 
 
 # Test case for create_dominoes_game function:
+print("Test case for create_dominoes_game")
 g = create_dominoes_game(2, 2)
 print(g.get_board())
 
