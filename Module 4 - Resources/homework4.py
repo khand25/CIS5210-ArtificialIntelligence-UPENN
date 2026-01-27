@@ -45,7 +45,30 @@ class DominoesGame(object):
                 self.board[i][j] = False
 
     def is_legal_move(self, row, col, vertical):
-        pass
+        # check to see if either row or col
+        # is valid indicies in the board
+        if row < 0 or col < 0:
+            return False
+        if row >= self.total_rows or col >= self.total_cols:
+            return False
+        
+        valid = False
+        # if we are dealing with a vertical move
+        if vertical:
+            # if the row below is actaully in bounds
+            if row + 1 < self.total_rows:
+                if self.board[row][col] is False:
+                    if self.board[row + 1][col] is False:
+                        valid = True
+        else:
+            # we are dealing with a horizontal move
+            if col + 1 < self.total_cols:
+                # if the col to the right is actaully in bounds
+                if self.board[row][col] is False:
+                    if self.board[row][col + 1] is False:
+                        valid = True
+        return valid
+
 
     def legal_moves(self, vertical):
         pass
