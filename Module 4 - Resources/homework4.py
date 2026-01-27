@@ -22,10 +22,6 @@ student_name = "Danyal Razaa Khan"
 ############################################################
 
 
-def create_dominoes_game(rows, cols):
-    pass
-
-
 class DominoesGame(object):
 
     # Required
@@ -68,6 +64,7 @@ class DominoesGame(object):
     def get_best_move(self, vertical, limit):
         pass
 
+
 # Test case for get_board()
 b = [[False, False], [False, False]]
 g = DominoesGame(b)
@@ -75,6 +72,26 @@ print(g.get_board())
 
 b = [[True, False], [True, False]]
 g = DominoesGame(b)
+print(g.get_board())
+
+
+def create_dominoes_game(rows, cols):
+    empty_board = []
+    for i in range(0, rows, 1):
+        temp = []
+        for j in range(0, cols, 1):
+            temp.append(False)
+        empty_board.append(temp)
+    # create a new dominoes object with the empty_board
+    # passed in via the constructor for this object
+    return DominoesGame(empty_board)
+
+
+# Test case for create_dominoes_game function:
+g = create_dominoes_game(2, 2)
+print(g.get_board())
+
+g = create_dominoes_game(2, 3)
 print(g.get_board())
 ############################################################
 # Section 2: Feedback
