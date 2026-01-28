@@ -71,10 +71,58 @@ class DominoesGame(object):
 
 
     def legal_moves(self, vertical):
-        pass
+        # we are dealing with a vertical moving dominoe
+        # player
+        if vertical:
+            # iterate through all the rows and columns of the
+            # instance variable board for the calling object 
+            # on each iteration, call our is_legal_move
+            # function from above to indicate where our current row
+            # and column from the board iteration is able to place
+            # a dominoe piece vertically on top of it.
+            # if True returned, then yeild the row and col
+            # as a generator tuple elment to puase this function
+            # return the tuple, and recontinue this function
+            # onto the next iteration of the loop
+            for i in range(0, self.total_rows, 1):
+                for j in range(0, self.total_cols, 1):
+                    if self.is_legal_move(i, j, True):
+                        yield(i, j)
+        else:
+            # we are dealing with a horizontal moving dominoe
+            # player.
+            # iterate through all the rows and columns of the
+            # instance variable board for the calling object 
+            # on each iteration, call our is_legal_move
+            # function from above to indicate where our current row
+            # and column from the board iteration is able to place
+            # a dominoe piece horizontally on top of it.
+            # if True returned, then yeild the row and col
+            # as a generator tuple elment to pause this function
+            # return the tuple, and recontinue this function
+            # onto the next iteration of the loop
+            for i in range(0, self.total_rows, 1):
+                for j in range(0, self.total_cols, 1):
+                    if self.is_legal_move(i, j, False):
+                        yield(i, j)
+        
 
     def perform_move(self, row, col, vertical):
-        pass
+        # we are dealing with a vertical moving dominoe
+        # player
+        if vertical:
+            # verify if we can place the veritcal dominoe at the
+            # given row col posistion
+            if self.is_legal_move(row, col, True):
+                self.board[row][col] = True
+                self.board[row + 1][col] = True
+        else:
+            # verify if we can place the horizontal dominoe at the
+            # given row col posistion
+            if self.is_legal_move(row, col, False):
+                self.board[row][col] = True
+                self.board[row][col + 1] = True
+
 
     def game_over(self, vertical):
         pass
@@ -126,6 +174,7 @@ print(g.is_legal_move(0, 1, True))
 print(g.is_legal_move(1, 1, True))
 
 
+
 def create_dominoes_game(rows, cols):
     # create a 2d list of all False boolean
     # values with the same dimensions of the
@@ -147,6 +196,23 @@ g = create_dominoes_game(2, 2)
 print(g.get_board())
 
 g = create_dominoes_game(2, 3)
+print(g.get_board())
+
+# Test case for legal_moves
+print("Test cases for legal_moves function")
+g = create_dominoes_game(3, 3)
+print(list(g.legal_moves(True)))
+print(list(g.legal_moves(False)))
+b = [[True, False], [True, False]]
+g = DominoesGame(b)
+print(list(g.legal_moves(True)))
+print(list(g.legal_moves(False)))
+print("Test cases for perform moves function")
+g = create_dominoes_game(3, 3)
+g.perform_move(0, 1, True)
+print(g.get_board())
+g = create_dominoes_game(3, 3)
+g.perform_move(1, 0, False)
 print(g.get_board())
 ############################################################
 # Section 2: Feedback
