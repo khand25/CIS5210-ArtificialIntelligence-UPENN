@@ -56,6 +56,7 @@ class DominoesGame(object):
         # if we are dealing with a vertical move
         if vertical:
             # if the row below is actaully in bounds
+            # and both sqaures are currently empty
             if row + 1 < self.total_rows:
                 if self.board[row][col] is False:
                     if self.board[row + 1][col] is False:
@@ -125,7 +126,18 @@ class DominoesGame(object):
 
 
     def game_over(self, vertical):
-        pass
+        if vertical:
+            for i in range(0, self.total_rows, 1):
+                for j in range(0, self.total_cols, 1):
+                    if self.is_legal_move(i, j, True):
+                        return False
+        else:
+            for i in range(0, self.total_rows, 1):
+                for j in range(0, self.total_cols, 1):
+                    if self.is_legal_move(i, j, False):
+                        return False
+        return True
+                        
 
     def copy(self):
         pass
@@ -214,6 +226,15 @@ print(g.get_board())
 g = create_dominoes_game(3, 3)
 g.perform_move(1, 0, False)
 print(g.get_board())
+print("Test case for game over:")
+b = [[False, False], [False, False]]
+g = DominoesGame(b)
+print(g.game_over(True))
+print(g.game_over(False))
+b = [[True, False], [True, False]]
+g = DominoesGame(b)
+print(g.game_over(True))
+print(g.game_over(False))
 ############################################################
 # Section 2: Feedback
 ############################################################
