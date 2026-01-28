@@ -114,6 +114,16 @@ g = DominoesGame(b)
 print(g.get_board())
 g.reset()
 print(g.get_board())
+print("Test case for is_legal_move")
+b = [[False, False], [False, False]]
+g = DominoesGame(b)
+print(g.is_legal_move(0, 0, True))
+print(g.is_legal_move(0, 0, False))
+b = [[True, False], [True, False]]
+g = DominoesGame(b)
+print(g.is_legal_move(0, 0, False))
+print(g.is_legal_move(0, 1, True))
+print(g.is_legal_move(1, 1, True))
 
 
 def create_dominoes_game(rows, cols):
