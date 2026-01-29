@@ -51,7 +51,7 @@ class DominoesGame(object):
             return False
         if row >= self.total_rows or col >= self.total_cols:
             return False
-        
+
         valid = False
         # if we are dealing with a vertical move
         if vertical:
@@ -126,24 +126,56 @@ class DominoesGame(object):
 
 
     def game_over(self, vertical):
+        # if the player is playing vertical dominoes
         if vertical:
+            # iterate through all the rows and columns of the
+            # the board, perform wheter the current row and col
+            # is legal, if so the game is not complete as a move
+            # can be made so no game over
             for i in range(0, self.total_rows, 1):
                 for j in range(0, self.total_cols, 1):
                     if self.is_legal_move(i, j, True):
                         return False
         else:
+            # if the player is playing horizontal dominoes
+            # iterate through all the rows and columns of the
+            # the board, perform wheter the current row and col
+            # is legal, if so the game is not complete as a move
+            # can be made so no game over
             for i in range(0, self.total_rows, 1):
                 for j in range(0, self.total_cols, 1):
                     if self.is_legal_move(i, j, False):
                         return False
         return True
-                        
 
     def copy(self):
-        pass
-
+        result = []
+        for i in range(0, self.total_rows, 1):
+            temp = []
+            for j in range(0, self.total_cols, 1):
+                temp.append(self.board[i][j])
+            result.append(temp)
+        return DominoesGame(result)
+                
+    
     def successors(self, vertical):
-        pass
+        if vertical:
+            for i in range(0, self.total_rows, 1):
+                for j in range(0, self.total_cols, 1):
+                    if self.is_legal_move(i, j, True):
+                        new_game = self.copy()
+                        new_game.perform_move(i, j, True)
+                        result_tuple = ((i, j), new_game)
+                        yield result_tuple
+        else:
+            for i in range(0, self.total_rows, 1):
+                for j in range(0, self.total_cols, 1):
+                    if self.is_legal_move(i, j, False):
+                        new_game = self.copy()
+                        new_game.perform_move(i, j, False)
+                        result_tuple = ((i, j), new_game)
+                        yield result_tuple
+
 
     def get_random_move(self, vertical):
         pass
@@ -235,6 +267,24 @@ b = [[True, False], [True, False]]
 g = DominoesGame(b)
 print(g.game_over(True))
 print(g.game_over(False))
+print("Test case for copy function:")
+g = create_dominoes_game(4, 4)
+g2 = g.copy()
+print(g.get_board() == g2.get_board())
+g = create_dominoes_game(4, 4)
+g2 = g.copy()
+g.perform_move(0, 0, True)
+print(g.get_board() == g2.get_board())
+print("Test case for sucessors function")
+b = [[False, False], [False, False]]
+g = DominoesGame(b)
+for m, new_g in g.successors(True):
+    print(m, new_g.get_board())
+b = [[True, False], [True, False]]
+g = DominoesGame(b)
+for m, new_g in g.successors(True):
+    print(m, new_g.get_board())
+
 ############################################################
 # Section 2: Feedback
 ############################################################
