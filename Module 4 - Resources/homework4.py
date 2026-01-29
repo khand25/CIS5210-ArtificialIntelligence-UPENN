@@ -178,7 +178,10 @@ class DominoesGame(object):
 
 
     def get_random_move(self, vertical):
-        pass
+       moves = list(self.legal_moves(vertical))
+       if not moves:
+           return None
+       return random.choice(moves)
 
     # Required
     def get_best_move(self, vertical, limit):
