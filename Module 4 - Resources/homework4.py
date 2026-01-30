@@ -185,7 +185,26 @@ class DominoesGame(object):
 
     # Required
     def get_best_move(self, vertical, limit):
+        number_of_leaf_nodes = 0
+
+
+    def evaluate_game(self, vertical_root):
+        # heuristic function used to make a great guess
+        # for the game result for the current player to max
+        # their chances
+        my_moves = list(self.legal_moves(vertical_root))
+        opponents_moves = list(self.legal_moves(not vertical_root))
+        number_my_moves = len(my_moves)
+        number_opps_moves = len(opponents_moves)
+        # return the disparity in number of allowed moves
+        # the current player can make versues the opposing
+        # player legally
+        return number_my_moves - number_opps_moves
+    
+    def cut_tree(self, depth, limit, move_verticle):
         pass
+    
+
 
 
 # Test case for get_board()
