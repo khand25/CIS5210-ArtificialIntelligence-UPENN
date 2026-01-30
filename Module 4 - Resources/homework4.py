@@ -202,7 +202,27 @@ class DominoesGame(object):
         return number_my_moves - number_opps_moves
     
     def cut_tree(self, depth, limit, move_verticle):
-        pass
+        # determine if we are at a leaf node if the depth
+        # of the tree is at the limit of the tree or we
+        # are at the game over stae
+        cut_off = depth == limit or self.game_over(move_verticle)
+        return cut_off
+    
+
+    def leaf_evaluation(self, verticle_root):
+        result = (self.evaluate_game(verticle_root), None, 1)
+        return result
+    
+    def max_value(self, vert_root, depth, limit, alpha, beta, move_vert):
+        if self.cut_tree(depth, limit, move_vert):
+            return self.leaf_evaluation(vert_root)
+    
+    def min_value(self, vert_root, depth, limit, alpha, beta, move_vert):
+        if self.cut_tree(depth, limit, move_vert):
+            return self.leaf_evaluation(vert_root)
+
+
+
     
 
 
