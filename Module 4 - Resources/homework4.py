@@ -180,6 +180,10 @@ class DominoesGame(object):
 
     # Required
     def get_best_move(self, vertical, limit):
+        # determine if the player currently
+        # wants to stack his dominoes veritcally or
+        # horizontally that way we can shape the root
+        # of the tree
         verticle_root = vertical
         max_val = self.max_value(verticle_root, 0,
                                  limit, float("-inf"),
@@ -208,7 +212,7 @@ class DominoesGame(object):
         # determine if we are at a leaf node if the depth
         # of the tree is at the limit of the tree or we
         # are at the game over stae
-        cut_off = depth == limit or self.game_over(move_verticle)
+        cut_off = (depth == limit) or (self.game_over(move_verticle))
         return cut_off
 
     def leaf_evaluation(self, verticle_root):
@@ -218,11 +222,53 @@ class DominoesGame(object):
     def max_value(self, vert_root, depth, limit, alpha, beta, move_vert):
         if self.cut_tree(depth, limit, move_vert):
             return self.leaf_evaluation(vert_root)
+        best_value = float("-inf")
+        best_move = None
+        total_leafs = 0
+
+        list_of_suc = list(self.successors(move_vert))
+        for element in list_of_suc:
+            current_move = element[0]
+            new_game = element[1]
+
+            child_val, temp, child_leav = new_game.min_value(vert_root,
+                                                             depth + 1,
+                                                             limit, alpha,
+                                                             beta,
+                                                             not move_vert)
+            total_leafs = total_leafs + child_leav
+
+            if child_val > best_value:
+                best_value = child_val
+                best_move = current_move
+        return (best_value, best_move, total_leafs)          
+
+
 
     def min_value(self, vert_root, depth, limit, alpha, beta, move_vert):
         if self.cut_tree(depth, limit, move_vert):
             return self.leaf_evaluation(vert_root)
+        best_value = float("inf")
+        best_move = None
+        total_leafs = 0
 
+        list_of_suc = list(self.successors(move_vert))
+        for element in list_of_suc:
+            current_move = element[0]
+            new_game = element[1]
+
+            child_val, temp, child_leav = new_game.max_value(vert_root,
+                                                             depth + 1,
+                                                             limit, alpha,
+                                                             beta,
+                                                             not move_vert)
+            total_leafs = total_leafs + child_leav
+
+            if child_val < best_value:
+                best_value = child_val
+                best_move = current_move
+        return (best_value, best_move, total_leafs)
+        
 
 # Test case for get_board()
 b = [[False, False], [False, False]]
