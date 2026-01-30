@@ -185,6 +185,8 @@ class DominoesGame(object):
         # horizontally that way we can shape the root
         # of the tree
         verticle_root = vertical
+        # call the max value function as start of the alpha
+        # beta- purning algorithm 
         max_val = self.max_value(verticle_root, 0,
                                  limit, float("-inf"),
                                  float("inf"),
@@ -192,6 +194,8 @@ class DominoesGame(object):
         current_value = max_val[0]
         current_move = max_val[1]
         leaf_nodes = max_val[2]
+        # return the optimal move for the current max player to 
+        # make with the help of our helper functions below
         temp = (current_move, current_value, leaf_nodes)
         return temp
 
@@ -223,7 +227,7 @@ class DominoesGame(object):
         return result
 
     def max_value(self, vert_root, depth, limit, alpha, beta, move_vert):
-        # if we already our at the bootom of our tree,
+        # if we already are at the bootom of our tree,
         # then the base case has been reached
         if self.cut_tree(depth, limit, move_vert):
             return self.leaf_evaluation(vert_root)
@@ -254,6 +258,15 @@ class DominoesGame(object):
             if child_val > best_value:
                 best_value = child_val
                 best_move = current_move
+            # update alpha value for prepurining step
+            # if best value v is now bigger than alpha
+            if alpha < best_value:
+                alpha = best_value
+            # if best_value is in fact greater than the beta value,
+            # then purning is required of path
+            if best_value >= beta:
+                return (best_value, best_move, total_leafs)
+        # defualt return of path is no purining is requried
         return (best_value, best_move, total_leafs)          
 
 
@@ -290,6 +303,14 @@ class DominoesGame(object):
             if child_val < best_value:
                 best_value = child_val
                 best_move = current_move
+            # update beta value for prepurining step
+            if best_value < beta:
+                beta = best_value
+            # if best_value is in fact smaller or equal to the alpha value,
+            # then purning is required of path
+            if best_value <= alpha:
+                return (best_value, best_move, total_leafs)
+        # defualt return of path is no purining is requried
         return (best_value, best_move, total_leafs)
         
 
