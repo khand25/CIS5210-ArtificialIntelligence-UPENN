@@ -70,13 +70,12 @@ class DominoesGame(object):
                         valid = True
         return valid
 
-
     def legal_moves(self, vertical):
         # we are dealing with a vertical moving dominoe
         # player
         if vertical:
             # iterate through all the rows and columns of the
-            # instance variable board for the calling object 
+            # instance variable board for the calling object
             # on each iteration, call our is_legal_move
             # function from above to indicate where our current row
             # and column from the board iteration is able to place
@@ -88,12 +87,12 @@ class DominoesGame(object):
             for i in range(0, self.total_rows, 1):
                 for j in range(0, self.total_cols, 1):
                     if self.is_legal_move(i, j, True):
-                        yield(i, j)
+                        yield (i, j)
         else:
             # we are dealing with a horizontal moving dominoe
             # player.
             # iterate through all the rows and columns of the
-            # instance variable board for the calling object 
+            # instance variable board for the calling object
             # on each iteration, call our is_legal_move
             # function from above to indicate where our current row
             # and column from the board iteration is able to place
@@ -105,8 +104,7 @@ class DominoesGame(object):
             for i in range(0, self.total_rows, 1):
                 for j in range(0, self.total_cols, 1):
                     if self.is_legal_move(i, j, False):
-                        yield(i, j)
-        
+                        yield (i, j)
 
     def perform_move(self, row, col, vertical):
         # we are dealing with a vertical moving dominoe
@@ -123,7 +121,6 @@ class DominoesGame(object):
             if self.is_legal_move(row, col, False):
                 self.board[row][col] = True
                 self.board[row][col + 1] = True
-
 
     def game_over(self, vertical):
         # if the player is playing vertical dominoes
@@ -156,8 +153,7 @@ class DominoesGame(object):
                 temp.append(self.board[i][j])
             result.append(temp)
         return DominoesGame(result)
-                
-    
+
     def successors(self, vertical):
         if vertical:
             for i in range(0, self.total_rows, 1):
@@ -176,17 +172,24 @@ class DominoesGame(object):
                         result_tuple = ((i, j), new_game)
                         yield result_tuple
 
-
     def get_random_move(self, vertical):
-       moves = list(self.legal_moves(vertical))
-       if not moves:
-           return None
-       return random.choice(moves)
+        moves = list(self.legal_moves(vertical))
+        if not moves:
+            return None
+        return random.choice(moves)
 
     # Required
     def get_best_move(self, vertical, limit):
-        number_of_leaf_nodes = 0
-
+        verticle_root = vertical
+        max_val = self.max_value(verticle_root, 0,
+                                 limit, float("-inf"),
+                                 float("inf"),
+                                 vertical)
+        current_value = max_val[0]
+        current_move = max_val[1]
+        leaf_nodes = max_val[2]
+        temp = (current_move, current_value, leaf_nodes)
+        return temp
 
     def evaluate_game(self, vertical_root):
         # heuristic function used to make a great guess
@@ -200,31 +203,25 @@ class DominoesGame(object):
         # the current player can make versues the opposing
         # player legally
         return number_my_moves - number_opps_moves
-    
+
     def cut_tree(self, depth, limit, move_verticle):
         # determine if we are at a leaf node if the depth
         # of the tree is at the limit of the tree or we
         # are at the game over stae
         cut_off = depth == limit or self.game_over(move_verticle)
         return cut_off
-    
 
     def leaf_evaluation(self, verticle_root):
         result = (self.evaluate_game(verticle_root), None, 1)
         return result
-    
+
     def max_value(self, vert_root, depth, limit, alpha, beta, move_vert):
         if self.cut_tree(depth, limit, move_vert):
             return self.leaf_evaluation(vert_root)
-    
+
     def min_value(self, vert_root, depth, limit, alpha, beta, move_vert):
         if self.cut_tree(depth, limit, move_vert):
             return self.leaf_evaluation(vert_root)
-
-
-
-    
-
 
 
 # Test case for get_board()
@@ -258,7 +255,6 @@ g = DominoesGame(b)
 print(g.is_legal_move(0, 0, False))
 print(g.is_legal_move(0, 1, True))
 print(g.is_legal_move(1, 1, True))
-
 
 
 def create_dominoes_game(rows, cols):
