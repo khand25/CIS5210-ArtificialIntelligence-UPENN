@@ -216,28 +216,41 @@ class DominoesGame(object):
         return cut_off
 
     def leaf_evaluation(self, verticle_root):
+        # call this function whenever we are at a leaf node
+        # to determine number of the current players
+        # moves against th opposing player
         result = (self.evaluate_game(verticle_root), None, 1)
         return result
 
     def max_value(self, vert_root, depth, limit, alpha, beta, move_vert):
+        # if we already our at the bootom of our tree,
+        # then the base case has been reached
         if self.cut_tree(depth, limit, move_vert):
             return self.leaf_evaluation(vert_root)
+        # keep track of the current value we wish to max
         best_value = float("-inf")
         best_move = None
+        # total number of leaf nodes we have encountered counter
         total_leafs = 0
 
         list_of_suc = list(self.successors(move_vert))
+        # for every sucessor node in our subtree, generate a new game
+        # at which the new chid nodes are better than the last by recursively
+        # calling our min value function and comparing our alpha and beta values 
+        # alike
         for element in list_of_suc:
             current_move = element[0]
             new_game = element[1]
-
+            # calculate the new min value of the new game
             child_val, temp, child_leav = new_game.min_value(vert_root,
                                                              depth + 1,
                                                              limit, alpha,
                                                              beta,
                                                              not move_vert)
             total_leafs = total_leafs + child_leav
-
+            # if our child node is better than our most
+            # current "best node max", then reupdate the value
+            # reflect the new child node value
             if child_val > best_value:
                 best_value = child_val
                 best_move = current_move
@@ -246,24 +259,34 @@ class DominoesGame(object):
 
 
     def min_value(self, vert_root, depth, limit, alpha, beta, move_vert):
+        # if we already our at the bootom of our tree,
+        # then the base case has been reached
         if self.cut_tree(depth, limit, move_vert):
             return self.leaf_evaluation(vert_root)
+        # keep track of the current value we wish to minimize
         best_value = float("inf")
         best_move = None
+         # total number of leaf nodes we have encountered counter
         total_leafs = 0
 
         list_of_suc = list(self.successors(move_vert))
+        # for every sucessor node in our subtree, generate a new game
+        # at which the new chid nodes are less than the last by recursively
+        # calling our max value function and comparing our alpha and beta values 
+        # alike
         for element in list_of_suc:
             current_move = element[0]
             new_game = element[1]
-
+            # calculate the new max value of the new_game
             child_val, temp, child_leav = new_game.max_value(vert_root,
                                                              depth + 1,
                                                              limit, alpha,
                                                              beta,
                                                              not move_vert)
             total_leafs = total_leafs + child_leav
-
+            # if our child node is smaller than our most
+            # current "best node max", then reupdate the value
+            # reflect the new child node value
             if child_val < best_value:
                 best_value = child_val
                 best_move = current_move
