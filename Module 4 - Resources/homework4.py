@@ -29,6 +29,8 @@ class DominoesGame(object):
         # create an instance variable called board,
         # used to store the board's reference in memory
         self.board = board
+        # store the dimensions of the board in seperate
+        # instance variables for easier access
         self.total_rows = len(self.board)
         self.total_cols = len(self.board[0])
 
@@ -146,15 +148,27 @@ class DominoesGame(object):
         return True
 
     def copy(self):
+        # create a result list to return the deep
+        # copy of the board
         result = []
+        # iterate through the calling object's
+        # board, and copy over all the values into
+        # the temp list to later be appended to he result board
         for i in range(0, self.total_rows, 1):
             temp = []
             for j in range(0, self.total_cols, 1):
                 temp.append(self.board[i][j])
             result.append(temp)
+        # return the new Dominoes Game object with the deep
+        # copied board
         return DominoesGame(result)
 
     def successors(self, vertical):
+        # iterate through the current board,
+        # and for every valid board posistion,
+        # perform a move, if possible and legal,
+        # and return the new resultant board after the
+        # move as a generator object
         if vertical:
             for i in range(0, self.total_rows, 1):
                 for j in range(0, self.total_cols, 1):
@@ -173,6 +187,11 @@ class DominoesGame(object):
                         yield result_tuple
 
     def get_random_move(self, vertical):
+        # optinal random function implemented
+        # where we gather all possible legal moves
+        # for either the horizontal or verticle player
+        # and choose a random legal move from the overall
+        # list to return
         moves = list(self.legal_moves(vertical))
         if not moves:
             return None
@@ -215,7 +234,7 @@ class DominoesGame(object):
     def cut_tree(self, depth, limit, move_verticle):
         # determine if we are at a leaf node if the depth
         # of the tree is at the limit of the tree or we
-        # are at the game over stae
+        # are at the game over state
         cut_off = (depth == limit) or (self.game_over(move_verticle))
         return cut_off
 
@@ -227,12 +246,14 @@ class DominoesGame(object):
         return result
 
     def max_value(self, vert_root, depth, limit, alpha, beta, move_vert):
-        # if we already are at the bootom of our tree,
+        # if we already are at the bottom of our tree,
+        # or the terminal state,
         # then the base case has been reached
         if self.cut_tree(depth, limit, move_vert):
             return self.leaf_evaluation(vert_root)
         # keep track of the current value we wish to max
         # v value from the algorithm
+        # usage of float's built in -infinity constant value
         best_value = float("-inf")
         best_move = None
         # total number of leaf nodes we have encountered counter
@@ -275,6 +296,7 @@ class DominoesGame(object):
     def min_value(self, vert_root, depth, limit, alpha, beta, move_vert):
         # if we already our at the bottom of our tree,
         # then the base case has been reached
+        # usage of float's built in +infinity constant value
         if self.cut_tree(depth, limit, move_vert):
             return self.leaf_evaluation(vert_root)
         # keep track of the current value we wish to minimize
@@ -319,36 +341,36 @@ class DominoesGame(object):
 
 
 # Test case for get_board()
-b = [[False, False], [False, False]]
-g = DominoesGame(b)
-print(g.get_board())
+# b = [[False, False], [False, False]]
+# g = DominoesGame(b)
+# print(g.get_board())
 
-b = [[True, False], [True, False]]
-g = DominoesGame(b)
-print(g.get_board())
+# b = [[True, False], [True, False]]
+# g = DominoesGame(b)
+# print(g.get_board())
 
 # Test case for reset
-b = [[False, False], [False, False]]
-g = DominoesGame(b)
-print("Test case for reset")
-print(g.get_board())
-g.reset()
-print(g.get_board())
-b = [[True, False], [True, False]]
-g = DominoesGame(b)
-print(g.get_board())
-g.reset()
-print(g.get_board())
-print("Test case for is_legal_move")
-b = [[False, False], [False, False]]
-g = DominoesGame(b)
-print(g.is_legal_move(0, 0, True))
-print(g.is_legal_move(0, 0, False))
-b = [[True, False], [True, False]]
-g = DominoesGame(b)
-print(g.is_legal_move(0, 0, False))
-print(g.is_legal_move(0, 1, True))
-print(g.is_legal_move(1, 1, True))
+# b = [[False, False], [False, False]]
+# g = DominoesGame(b)
+# print("Test case for reset")
+# print(g.get_board())
+# g.reset()
+# print(g.get_board())
+# b = [[True, False], [True, False]]
+# g = DominoesGame(b)
+# print(g.get_board())
+# g.reset()
+# print(g.get_board())
+# print("Test case for is_legal_move")
+# b = [[False, False], [False, False]]
+# g = DominoesGame(b)
+# print(g.is_legal_move(0, 0, True))
+# print(g.is_legal_move(0, 0, False))
+# b = [[True, False], [True, False]]
+# g = DominoesGame(b)
+# print(g.is_legal_move(0, 0, False))
+# print(g.is_legal_move(0, 1, True))
+# print(g.is_legal_move(1, 1, True))
 
 
 def create_dominoes_game(rows, cols):
@@ -367,66 +389,66 @@ def create_dominoes_game(rows, cols):
 
 
 # Test case for create_dominoes_game function:
-print("Test case for create_dominoes_game")
-g = create_dominoes_game(2, 2)
-print(g.get_board())
+# print("Test case for create_dominoes_game")
+# g = create_dominoes_game(2, 2)
+# print(g.get_board())
 
-g = create_dominoes_game(2, 3)
-print(g.get_board())
+# g = create_dominoes_game(2, 3)
+# print(g.get_board())
 
 # Test case for legal_moves
-print("Test cases for legal_moves function")
-g = create_dominoes_game(3, 3)
-print(list(g.legal_moves(True)))
-print(list(g.legal_moves(False)))
-b = [[True, False], [True, False]]
-g = DominoesGame(b)
-print(list(g.legal_moves(True)))
-print(list(g.legal_moves(False)))
-print("Test cases for perform moves function")
-g = create_dominoes_game(3, 3)
-g.perform_move(0, 1, True)
-print(g.get_board())
-g = create_dominoes_game(3, 3)
-g.perform_move(1, 0, False)
-print(g.get_board())
-print("Test case for game over:")
-b = [[False, False], [False, False]]
-g = DominoesGame(b)
-print(g.game_over(True))
-print(g.game_over(False))
-b = [[True, False], [True, False]]
-g = DominoesGame(b)
-print(g.game_over(True))
-print(g.game_over(False))
-print("Test case for copy function:")
-g = create_dominoes_game(4, 4)
-g2 = g.copy()
-print(g.get_board() == g2.get_board())
-g = create_dominoes_game(4, 4)
-g2 = g.copy()
-g.perform_move(0, 0, True)
-print(g.get_board() == g2.get_board())
-print("Test case for sucessors function")
-b = [[False, False], [False, False]]
-g = DominoesGame(b)
-for m, new_g in g.successors(True):
-    print(m, new_g.get_board())
-b = [[True, False], [True, False]]
-g = DominoesGame(b)
-for m, new_g in g.successors(True):
-    print(m, new_g.get_board())
+# print("Test cases for legal_moves function")
+# g = create_dominoes_game(3, 3)
+# print(list(g.legal_moves(True)))
+# print(list(g.legal_moves(False)))
+# b = [[True, False], [True, False]]
+# # g = DominoesGame(b)
+# print(list(g.legal_moves(True)))
+# print(list(g.legal_moves(False)))
+# print("Test cases for perform moves function")
+# g = create_dominoes_game(3, 3)
+# g.perform_move(0, 1, True)
+# print(g.get_board())
+# g = create_dominoes_game(3, 3)
+# g.perform_move(1, 0, False)
+# print(g.get_board())
+# print("Test case for game over:")
+# b = [[False, False], [False, False]]
+# g = DominoesGame(b)
+# print(g.game_over(True))
+# print(g.game_over(False))
+# b = [[True, False], [True, False]]
+# g = DominoesGame(b)
+# print(g.game_over(True))
+# print(g.game_over(False))
+# print("Test case for copy function:")
+# g = create_dominoes_game(4, 4)
+# g2 = g.copy()
+# print(g.get_board() == g2.get_board())
+# g = create_dominoes_game(4, 4)
+# g2 = g.copy()
+# g.perform_move(0, 0, True)
+# print(g.get_board() == g2.get_board())
+# print("Test case for sucessors function")
+# b = [[False, False], [False, False]]
+# g = DominoesGame(b)
+# for m, new_g in g.successors(True):
+# print(m, new_g.get_board())
+# b = [[True, False], [True, False]]
+# g = DominoesGame(b)
+# for m, new_g in g.successors(True):
+# print(m, new_g.get_board())
 
-print("Test case for get_best_move function")
-b = [[False] * 3 for i in range(3)]
-g = DominoesGame(b)
-print(g.get_best_move(True, 1))
-print(g.get_best_move(True, 2))
-b = [[False] * 3 for i in range(3)]
-g = DominoesGame(b)
-g.perform_move(0, 1, True)
-print(g.get_best_move(False, 1))
-print(g.get_best_move(False, 2))
+# print("Test case for get_best_move function")
+# b = [[False] * 3 for i in range(3)]
+# g = DominoesGame(b)
+# print(g.get_best_move(True, 1))
+# print(g.get_best_move(True, 2))
+# b = [[False] * 3 for i in range(3)]
+# g = DominoesGame(b)
+# g.perform_move(0, 1, True)
+# print(g.get_best_move(False, 1))
+# print(g.get_best_move(False, 2))
 
 
 ############################################################
@@ -436,17 +458,24 @@ print(g.get_best_move(False, 2))
 
 # Just an approximation is fine.
 feedback_question_1 = """
-I spent around 13-16 hours working on this assignment.
+I spent around 10-12 hours working on this assignment.
 """
 
 feedback_question_2 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+Working through this homework assingment, I found the section on
+implementing the alpha-beta search for the get_best_move function to
+be the most challenging. This is due to the fact of my first time seeing
+psuedocode from the textbook for this algorithm and referencing it directly
+to construct the function.
+Also the amount of helper functions needed to support
+the search varied in completity and time to sort out correctly.
 """
 
 feedback_question_3 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I liked working on the functions in part 1 of the
+assignment in setting up the Dominoes Game class as it was very
+inutitve and fun to think in the perspective of either the horizontal
+player or verticle player in trying to place their dominoes. The aspect
+of using an apporach that differed in terms of game oreintation
+was actually quite interesting.
 """
