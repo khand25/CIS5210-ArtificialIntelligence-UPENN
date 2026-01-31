@@ -181,12 +181,12 @@ class DominoesGame(object):
     # Required
     def get_best_move(self, vertical, limit):
         # determine if the player currently
-        # wants to stack his dominoes veritcally or
+        # wants to stack his dominoes vertically or
         # horizontally that way we can shape the root
         # of the tree
         verticle_root = vertical
         # call the max value function as start of the alpha
-        # beta- purning algorithm 
+        # beta- purning algorithm
         max_val = self.max_value(verticle_root, 0,
                                  limit, float("-inf"),
                                  float("inf"),
@@ -194,7 +194,7 @@ class DominoesGame(object):
         current_value = max_val[0]
         current_move = max_val[1]
         leaf_nodes = max_val[2]
-        # return the optimal move for the current max player to 
+        # return the optimal move for the current max player to
         # make with the help of our helper functions below
         temp = (current_move, current_value, leaf_nodes)
         return temp
@@ -222,7 +222,7 @@ class DominoesGame(object):
     def leaf_evaluation(self, verticle_root):
         # call this function whenever we are at a leaf node
         # to determine number of the current players
-        # moves against th opposing player
+        # moves against the opposing player
         result = (self.evaluate_game(verticle_root), None, 1)
         return result
 
@@ -232,6 +232,7 @@ class DominoesGame(object):
         if self.cut_tree(depth, limit, move_vert):
             return self.leaf_evaluation(vert_root)
         # keep track of the current value we wish to max
+        # v value from the algorithm
         best_value = float("-inf")
         best_move = None
         # total number of leaf nodes we have encountered counter
@@ -240,7 +241,8 @@ class DominoesGame(object):
         list_of_suc = list(self.successors(move_vert))
         # for every sucessor node in our subtree, generate a new game
         # at which the new chid nodes are better than the last by recursively
-        # calling our min value function and comparing our alpha and beta values 
+        # calling our min value function and
+        # comparing our alpha and beta values
         # alike
         for element in list_of_suc:
             current_move = element[0]
@@ -267,25 +269,25 @@ class DominoesGame(object):
             if best_value >= beta:
                 return (best_value, best_move, total_leafs)
         # defualt return of path is no purining is requried
-        return (best_value, best_move, total_leafs)          
-
-
+        return (best_value, best_move, total_leafs)
 
     def min_value(self, vert_root, depth, limit, alpha, beta, move_vert):
-        # if we already our at the bootom of our tree,
+        # if we already our at the bottom of our tree,
         # then the base case has been reached
         if self.cut_tree(depth, limit, move_vert):
             return self.leaf_evaluation(vert_root)
         # keep track of the current value we wish to minimize
+        # v value from algorithm
         best_value = float("inf")
         best_move = None
-         # total number of leaf nodes we have encountered counter
+        # total number of leaf nodes we have encountered counter
         total_leafs = 0
 
         list_of_suc = list(self.successors(move_vert))
         # for every sucessor node in our subtree, generate a new game
         # at which the new chid nodes are less than the last by recursively
-        # calling our max value function and comparing our alpha and beta values 
+        # calling our max value function and
+        # comparing our alpha and beta values
         # alike
         for element in list_of_suc:
             current_move = element[0]
@@ -298,7 +300,7 @@ class DominoesGame(object):
                                                              not move_vert)
             total_leafs = total_leafs + child_leav
             # if our child node is smaller than our most
-            # current "best node max", then reupdate the value
+            # current "best node min", then reupdate the value
             # reflect the new child node value
             if child_val < best_value:
                 best_value = child_val
@@ -310,9 +312,9 @@ class DominoesGame(object):
             # then purning is required of path
             if best_value <= alpha:
                 return (best_value, best_move, total_leafs)
-        # defualt return of path is no purining is requried
+        # defualt return of path when no purning is required
         return (best_value, best_move, total_leafs)
-        
+
 
 # Test case for get_board()
 b = [[False, False], [False, False]]
@@ -412,6 +414,18 @@ b = [[True, False], [True, False]]
 g = DominoesGame(b)
 for m, new_g in g.successors(True):
     print(m, new_g.get_board())
+
+print("Test case for get_best_move function")
+b = [[False] * 3 for i in range(3)]
+g = DominoesGame(b)
+print(g.get_best_move(True, 1))
+print(g.get_best_move(True, 2))
+b = [[False] * 3 for i in range(3)]
+g = DominoesGame(b)
+g.perform_move(0, 1, True)
+print(g.get_best_move(False, 1))
+print(g.get_best_move(False, 2))
+
 
 ############################################################
 # Section 2: Feedback
