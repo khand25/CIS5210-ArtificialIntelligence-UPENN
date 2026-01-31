@@ -186,7 +186,7 @@ class DominoesGame(object):
         # of the tree
         verticle_root = vertical
         # call the max value function as start of the alpha
-        # beta- purning algorithm
+        # beta-puruning algorithm
         max_val = self.max_value(verticle_root, 0,
                                  limit, float("-inf"),
                                  float("inf"),
@@ -247,7 +247,8 @@ class DominoesGame(object):
         for element in list_of_suc:
             current_move = element[0]
             new_game = element[1]
-            # calculate the new min value of the new game
+            # calculate the new min value of the new game with
+            # the help of the min value function we defined
             child_val, temp, child_leav = new_game.min_value(vert_root,
                                                              depth + 1,
                                                              limit, alpha,
@@ -292,7 +293,8 @@ class DominoesGame(object):
         for element in list_of_suc:
             current_move = element[0]
             new_game = element[1]
-            # calculate the new max value of the new_game
+            # calculate the new max value of the new_game with
+            # the help of the max_value function we defined
             child_val, temp, child_leav = new_game.max_value(vert_root,
                                                              depth + 1,
                                                              limit, alpha,
@@ -434,9 +436,7 @@ print(g.get_best_move(False, 2))
 
 # Just an approximation is fine.
 feedback_question_1 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I spent around 13-16 hours working on this assignment.
 """
 
 feedback_question_2 = """
