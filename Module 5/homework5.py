@@ -41,6 +41,7 @@ def read_board(path):
         
     for i in range(0, 9, 1):
         for j in range(0, 9, 1):
+            # make a row,col tuple for the key
             temp = (i, j)
             if all_lines[i][j] == "*":
                 # now the empty cell will contain a set of 9 digits
@@ -91,6 +92,12 @@ class Sudoku(object):
 # Feedback
 ############################################################
 
+
+# Read board test cases:
+b = read_board("homework5_sudoku/medium1.txt")
+print(Sudoku(b).get_values((0, 0)))
+b = read_board("homework5_sudoku/medium1.txt")
+print(Sudoku(b).get_values((0,1)))
 
 # Just an approximation is fine.
 feedback_question_1 = """
