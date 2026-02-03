@@ -31,7 +31,25 @@ def sudoku_arcs():
 
 
 def read_board(path):
-    pass
+    result_board = dict()
+    possible_digits = {1,2,3,4,5,6,7,8,9}
+    all_lines = []
+    with open(path, 'r') as f:
+        # all_lines = []
+        for line in f.readlines():
+            all_lines.append(line.strip())
+        
+    for i in range(0, 9, 1):
+        for j in range(0, 9, 1):
+            temp = (i, j)
+            if all_lines[i][j] == "*":
+                # now the empty cell will contain a set of 9 digits
+                # to pick from eliminate from later
+                result_board[temp] = set(possible_digits)
+            else:
+                result_board[temp] = {int(all_lines[i][j])}
+    return result_board
+
 
 
 class Sudoku(object):
@@ -55,7 +73,7 @@ class Sudoku(object):
            
 
     def get_values(self, cell):
-        pass
+        return set(self.board[cell])
 
     def remove_inconsistent_values(self, cell1, cell2):
         pass
