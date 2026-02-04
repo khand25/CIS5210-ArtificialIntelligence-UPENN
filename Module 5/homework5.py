@@ -33,7 +33,35 @@ def sudoku_cells():
 
 
 def sudoku_arcs():
-    pass
+    possible_arcs = set()
+    # iterate through all the cells in the sudoku board
+    for i in range(0, 9, 1):
+        for j in range(0, 9, 1):
+            cell1 = (i, j)
+
+            # same column arcs, where row are different
+            # from each other
+            for i2 in range(0, 9, 1):
+                if i != i2:
+                    cell2 = (i2, j)
+                    possible_arcs.add((cell1, cell2))
+            # same row arcs, where column are different
+            # from each other
+            for j2 in range(0, 9, 1):
+                if j != j2:
+                    cell2 = (i, j2)
+                    possible_arcs.add((cell1, cell2))
+            # same block arcs so add to the set 
+            block_row_start = i - (i % 3)
+            block_col_start = j - (j % 3)
+            for direction_row in range(0, 3, 1):
+                for direction_col in range(0, 3, 1):
+                    temp = block_row_start + direction_row
+                    temp2 = block_col_start + direction_col
+                    cell2 = (temp, temp2)
+                    if cell1 != cell2:
+                        possible_arcs.add((cell1, cell2))
+    return list(possible_arcs)
 
 
 def read_board(path):
