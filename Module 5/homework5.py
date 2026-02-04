@@ -121,7 +121,24 @@ class Sudoku(object):
         return set(self.board[cell])
 
     def remove_inconsistent_values(self, cell1, cell2):
-        pass
+        removed = False
+        # if the length of cell2 for the
+        # board is 1, then we know it is filled with a single
+        # posistion so we can try to remove that
+        # value if it exists in cell1 as well
+        if len(self.board[cell2]) == 1:
+            # convert the single value set to a list
+            # and grab the only item from the list
+            value_to_remove = list(self.board[cell2])[0]
+            # if the cell2 value exists in cell1
+            # remove the inconsistent value from cell1
+            # and return True for removal
+            if value_to_remove in self.board[cell1]:
+                self.board[cell1].remove(value_to_remove)
+                removed = True
+        # no removal happened so return False
+        return removed
+
 
     def infer_ac3(self):
         pass
