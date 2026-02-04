@@ -32,13 +32,19 @@ def sudoku_arcs():
 
 def read_board(path):
     result_board = dict()
-    possible_digits = {1,2,3,4,5,6,7,8,9}
+    # create a set of all possible digits
+    possible_digits = {1, 2, 3, 4, 5, 6, 7, 8, 9}
+    # store all the readable lines from the file
+    # as a list
     all_lines = []
+    # read the file and for each line
+    # cutoof the newline character and
+    # add it to the all_lines list
     with open(path, 'r') as f:
         # all_lines = []
         for line in f.readlines():
             all_lines.append(line.strip())
-        
+    # iterate through a valid sudoku board
     for i in range(0, 9, 1):
         for j in range(0, 9, 1):
             # make a row,col tuple for the key
@@ -48,9 +54,11 @@ def read_board(path):
                 # to pick from eliminate from later
                 result_board[temp] = set(possible_digits)
             else:
+                # otherwise the cell will contains a set of
+                # only one value which is the fixed digit
+                # value it had previosuly had
                 result_board[temp] = {int(all_lines[i][j])}
     return result_board
-
 
 
 class Sudoku(object):
@@ -63,15 +71,14 @@ class Sudoku(object):
         # board that will be assingned to an empty dictionary
         self.board = dict()
         # iterate through the board dictionary
-        # and grab the current element 
-        # (row, col) -> value 
+        # and grab the current element
+        # (row, col) -> value
         # cell and initialize as a new key
         # value pair to self.board dict.
         # Convert value of key to always be a set member
         # for easy duplicate values avoidance later
         for element in board.items():
             self.board[element[0]] = set(element[1])
-           
 
     def get_values(self, cell):
         return set(self.board[cell])
@@ -97,7 +104,7 @@ class Sudoku(object):
 b = read_board("homework5_sudoku/medium1.txt")
 print(Sudoku(b).get_values((0, 0)))
 b = read_board("homework5_sudoku/medium1.txt")
-print(Sudoku(b).get_values((0,1)))
+print(Sudoku(b).get_values((0, 1)))
 
 # Just an approximation is fine.
 feedback_question_1 = """
