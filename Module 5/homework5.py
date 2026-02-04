@@ -31,7 +31,6 @@ def sudoku_cells():
     return result_list
 
 
-
 def sudoku_arcs():
     possible_arcs = set()
     # iterate through all the cells in the sudoku board
@@ -51,7 +50,9 @@ def sudoku_arcs():
                 if j != j2:
                     cell2 = (i, j2)
                     possible_arcs.add((cell1, cell2))
-            # same block arcs so add to the set 
+            # same block arcs so add to the set
+            # cells in the same 3 X 3 blocks
+            # are mutiple of 3 each other
             block_row_start = i - (i % 3)
             block_col_start = j - (j % 3)
             for direction_row in range(0, 3, 1):
@@ -61,6 +62,8 @@ def sudoku_arcs():
                     cell2 = (temp, temp2)
                     if cell1 != cell2:
                         possible_arcs.add((cell1, cell2))
+    # convert the set of possible arcs to
+    # a list and return it
     return list(possible_arcs)
 
 
@@ -141,6 +144,13 @@ b = read_board("homework5_sudoku/medium1.txt")
 print(Sudoku(b).get_values((0, 1)))
 print("Test case for sudoku cells")
 print(sudoku_cells())
+print("Test case for sudoku arcs")
+print(((0, 0), (0, 8)) in sudoku_arcs())
+print(((0, 0), (8, 0)) in sudoku_arcs())
+print(((0, 8), (0, 0)) in sudoku_arcs())
+print(((0, 0), (2, 1)) in sudoku_arcs())
+print(((2, 2), (0, 0)) in sudoku_arcs())
+print(((2, 3), (0, 0)) in sudoku_arcs())
 
 # Just an approximation is fine.
 feedback_question_1 = """
