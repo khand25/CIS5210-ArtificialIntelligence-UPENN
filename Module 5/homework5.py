@@ -23,7 +23,13 @@ student_name = "Danyal Razaa Khan"
 
 
 def sudoku_cells():
-    pass
+    result_list = []
+    for i in range(0, 9, 1):
+        for j in range(0, 9, 1):
+            temp = (i, j)
+            result_list.append(temp)
+    return result_list
+
 
 
 def sudoku_arcs():
@@ -105,6 +111,8 @@ b = read_board("homework5_sudoku/medium1.txt")
 print(Sudoku(b).get_values((0, 0)))
 b = read_board("homework5_sudoku/medium1.txt")
 print(Sudoku(b).get_values((0, 1)))
+print("Test case for sudoku cells")
+print(sudoku_cells())
 
 # Just an approximation is fine.
 feedback_question_1 = """
