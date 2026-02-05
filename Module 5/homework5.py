@@ -187,7 +187,13 @@ class Sudoku(object):
         return True
             
     def infer_improved(self):
-        pass
+        # if we cannot use the AC3 inference
+        # algorithm, then immeditely return failure
+        if not self.infer_ac3():
+            return False
+        possible_values = []
+        
+
 
     def infer_with_guessing(self):
         pass
