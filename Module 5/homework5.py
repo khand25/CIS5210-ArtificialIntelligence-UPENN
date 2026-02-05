@@ -12,6 +12,7 @@ import copy
 import itertools
 import random
 import math
+import queue
 
 ############################################################
 
@@ -139,9 +140,17 @@ class Sudoku(object):
         # no removal happened so return False
         return removed
 
-
     def infer_ac3(self):
-        pass
+        # follow the standard AC-3 algorithm from the slides
+        # initialize the arcs queue with all the arcs from the
+        # given sudoku board
+        arcs_queue = queue.Queue()
+        # enqueue all the arcs into the queue using
+        # our arcs function
+        for arc in Sudoku.ARCS:
+            arcs_queue.put(arc)
+        # while the arcs queue is not empty
+
 
     def infer_improved(self):
         pass
