@@ -217,6 +217,12 @@ print(sudoku.get_values((0, 3)))
 for col in [0, 1, 4]:
     removed = sudoku.remove_inconsistent_values((0, 3), (0, col))
     print(removed, sudoku.get_values((0, 3)))
+print("Test case for infer ac3")
+sudoku = Sudoku(read_board("homework5_sudoku/easy.txt"))
+print(sudoku.infer_ac3())
+sudoku = Sudoku(read_board("homework5_sudoku/medium1.txt"))
+print(sudoku.infer_ac3())
+
 
 # Just an approximation is fine.
 feedback_question_1 = """
