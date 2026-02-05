@@ -191,8 +191,15 @@ class Sudoku(object):
         # algorithm, then immeditely return failure
         if not self.infer_ac3():
             return False
+        # used to store all the possible units for each cell
+        # determine the possible deductons to make for each cell
+        # later on and use that to make inferences and reduce the overall
+        # search space
         possible_cell_units = []
 
+        # iterate through the rows in row major order and
+        # add the row units (tuples of cells in the same row) 
+        # to the possible cell units list
         for i in range(0, 9, 1):
             row_units = []
             for j in range(0, 9, 1):
@@ -200,6 +207,9 @@ class Sudoku(object):
             possible_cell_units.append(row_units)
         
         # columns units
+        # iterate through the columns in column major order and
+        # add the col units (tuples of cells in the same column) 
+        # to the possible cell units list
         for i in range(0, 9, 1):
             col_units = []
             for j in range(0, 9, 1):
@@ -207,6 +217,8 @@ class Sudoku(object):
             possible_cell_units.append(col_units)
         
         # block units
+        # iterate through each of the 3 X 3 blocks
+        # and add the block units (tuples of cells in the same block)
         for block_row in range(0, 9, 3):
             for block_col in range(0, 9, 3):
                 block_units = []
@@ -216,6 +228,48 @@ class Sudoku(object):
                                 block_col + direction_col)
                         block_units.append(temp)
                 possible_cell_units.append(block_units)
+        # rerun AC3 alorithm continusoly until no more deductions
+        # can be made
+        while True:
+            # if we cannot use the AC3 inference
+            # algorithm, then immeditely return failure
+            if not self.infer_ac3():
+                return False
+            # hidden singles deduction
+            # for each unit in the possible cell units
+            worked = False
+            # for each possible value from 1 to 9
+            # create a mapping of possible posistions
+            # of keys 1-9
+            for value in possible_cell_units:
+                possible_posistions = dict()
+                for i in range(1, 10, 1):
+                    possible_posistions[i] = []
+                # populate the possible posistions
+                # mapping of keys with the cell values
+                for cell in value:
+                    for element in self.board[cell]:
+                        possible_posistions[element].append(cell)
+            
+                # if any value has only one posistion so far
+                # force it and assign the new posistion
+                for i in range(1, 10, 1):
+                    if len(possible_posistions[i]) == 1:
+                        one_cell = possible_posistions[i][0]
+                        temp = {i}
+                        if self.board[one_cell] != temp:
+                            self.board[one_cell] = temp
+                            worked = True
+            # if no more new assignments can be made, 
+            # that means the worked boolean was not set to True
+            # then
+            # break the loop as the improved AC3 is done
+            if not worked:
+                break
+        # At this point we were able to improve our
+        # sudoku board so return True
+        return True
+            
 
     def infer_with_guessing(self):
         pass
