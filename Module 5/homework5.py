@@ -149,9 +149,21 @@ class Sudoku(object):
         # our arcs function
         for arc in Sudoku.ARCS:
             arcs_queue.put(arc)
+        # create a dictionary to store all the neighbors
+        # for each cell in the sudoku board
+        all_neighbors = dict()
+        # initialize the neighbors an empty set
+        # for each cell in the sudoku board
+        for element in Sudoku.CELLS:
+            all_neighbors[element] = set()
+        # fill the neighbors dictionary with the
+        # arcs using the ARCS function we defined
+        for arc in Sudoku.ARCS:
+            cell1 = arc[0]
+            cell2 = arc[1]
+            all_neighbors[cell1].add(cell2)
         # while the arcs queue is not empty
-
-
+        
     def infer_improved(self):
         pass
 
