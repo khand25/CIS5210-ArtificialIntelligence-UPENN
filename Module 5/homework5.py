@@ -163,7 +163,29 @@ class Sudoku(object):
             cell2 = arc[1]
             all_neighbors[cell1].add(cell2)
         # while the arcs queue is not empty
-        
+        while not arcs_queue.empty():
+            # dequeue the current arc from the queue
+            current_arc = arcs_queue.get()
+            cell1 = current_arc[0]
+            cell2 = current_arc[1]
+            # try to remove inconsistent values
+            # according to the AC-3 alogrithm
+            removed = self.remove_inconsistent_values(cell1, cell2)
+            if removed:
+                # if the domain of cell1 is empty
+                # then return failure
+                if len(self.board[cell1]) == 0:
+                    return False
+                # otherwise for each neighbor of cell1
+                # add the arc to the queue according to
+                # the AC-3 algorithm
+                for current_neighbor in all_neighbors[cell1]:
+                    if current_neighbor != cell2:
+                        arcs_queue.put((current_neighbor, cell1))
+        # if we finish processing all the arcs
+        # and queue gets empty, return sucess
+        return True
+            
     def infer_improved(self):
         pass
 
