@@ -185,15 +185,37 @@ class Sudoku(object):
         # if we finish processing all the arcs
         # and queue gets empty, return sucess
         return True
-            
+  
     def infer_improved(self):
         # if we cannot use the AC3 inference
         # algorithm, then immeditely return failure
         if not self.infer_ac3():
             return False
-        possible_values = []
-        
+        possible_cell_units = []
 
+        for i in range(0, 9, 1):
+            row_units = []
+            for j in range(0, 9, 1):
+                row_units.append((i, j))
+            possible_cell_units.append(row_units)
+        
+        # columns units
+        for i in range(0, 9, 1):
+            col_units = []
+            for j in range(0, 9, 1):
+                col_units.append((j, i))
+            possible_cell_units.append(col_units)
+        
+        # block units
+        for block_row in range(0, 9, 3):
+            for block_col in range(0, 9, 3):
+                block_units = []
+                for direction_row in range(0, 3, 1):
+                    for direction_col in range(0, 3, 1):
+                        temp = (block_row + direction_row,
+                                block_col + direction_col)
+                        block_units.append(temp)
+                possible_cell_units.append(block_units)
 
     def infer_with_guessing(self):
         pass
