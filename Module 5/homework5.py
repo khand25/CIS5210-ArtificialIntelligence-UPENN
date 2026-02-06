@@ -304,8 +304,9 @@ for col in [0, 1, 4]:
 print("Test case for infer ac3")
 sudoku = Sudoku(read_board("homework5_sudoku/easy.txt"))
 print(sudoku.infer_ac3())
-sudoku = Sudoku(read_board("homework5_sudoku/medium1.txt"))
-print(sudoku.infer_ac3())
+sudoku = Sudoku(read_board("homework5_sudoku/medium3.txt"))
+print(sudoku.infer_improved())
+
 
 
 # Just an approximation is fine.
