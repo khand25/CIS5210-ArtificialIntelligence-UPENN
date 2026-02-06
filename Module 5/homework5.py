@@ -274,7 +274,30 @@ class Sudoku(object):
             
 
     def infer_with_guessing(self):
-        pass
+        # call the previous inference function to reduce
+        # the search space
+        if not self.infer_improved():
+            return False
+        # if the board is already solved, and the assingment
+        # is complete according to the backtracking algorithm,
+        # then return True
+        is_complete = True
+        for cell_value in Sudoku.CELLS:
+            if len(self.board[cell_value]) != 1:
+                is_complete = False
+                break
+        if is_complete:
+            return is_complete
+        # select an unassigned variable (cell)
+        # Use the minimum remainin values heuristic to select the cell
+        # that has the fewest possible values to pick from
+        # and leads to a good guess
+        picked_cell = 0
+        # have a variable store the size of the biggest
+        # domain size possible
+        picked_size = 20
+        for cell_value in Sudoku.CELLS:
+            
 
 ############################################################
 # Feedback
