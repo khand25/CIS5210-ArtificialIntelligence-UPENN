@@ -228,7 +228,7 @@ class Sudoku(object):
                                 block_col + direction_col)
                         block_units.append(temp)
                 possible_cell_units.append(block_units)
-        # rerun AC3 alorithm continusoly until no more deductions
+        # rerun AC3 algorithm continusoly until no more deductions
         # can be made
         while True:
             # if we cannot use the AC3 inference
@@ -253,6 +253,8 @@ class Sudoku(object):
             
                 # if any value has only one posistion so far
                 # force it and assign the new posistion
+                # this improves the AC3 algorithm by
+                # making more deductions
                 for i in range(1, 10, 1):
                     if len(possible_posistions[i]) == 1:
                         one_cell = possible_posistions[i][0]
