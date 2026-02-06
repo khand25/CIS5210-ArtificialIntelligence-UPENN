@@ -185,7 +185,7 @@ class Sudoku(object):
         # if we finish processing all the arcs
         # and queue gets empty, return sucess
         return True
-  
+
     def infer_improved(self):
         # if we cannot use the AC3 inference
         # algorithm, then immeditely return failure
@@ -198,24 +198,24 @@ class Sudoku(object):
         possible_cell_units = []
 
         # iterate through the rows in row major order and
-        # add the row units (tuples of cells in the same row) 
+        # add the row units (tuples of cells in the same row)
         # to the possible cell units list
         for i in range(0, 9, 1):
             row_units = []
             for j in range(0, 9, 1):
                 row_units.append((i, j))
             possible_cell_units.append(row_units)
-        
+
         # columns units
         # iterate through the columns in column major order and
-        # add the col units (tuples of cells in the same column) 
+        # add the col units (tuples of cells in the same column)
         # to the possible cell units list
         for i in range(0, 9, 1):
             col_units = []
             for j in range(0, 9, 1):
                 col_units.append((j, i))
             possible_cell_units.append(col_units)
-        
+
         # block units
         # iterate through each of the 3 X 3 blocks
         # and add the block units (tuples of cells in the same block)
@@ -250,7 +250,7 @@ class Sudoku(object):
                 for cell in value:
                     for element in self.board[cell]:
                         possible_posistions[element].append(cell)
-            
+
                 # if any value has only one posistion so far
                 # force it and assign the new posistion
                 # this improves the AC3 algorithm by
@@ -262,7 +262,7 @@ class Sudoku(object):
                         if self.board[one_cell] != temp:
                             self.board[one_cell] = temp
                             worked = True
-            # if no more new assignments can be made, 
+            # if no more new assignments can be made,
             # that means the worked boolean was not set to True
             # then
             # break the loop as the improved AC3 is done
@@ -271,16 +271,17 @@ class Sudoku(object):
         # At this point we were able to improve our
         # sudoku board so return True
         return True
-            
 
     def infer_with_guessing(self):
         # call the previous inference function to reduce
         # the search space
         if not self.infer_improved():
             return False
-        # if the board is already solved, and the assingment
+        # if the board is already solved, and the assignment
         # is complete according to the backtracking algorithm,
         # then return True
+        # beggining of the backtracking algorithm
+        # based on the textbook psuedocode page 192
         is_complete = True
         for cell_value in Sudoku.CELLS:
             if len(self.board[cell_value]) != 1:
@@ -289,15 +290,56 @@ class Sudoku(object):
         if is_complete:
             return is_complete
         # select an unassigned variable (cell)
-        # Use the minimum remainin values heuristic to select the cell
+        # Use the minimum remaining values heuristic to select the cell
         # that has the fewest possible values to pick from
         # and leads to a good guess
-        picked_cell = 0
+        picked_cell = -1
         # have a variable store the size of the biggest
         # domain size possible
         picked_size = 20
         for cell_value in Sudoku.CELLS:
-            
+            if len(self.board[cell_value]) > 1:
+                if len(self.board[cell_value]) < picked_size:
+                    picked_size = len(self.board[cell_value])
+                    picked_cell = cell_value
+        # if there was no cell picked, then
+        # return failure as no cell can have
+        # value of -1
+        if picked_cell == -1:
+            return False
+        # Try all possible values for the picked cell
+        possible_values = list(self.board[picked_cell])
+        possible_values.sort()
+        # for every possible value in the picked cell
+        # try to assign to it and continue the backtracking
+        # search
+        for value in possible_values:
+            # create a deep copy of the current board
+            # later save of easy backtracking reference
+            new_board = dict()
+            for element in self.board.keys():
+                new_board[element] = set()
+                for val in self.board[element]:
+                    new_board[element].add(val)
+            # assign the picked cell to the current value
+            # apply an inference
+            self.board[picked_cell] = {value}
+            # call the ifer_improved function after every new
+            # guess
+            if self.infer_improved():
+                # recusively call the infer_with_guessing function
+                # to continue the backtracking search
+                backtrack_result = self.infer_with_guessing()
+                if backtrack_result:
+                    return backtrack_result
+            # if we reach here, that means our inference
+            # failed so we need backtrack again
+            self.board = new_board
+        # if we reach here,
+        # that means all of our guess failed
+        # so return failure
+        return False
+
 
 ############################################################
 # Feedback
@@ -329,7 +371,6 @@ sudoku = Sudoku(read_board("homework5_sudoku/easy.txt"))
 print(sudoku.infer_ac3())
 sudoku = Sudoku(read_board("homework5_sudoku/medium3.txt"))
 print(sudoku.infer_improved())
-
 
 
 # Just an approximation is fine.
