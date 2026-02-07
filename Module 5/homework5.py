@@ -24,6 +24,8 @@ student_name = "Danyal Razaa Khan"
 
 
 def sudoku_cells():
+    # create an empty list used to store all possible
+    # row and column cell tuples in a 9 X 9 sudoku board
     result_list = []
     for i in range(0, 9, 1):
         for j in range(0, 9, 1):
