@@ -76,7 +76,7 @@ def read_board(path):
     # as a list
     all_lines = []
     # read the file and for each line
-    # cutoof the newline character and
+    # cutoff the newline character and
     # add it to the all_lines list
     with open(path, 'r') as f:
         # all_lines = []
@@ -375,19 +375,20 @@ print(sudoku.infer_improved())
 
 # Just an approximation is fine.
 feedback_question_1 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I spent around 15 - 17 hours working on this homework.
 """
 
 feedback_question_2 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+Some aspects of the homework that I found challenging was intially
+following the AC3 algorithm psuedocode from the slides and implementing
+it throughly and correctly for the infer_ac3 function. Also implementing
+the infer_improved function was a bit challenging as I had to figure out
+using the block units, row units and column units to make more deductions
+and improve the overall AC3 algorithm.
 """
 
 feedback_question_3 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I liked working on the read-board function as it was my first
+time working with reading from a file in python and converting its
+data into another data structure that can be more useful.
 """
