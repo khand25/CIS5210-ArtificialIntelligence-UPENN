@@ -326,7 +326,7 @@ class Sudoku(object):
             # assign the picked cell to the current value
             # apply an inference
             self.board[picked_cell] = {value}
-            # call the ifer_improved function after every new
+            # call the ifer_improved function recursively after every new
             # guess
             if self.infer_improved():
                 # recusively call the infer_with_guessing function
@@ -349,30 +349,30 @@ class Sudoku(object):
 
 
 # Read board test cases:
-b = read_board("homework5_sudoku/medium1.txt")
-print(Sudoku(b).get_values((0, 0)))
-b = read_board("homework5_sudoku/medium1.txt")
-print(Sudoku(b).get_values((0, 1)))
-print("Test case for sudoku cells")
-print(sudoku_cells())
-print("Test case for sudoku arcs")
-print(((0, 0), (0, 8)) in sudoku_arcs())
-print(((0, 0), (8, 0)) in sudoku_arcs())
-print(((0, 8), (0, 0)) in sudoku_arcs())
-print(((0, 0), (2, 1)) in sudoku_arcs())
-print(((2, 2), (0, 0)) in sudoku_arcs())
-print(((2, 3), (0, 0)) in sudoku_arcs())
-print("Test case for remove inconsistent values")
-sudoku = Sudoku(read_board("homework5_sudoku/easy.txt"))
-print(sudoku.get_values((0, 3)))
-for col in [0, 1, 4]:
-    removed = sudoku.remove_inconsistent_values((0, 3), (0, col))
-    print(removed, sudoku.get_values((0, 3)))
-print("Test case for infer ac3")
-sudoku = Sudoku(read_board("homework5_sudoku/easy.txt"))
-print(sudoku.infer_ac3())
-sudoku = Sudoku(read_board("homework5_sudoku/medium3.txt"))
-print(sudoku.infer_improved())
+# b = read_board("homework5_sudoku/medium1.txt")
+# print(Sudoku(b).get_values((0, 0)))
+# b = read_board("homework5_sudoku/medium1.txt")
+# print(Sudoku(b).get_values((0, 1)))
+# # print("Test case for sudoku cells")
+# print(sudoku_cells())
+# print("Test case for sudoku arcs")
+# print(((0, 0), (0, 8)) in sudoku_arcs())
+# print(((0, 0), (8, 0)) in sudoku_arcs())
+# print(((0, 8), (0, 0)) in sudoku_arcs())
+# print(((0, 0), (2, 1)) in sudoku_arcs())
+# print(((2, 2), (0, 0)) in sudoku_arcs())
+# print(((2, 3), (0, 0)) in sudoku_arcs())
+# print("Test case for remove inconsistent values")
+# sudoku = Sudoku(read_board("homework5_sudoku/easy.txt"))
+# print(sudoku.get_values((0, 3)))
+# for col in [0, 1, 4]:
+# removed = sudoku.remove_inconsistent_values((0, 3), (0, col))
+# print(removed, sudoku.get_values((0, 3)))
+# print("Test case for infer ac3")
+# sudoku = Sudoku(read_board("homework5_sudoku/easy.txt"))
+# print(sudoku.infer_ac3())
+# sudoku = Sudoku(read_board("homework5_sudoku/medium3.txt"))
+# print(sudoku.infer_improved())
 
 
 # Just an approximation is fine.
