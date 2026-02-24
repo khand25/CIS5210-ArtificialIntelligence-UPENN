@@ -18,6 +18,8 @@ class ValueIterationAgent:
         self.discount = float(discount)
         # Intialize all the state values 0 
         # V0(s) = 0
+        # end of the line, not going to count 
+        # anymore future rewards.
         self.values = defaultdict(float)
 
 
@@ -25,7 +27,10 @@ class ValueIterationAgent:
         """Return value V*(s) correspond to state.
         State values should be stored directly for quick retrieval.
         """
-        return 0  # TODO
+        # retun the value of the state from the values dictionary
+        value = self.values.get(state, 0.0)
+        value = float(value)
+        return value
 
     def get_q_value(self, state, action):
         """Return Q*(s,a) correspond to state and action.
