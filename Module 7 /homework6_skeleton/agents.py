@@ -16,12 +16,11 @@ class ValueIterationAgent:
         # make sure to keep the discount value between 0 and 1
         # floating point number
         self.discount = float(discount)
-        # Intialize all the state values 0 
+        # Intialize all the state values 0
         # V0(s) = 0
-        # end of the line, not going to count 
+        # end of the line, not going to count
         # anymore future rewards.
         self.values = defaultdict(float)
-
 
     def get_value(self, state):
         """Return value V*(s) correspond to state.
@@ -37,7 +36,15 @@ class ValueIterationAgent:
         Q-state values should be computed using Bellman equation:
         Q*(s,a) = Σ_s' T(s,a,s') [R(s,a,s') + γ V*(s')]
         """
-        return 0  # TODO
+        q_value = 0.0
+        # get the transistion probabilities and rewards for the given state
+        # state and action from the game object
+        transition_function = self.game.get_transitions(state, action)
+        for new_state, probability in transition_function.items():
+            reward = self.game.get_reward(state, action, new_state)
+            q_value += float(probability) * (float(reward) + self.discount *
+                                             self.get_value(new_state))
+        return q_value
 
     def get_best_policy(self, state):
         """Return policy π*(s) correspond to state.
