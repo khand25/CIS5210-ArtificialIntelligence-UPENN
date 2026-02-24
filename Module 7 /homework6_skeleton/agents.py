@@ -40,6 +40,9 @@ class ValueIterationAgent:
         # get the transistion probabilities and rewards for the given state
         # state and action from the game object
         transition_function = self.game.get_transitions(state, action)
+        # iterate over the possible new states and their probabilities
+        # for each new state, calculate the reward and the value of the new
+        # state and add it to the q_value
         for new_state, probability in transition_function.items():
             reward = self.game.get_reward(state, action, new_state)
             q_value += float(probability) * (float(reward) + self.discount *
