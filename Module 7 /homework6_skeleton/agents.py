@@ -54,7 +54,27 @@ class ValueIterationAgent:
         Policy should be extracted from Q-state values using policy extraction:
         π*(s) = argmax_a Q*(s,a)
         """
-        return None  # TODO
+        best_possible_action = None
+        # assign the best_q_value to negative infinity so that any q_value we calculate
+        # will be greater than it and we can update the best_q_value and the
+        # best_possible_action accordingly
+        best_q_value = float('-inf')
+        # grab the possible actions for the given state from the generic
+        # game object as a set object
+        possible_actions = self.game.get_actions(state)
+        # if we are in a terminal state, there are no possible actions,
+        # so return None
+        if not possible_actions:
+            return None
+        # iterate over the possible actions and calculate the q_value for each action
+        # if the q_value is bigger than the current best_q_value, update the best_q_value
+        # and the best_possible_action
+        for action in possible_actions:
+            q_value = self.get_q_value(state, action)
+            if q_value > best_q_value:
+                best_q_value = q_value
+                best_possible_action = action
+        return best_possible_action
 
     def iterate(self):
         """Run single value iteration using Bellman equation:
