@@ -55,7 +55,8 @@ class ValueIterationAgent:
         π*(s) = argmax_a Q*(s,a)
         """
         best_possible_action = None
-        # assign the best_q_value to negative infinity so that any q_value we calculate
+        # assign the best_q_value to negative
+        # infinity so that any q_value we calculate
         # will be greater than it and we can update the best_q_value and the
         # best_possible_action accordingly
         best_q_value = float('-inf')
@@ -66,8 +67,10 @@ class ValueIterationAgent:
         # so return None
         if not possible_actions:
             return None
-        # iterate over the possible actions and calculate the q_value for each action
-        # if the q_value is bigger than the current best_q_value, update the best_q_value
+        # iterate over the possible actions and
+        # calculate the q_value for each action
+        # if the q_value is bigger than
+        # the current best_q_value, update the best_q_value
         # and the best_possible_action
         for action in possible_actions:
             q_value = self.get_q_value(state, action)
@@ -76,12 +79,69 @@ class ValueIterationAgent:
                 best_possible_action = action
         return best_possible_action
 
+    def iterate_helper(self, state, previous_values):
+        # helper funtion to get the value of the previous state
+        result = float(previous_values.get(state, 0.0))
+        return result
+
     def iterate(self):
         """Run single value iteration using Bellman equation:
         V_{k+1}(s) = max_a Q*(s,a)
         Then update values: V*(s) = V_{k+1}(s)
         """
-        ...  # TODO
+        # grab the instantanious values for all the states in the game object
+        previous_values = dict(self.values)
+        new_values = defaultdict(float)
+        # iterate over all the states in the game object and
+        # calculate the new value for each state
+        # using the iterate_helper function
+        for current_state in self.game.states:
+            possible_actions = self.game.get_actions(current_state)
+
+            # if we are in a terminal state, there are no possible actions,
+            # so the value of the state is 0
+            if not possible_actions:
+                new_values[current_state] = 0.0
+            else:
+                # othewise, we are not in a terminal state, so we need
+                # to calculate the new value for the state using the Bellman
+                # equation and the iterate_helper function
+                # assign the best_q_value to
+                # negative infinity so that any q_value
+                # we calculate will be greater than it
+                best_q_value = float('-inf')
+                # iterate over the possible actions and
+                # calculate the q_value for
+                # each action
+                for action in possible_actions:
+                    q_value = 0.0
+                    # grab the possible new states and
+                    # their probabilities for the
+                    # given state and action from the game object
+                    list_of_transitions = self.game.get_transitions(
+                        current_state, action)
+                    for new_state, prob in list_of_transitions.items():
+                        # calculate the reward
+                        # for the given state and new state
+                        given_reward = self.game.get_reward(current_state,
+                                                            action,
+                                                            new_state)
+                        # calculate the new q_value using
+                        # the Bellman equation and the iterate
+                        # helper function
+                        q_value += float(prob) * (
+                            float(given_reward) + self.discount *
+                            self.iterate_helper(new_state, previous_values)
+                        )
+                    # if the q_value is now bigger
+                    # than the current best_q_value, update
+                    # it accordingly
+                    if q_value > best_q_value:
+                        best_q_value = q_value
+                new_values[current_state] = best_q_value
+        # update the values with the new values
+        # for all the states
+        self.values = new_values
 
 
 # 2. Policy Iteration
