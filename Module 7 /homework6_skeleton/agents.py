@@ -323,14 +323,27 @@ def question_4a():
     discount = 0.3
     noise = 0.0
     living_reward = -1.0
+    # I was able to tune the discount value from 0.9 to 0.3
+    # implying that later rewards are less valuable than sooner rewards.
+    # I was also able to decrease the noise value from 0.2 to 0.0, which means
+    # that the agent will be forced to take the optimal policy set by us
+    # and follow it rather than doing a percentage of random actions.
+    # Also I was able to set the living reward to be -1.0 from 0.0, which means
+    # the agent will want to prefer the shorter path to exit (near the cliff)
+    # rather than
+    # the longer path on the top to minmize
+    #  the amount of steps it takes to reach the
+    # exit. With these combinations of values, the agent will be able
+    # right to the closer exit near the cliff as desired.
     return discount, noise, living_reward
     # If not possible, return 'NOT POSSIBLE'
 
 
 def question_4b():
-    discount = ...
-    noise = ...
-    living_reward = ...
+    discount = 0.3
+    noise = 0.2
+    living_reward = 0.0
+    # I was able to tune the discount value
     return discount, noise, living_reward
     # If not possible, return 'NOT POSSIBLE'
 
