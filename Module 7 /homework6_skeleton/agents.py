@@ -356,9 +356,10 @@ def question_4b():
 
 
 def question_4c():
-    discount = ...
-    noise = ...
-    living_reward = ...
+    discount = 0.9
+    noise = 0.0
+    living_reward = -2.0
+    # I was able to tune
     return discount, noise, living_reward
     # If not possible, return 'NOT POSSIBLE'
 
