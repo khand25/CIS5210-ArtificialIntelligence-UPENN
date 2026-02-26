@@ -291,8 +291,30 @@ class PolicyIterationAgent(ValueIterationAgent):
 
 # 3. Bridge Crossing Analysis
 def question_3():
-    discount = ...
-    noise = ...
+    discount = 0.9
+    noise = 0.0
+    # I was able to tune the noise value to be 0.0 from 0.2
+    # while keeping the discount value at 0.9 the defualt value.
+    # Basically, I was able to get the optimal policy, after testing
+    # different noise values in the gui, and I found that the optimal policy
+    # is achieved when the noise is 0.0. This is because noise tells us the
+    # probability of the agent doing some random action, against our intented
+    # action. We want our agent to move right.
+    # By setting it to 0.0 from 0.2, we are basically telling the agent to
+    # always do the intended action to cross the bridge and recieve the
+    # high reward as indicated by the discount value of 0.9, which is a high
+    # value for the agent to go for the reward at the end of the bridge
+    # rather than the start.
+    # Also, while experimenting with the noise value, in the gui, I was
+    # able to notice the reward values decreasing going to the right until
+    # the middle of the bridge, and then increasing again until the end of
+    # the bridge. This is the default behavior making the agent prefer
+    # to not cross the bridge.
+    # But as I was tunning the noise value down and keeping
+    # the same discount value,
+    # I was able to notice the reward values increasing
+    # in ascending order as we go right to the 10.00 reward at the end
+    # of the bridge signifying the agents wanting to cross the bridge now.
     return discount, noise
 
 
