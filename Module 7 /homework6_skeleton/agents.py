@@ -166,6 +166,7 @@ class PolicyIterationAgent(ValueIterationAgent):
         Fix current policy, iterate state values V(s) until
         |V_{k+1}(s) - V_k(s)| < ε
         """
+        # epsilon value already given
         epsilon = 1e-6
         # create the original policy
         unchanged_policy = dict()
@@ -179,15 +180,29 @@ class PolicyIterationAgent(ValueIterationAgent):
                 unchanged_policy[current_state] = None
             else:
                 # otherwise, we are not in a terminal state
-                if current_state in self.current_policy:
-                    if self.current_policy[current_state] in possible_actions:
-                        unchanged_policy[current_state] = self.current_policy[
-                            current_state
-                        ]
+                # capture the old policy action for
+                # the state as from the current policy
+                # dictionary
+                old_policy_act = self.current_policy.get(current_state, None)
+                # if the old policy action is not None and
+                # it is in the possible actions, then we can
+                # keep the same policy for the state
+                if old_policy_act in possible_actions:
+                    unchanged_policy[current_state] = old_policy_act
+                else:
+                    # otherwise, we need to update the policy for the state
+                    # to be the first possible action for the state
+                    for cur_action in possible_actions:
+                        unchanged_policy[current_state] = cur_action
+                        break
         # start of the policy iteration loop algorithm
         possible_values = dict(self.values)
+        # boolean variable to keep track to
+        # control the while loop for iterating
+        # the values until convergence
         continue_iteration = True
         while continue_iteration:
+            # discount coefficient
             discount_value = 0.0
             new_values = defaultdict(float)
             # iterate over all the states in the game object
@@ -218,15 +233,22 @@ class PolicyIterationAgent(ValueIterationAgent):
                             float(given_reward) + self.discount *
                             possible_values.get(new_state, 0.0)
                         )
+                    # update the new value for the
+                    # current state in the new values
+                    # dictionary and update the discount
+                    # value to be the maximum
+                    # of the current discount value
+                    # and the absolute value of the
+                    # difference between old and new values
                     new_values[current_state] = value_variable
                     discount_value = max(discount_value,
-                                         abs(value_variable - 
+                                         abs(value_variable -
                                              float(possible_values.get(
                                                  current_state, 0.0))
                                              ))
             possible_values = dict(new_values)
 
-            # if the discoun value smaller than epsilon, then we can stop
+            # if the discount value smaller than epsilon, then we can stop
             # iterating and update the policy
             if discount_value < epsilon:
                 continue_iteration = False
@@ -236,14 +258,14 @@ class PolicyIterationAgent(ValueIterationAgent):
         self.values = defaultdict(float, possible_values)
 
         # improvement of the policy
-        # step 2 of the algorithm
+        # Step 2 of the algorithm
         better_policy = dict()
         # iterate over all the states in the game object and
         # calculate te best action for each state using the get
         # q_value function and update the better policy accordingly
         for current_state in self.game.states:
             possible_actions = self.game.get_actions(current_state)
-            # if we are in a terminal state, then there are no 
+            # if we are in a terminal state, then there are no
             # possible actions, so the policy is None
             if not possible_actions:
                 better_policy[current_state] = None
@@ -266,7 +288,6 @@ class PolicyIterationAgent(ValueIterationAgent):
         # we have just found!
         self.current_policy = better_policy
 
-                    
 
 # 3. Bridge Crossing Analysis
 def question_3():
