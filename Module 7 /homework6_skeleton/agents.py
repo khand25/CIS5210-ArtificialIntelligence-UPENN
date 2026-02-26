@@ -343,7 +343,14 @@ def question_4b():
     discount = 0.3
     noise = 0.2
     living_reward = 0.0
-    # I was able to tune the discount value
+    # I was able to tune the discount value from 0.9 to 0.3
+    # making farther distance rewards less attracable and closer
+    # rewards more attractive. I then was able to keep the noise 
+    # level the same keeping the chance high enough for the agent
+    # to possible enter a cliff high enough to avoid the cliff
+    # route entirely. I also kept the living_reward the default value
+    # 0.0 where shorter paths are not reward making the agent
+    # prefer the longer cliff avoidance path.
     return discount, noise, living_reward
     # If not possible, return 'NOT POSSIBLE'
 
