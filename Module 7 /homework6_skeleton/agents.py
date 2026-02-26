@@ -153,15 +153,120 @@ class PolicyIterationAgent(ValueIterationAgent):
     or override ValueIterationAgent's methods, you can add them as well.
     """
 
+    def __init__(self, game, discount):
+        # You can call the parent class constructor to initialize
+        # the game and discount value
+        super().__init__(game, discount)
+        # initialize the policy for each state to be an empty
+        # dictionary, which will be updated in the iterate function
+        self.current_policy = dict()
+
     def iterate(self):
         """Run single policy iteration.
         Fix current policy, iterate state values V(s) until
         |V_{k+1}(s) - V_k(s)| < ε
         """
         epsilon = 1e-6
+        # create the original policy
+        unchanged_policy = dict()
+        # iterate over all the states in the game object and
+        # calculate the new value for each state
+        for current_state in self.game.states:
+            possible_actions = self.game.get_actions(current_state)
+            # if we are in a terminal state, then there are no
+            # possible actions, so the value of the state is 0
+            if not possible_actions:
+                unchanged_policy[current_state] = None
+            else:
+                # otherwise, we are not in a terminal state
+                if current_state in self.current_policy:
+                    if self.current_policy[current_state] in possible_actions:
+                        unchanged_policy[current_state] = self.current_policy[
+                            current_state
+                        ]
+        # start of the policy iteration loop algorithm
+        possible_values = dict(self.values)
+        continue_iteration = True
+        while continue_iteration:
+            discount_value = 0.0
+            new_values = defaultdict(float)
+            # iterate over all the states in the game object
+            for current_state in self.game.states:
+                action_to_take = unchanged_policy.get(current_state, None)
+                # if the action to take is None, then we are in a terminal
+                # state, so the value of the state is 0
+                if action_to_take is None:
+                    new_values[current_state] = 0.0
+                else:
+                    # otherwise, we are not in a terminal state, so we
+                    # need to calculate the new value for the state using
+                    # the Bellman equation
+                    value_variable = 0.0
+                    list_of_transitions = self.game.get_transitions(
+                        current_state,
+                        action_to_take)
+                    # iterate over the possible new states
+                    # and their probabilities
+                    # for each new state,
+                    # calculate the reward and the value of the
+                    # new state and add it to the value variable
+                    for new_state, probability in list_of_transitions.items():
+                        given_reward = self.game.get_reward(current_state,
+                                                            action_to_take,
+                                                            new_state)
+                        value_variable += float(probability) * (
+                            float(given_reward) + self.discount *
+                            possible_values.get(new_state, 0.0)
+                        )
+                    new_values[current_state] = value_variable
+                    discount_value = max(discount_value,
+                                         abs(value_variable - 
+                                             float(possible_values.get(
+                                                 current_state, 0.0))
+                                             ))
+            possible_values = dict(new_values)
 
-        ...  # TODO
+            # if the discoun value smaller than epsilon, then we can stop
+            # iterating and update the policy
+            if discount_value < epsilon:
+                continue_iteration = False
+        # update the policy
+        # convergence has been reached, so we can update
+        # the policy
+        self.values = defaultdict(float, possible_values)
 
+        # improvement of the policy
+        # step 2 of the algorithm
+        better_policy = dict()
+        # iterate over all the states in the game object and
+        # calculate te best action for each state using the get
+        # q_value function and update the better policy accordingly
+        for current_state in self.game.states:
+            possible_actions = self.game.get_actions(current_state)
+            # if we are in a terminal state, then there are no 
+            # possible actions, so the policy is None
+            if not possible_actions:
+                better_policy[current_state] = None
+            else:
+                best_q_value = float('-inf')
+                best_possible_action = None
+                # iterate over the possible actions
+                # and calculate the q_value for each
+                # action using the get_q_value function
+                for action in possible_actions:
+                    q_value = self.get_q_value(current_state, action)
+                    # if the q_value is now bigger
+                    # than the current best_q_value, update
+                    # it accordingly
+                    if q_value > best_q_value:
+                        best_q_value = q_value
+                        best_possible_action = action
+                better_policy[current_state] = best_possible_action
+        # update the current policy with the better policy
+        # we have just found!
+        self.current_policy = better_policy
+
+                    
 
 # 3. Bridge Crossing Analysis
 def question_3():
