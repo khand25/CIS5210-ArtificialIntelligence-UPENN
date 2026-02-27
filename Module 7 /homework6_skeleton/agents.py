@@ -395,6 +395,16 @@ def question_4e():
     discount = 0.99
     noise = 0.0
     living_reward = 1.0
+    # I was able to increase the discount from 0.9 to .99
+    # making it so the agent will be attracted to stay
+    # in non-terminal states as they would get rewards close
+    # to 0.99 making them not want to go to terminal states (the exits)
+    # Having the noise set at 0.0, would let the agent be undetered
+    # from choosing cliff paths or not which would not affect their
+    # overall judgement. Increasing the living reward to 1.0
+    # making it so the agent will be attracted to stay
+    # in non-terminal states as they would get rewards close
+    # to 0.99 making them not want to go to terminal states (the exits).
     return discount, noise, living_reward
     # If not possible, return 'NOT POSSIBLE'
 
@@ -402,19 +412,23 @@ def question_4e():
 # 5. Feedback
 # Just an approximation is fine.
 feedback_question_1 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I spent around 15 - 17 hours working on this assignment.
 """
 
 feedback_question_2 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I found working on implementing the policy iteration
+# improvemnet alogirhtm to be the most challenging as
+it involved strong knowledge of the prior value iteration
+algorithm and having me look up in the textbook regarding the
+apporiate psuedocode for this alogorithm. Testing the solution
+with the gui really made the difference to pinpoint my
+errors I was getting initally.
 """
 
 feedback_question_3 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I liked part 3 and part 4 as tuning the noise, discount, and living
+rewards parameters, was actaully fun and had me test my actual intuition
+on the purpose of these parameters. I also liked seeing the GUI and how each
+of the arrows either conflicted or actually went towards the problem
+desired destination based upon my tuning of the parameters.
 """
