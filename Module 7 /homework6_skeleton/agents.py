@@ -345,7 +345,7 @@ def question_4b():
     living_reward = 0.0
     # I was able to tune the discount value from 0.9 to 0.3
     # making farther distance rewards less attracable and closer
-    # rewards more attractive. I then was able to keep the noise 
+    # rewards more attractive. I then was able to keep the noise
     # level the same keeping the chance high enough for the agent
     # to possible enter a cliff high enough to avoid the cliff
     # route entirely. I also kept the living_reward the default value
@@ -359,23 +359,42 @@ def question_4c():
     discount = 0.9
     noise = 0.0
     living_reward = -2.0
-    # I was able to tune
+    # I was able to keep the default discount value of 0.9 as
+    # a 0.9 discount value makes it attractive for an agent
+    # to go to more distant exits with +10 rewards than closer
+    # exits will smaller rewards. Keeping the noise level at 0.0
+    # removes the risk of apporaching an cliff for the agent making
+    # them not fear it so thus prefering the shorter optimal path
+    # by the cliff.
+    # Lastly I tuned the living_reward from 0.0 to -2.0 which would
+    # penalize extra steps taken by the agent thus motivated the agent
+    # to prefer the shorter optimal path by the cliff to the farther
+    # exit.
     return discount, noise, living_reward
     # If not possible, return 'NOT POSSIBLE'
 
 
 def question_4d():
-    discount = ...
-    noise = ...
-    living_reward = ...
+    discount = 0.9
+    noise = 0.3
+    living_reward = 0.0
+    # I was able to keep the default discount value of 0.9 as
+    # a 0.9 discount value makes it attractive for an agent
+    # to go to more distant exits with +10 rewards than closer
+    # exits will smaller rewards. I increased the noise from
+    # 0.0 to 0.3 which would ential enough risk for the agent
+    # to avoid cliff near routes. I also kept the living_reward at
+    # 0.0 making it no extra penality for the agent to take extra
+    # steps to reach the destination thus making the agent prefer
+    # the longer further cliff avoidance route.
     return discount, noise, living_reward
     # If not possible, return 'NOT POSSIBLE'
 
 
 def question_4e():
-    discount = ...
-    noise = ...
-    living_reward = ...
+    discount = 0.99
+    noise = 0.0
+    living_reward = 1.0
     return discount, noise, living_reward
     # If not possible, return 'NOT POSSIBLE'
 
