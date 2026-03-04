@@ -21,7 +21,8 @@ class QLearningAgent:
         """Retrieve Q-value from Q-table.
         For an never seen (s,a) pair, the Q-value is by default 0.
         """
-        return 0  # TODO
+        result = self.possible_q_values.get((state, action), 0)
+        return result 
 
     def get_value(self, state):
         """Compute state value from Q-values using Bellman Equation.
