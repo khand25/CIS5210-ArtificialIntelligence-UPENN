@@ -15,6 +15,7 @@ class QLearningAgent:
         self.discount = discount
         self.learning_rate = learning_rate
         self.explore_prob = explore_prob
+        self.possible_q_values = dict()
 
     def get_q_value(self, state, action):
         """Retrieve Q-value from Q-table.
