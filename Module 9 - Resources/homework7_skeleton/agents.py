@@ -22,16 +22,34 @@ class QLearningAgent:
         For an never seen (s,a) pair, the Q-value is by default 0.
         """
         result = self.possible_q_values.get((state, action), 0)
-        return result 
+        return result
 
     def get_value(self, state):
         """Compute state value from Q-values using Bellman Equation.
         V(s) = max_a Q(s,a)
         """
-        return 0  # TODO
+        # grab the possible actions from the game object as a set
+        # for later examaniation
+        possible_actions = self.game.get_actions(state)
+        # if the action set is empty, then there are no possible
+        # actions available so return 0
+        if not possible_actions:
+            return 0
+        # build an empty list to store q values in to later return the
+        # max q value from easier
+        list_of_qs = []
+        # iterate through the set of possible actions and on each iteration
+        # call the get_q_value function from above and append the resultant
+        # q value to our list
+        for current_action in possible_actions:
+            list_of_qs.append(self.get_q_value(state, current_action))
+        # Use Python's built in max function to return maximum q value from our
+        # list
+        return max(list_of_qs)
 
     def get_best_policy(self, state):
-        """Compute the best action to take in the state using Policy Extraction.
+        """Compute the best action to take in the
+        state using Policy Extraction.
         π(s) = argmax_a Q(s,a)
 
         If there are ties, return a random one for better performance.
@@ -85,8 +103,10 @@ class ApproximateQAgent(QLearningAgent):
         return 0  # TODO
 
     def get_q_value(self, state, action):
-        """Compute Q value based on the dot product of feature components and weights.
-        Q(s,a) = w_1 * f_1(s,a) + w_2 * f_2(s,a) + ... + w_n * f_n(s,a)
+        """Compute Q value based on the dot
+        product of feature components and weights.
+        Q(s,a) = w_1 * f_1(s,a) + w_2 * f_2(s,a)
+        + ... + w_n * f_n(s,a)
         """
         return 0  # TODO
 
