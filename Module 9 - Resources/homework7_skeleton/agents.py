@@ -55,7 +55,30 @@ class QLearningAgent:
         If there are ties, return a random one for better performance.
         Hint: use random.choice().
         """
-        return None  # TODO
+        # grab the possible actions from the game object as a set
+        # for later examaniation
+        possible_actions = self.game.get_actions(state)
+        # if there action set is empty signifying no
+        # actions, return 0
+        if not possible_actions:
+            return None
+        # call our previous get_value function to retreive the
+        # highest q value from the table
+        best_possible_value = self.get_value(state)
+        best_possible_actions = []
+        # iterate through the set of possible actions and on each iteration
+        # call the get_q_value function from above and append the resultant
+        # q value to our best_possible_actions list
+        for current_action in possible_actions:
+            # if the current q value is equivalent to the best possible q value
+            # then add it's action to our best_possible_actions list to return
+            # later actions from
+            if self.get_q_value(state, current_action) == best_possible_value:
+                best_possible_actions.append(current_action)
+        # return a random policy from mutiple best policies if there
+        # are ties
+        result = random.choice(best_possible_actions)
+        return result
 
     def update(self, state, action, next_state, reward):
         """Update Q-values using running average.
@@ -64,6 +87,7 @@ class QLearningAgent:
 
         Note: You should not call this function in your code.
         """
+        # Q(s,a) == get_q_value(state, action)
         ...  # TODO
 
     # 2. Epsilon Greedy
