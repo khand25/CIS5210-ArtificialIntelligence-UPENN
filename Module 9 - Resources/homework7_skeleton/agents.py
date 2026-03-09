@@ -15,6 +15,8 @@ class QLearningAgent:
         self.discount = discount
         self.learning_rate = learning_rate
         self.explore_prob = explore_prob
+        # store a table of possible q values that can be
+        # later updated as needed
         self.possible_q_values = dict()
 
     def get_q_value(self, state, action):
@@ -88,7 +90,24 @@ class QLearningAgent:
         Note: You should not call this function in your code.
         """
         # Q(s,a) == get_q_value(state, action)
-        ...  # TODO
+        # first half of the equation
+        # grab our current q value
+        current_q = self.get_q_value(state, action)
+        # using our current q value multiply it by
+        # the 1 - the learning rate defined by our
+        # internal instance variable
+        current_q *= (1 - self.learning_rate)
+        # RHS of the equation where we take the product
+        # of the learning rate with the reward summed with the
+        # product of the discount and current value
+        updated_reward = self.learning_rate * (reward +
+                                               (self.discount *
+                                                self.get_value(next_state)))
+        # the new q value we get after fully applying the formula above
+        new_q = current_q + updated_reward
+        # update our current q table with the new next q value we just
+        # calculated!
+        self.possible_q_values[(state, action)] = new_q
 
     # 2. Epsilon Greedy
     def get_action(self, state):
