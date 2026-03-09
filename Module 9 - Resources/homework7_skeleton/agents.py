@@ -61,7 +61,7 @@ class QLearningAgent:
         # for later examaniation
         possible_actions = self.game.get_actions(state)
         # if there action set is empty signifying no
-        # actions, return 0
+        # actions, return None
         if not possible_actions:
             return None
         # call our previous get_value function to retreive the
@@ -117,7 +117,26 @@ class QLearningAgent:
 
         Hint: use random.random() < ε to check if exploration is needed.
         """
-        return None  # TODO
+        # grab the possible actions from the game object as a set
+        # for later examaniation
+        possible_actions = self.game.get_actions(state)
+        # if the action set is empty, then there are no possible
+        # actions available so return None
+        if not possible_actions:
+            return None
+        # Convert our possible_actions set into a list for easy element
+        # extraction later
+        possible_actions = list(possible_actions)
+        # apply the random function againts our probabiltiy
+        # instance variable epsilon to get a random action to take
+        # Simulate the Bernouli trial
+        if random.random() < self.explore_prob:
+            random_action = random.choice(possible_actions)
+            return random_action
+        # Since the random probablity is actually more than epsilon,
+        # then just extra the action based upon the optimal policy
+        action_to_take = self.get_best_policy(state)
+        return action_to_take
 
 
 # 3. Bridge Crossing Revisited
