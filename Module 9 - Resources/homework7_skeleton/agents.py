@@ -141,10 +141,16 @@ class QLearningAgent:
 
 # 3. Bridge Crossing Revisited
 def question3():
-    epsilon = ...
-    learning_rate = ...
-    return epsilon, learning_rate
-    # If not possible, return 'NOT POSSIBLE'
+    # epsilon = ...
+    # learning_rate = ...
+    # if we were to increase the epsilon then exploration
+    # would likely occur but there is a high chance after 50
+    # episodes, the agent will still not explore the optimal
+    # path needed to cross the bridge as intended with 99%
+    # reliability
+    # Altering the learning rate affects the Q values and not
+    # how to solve the exploration problem
+    return 'NOT POSSIBLE'
 
 
 # 5. Approximate Q-Learning
