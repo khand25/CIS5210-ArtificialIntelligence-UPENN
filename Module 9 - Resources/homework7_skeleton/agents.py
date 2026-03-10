@@ -160,9 +160,9 @@ class ApproximateQAgent(QLearningAgent):
     def __init__(self, *args, extractor):
         """Initialize parameters and store the feature extractor.
         Initialize weights table."""
-
         super().__init__(*args)
-        ...  # TODO
+        self.extractor = extractor
+        self.weight_table = dict()
 
     def get_weight(self, feature):
         """Get weight of a feature.
