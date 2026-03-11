@@ -150,6 +150,7 @@ def question3():
     # reliability
     # Altering the learning rate affects the Q values and not
     # how to solve the exploration problem
+    # So probably not possible
     return 'NOT POSSIBLE'
 
 
@@ -168,7 +169,11 @@ class ApproximateQAgent(QLearningAgent):
         """Get weight of a feature.
         Never seen feature should have a weight of 0.
         """
-        return 0  # TODO
+        # return the weight of a feature.
+        # if the feature is not a key in the dictionary
+        # then return 0
+        weight = self.weight_table.get(feature, 0)
+        return weight
 
     def get_q_value(self, state, action):
         """Compute Q value based on the dot
@@ -176,32 +181,63 @@ class ApproximateQAgent(QLearningAgent):
         Q(s,a) = w_1 * f_1(s,a) + w_2 * f_2(s,a)
         + ... + w_n * f_n(s,a)
         """
-        return 0  # TODO
+        # call the extractor function to get the map of feature to value
+        # as specificed in the hw instructions
+        total_features = self.extractor(state, action)
+        # counter to increment q values with respect to the dot
+        # product of the value feature with the weight of each
+        # entry
+        total_q_value = 0
+        # iterate through the features dictionary and on each iteration
+        # grab the weight of the feature and mulitply it my the key's value
+        # and add it to the total_q_value variable as a dot product
+        # according to the formula above
+        for current_feature, value in total_features.items():
+            temp = self.get_weight(current_feature) * value
+            total_q_value = total_q_value + temp
+        return total_q_value
 
     def update(self, state, action, next_state, reward):
         """Update weights using least-squares approximation.
         Δ = R + γ V(s') - Q(s,a)
         Then update weights: w_i = w_i + α * Δ * f_i(s, a)
         """
-        ...  # TODO
+        # call the extractor function to get the map of feature to value
+        # as specificed in the hw instructions
+        total_features = self.extractor(state, action)
+        # Δ = R + γ V(s') - Q(s,a)
+        delta = (reward + self.discount * self.get_value(next_state) -
+                 self.get_q_value(state, action))
+        # iterate through the features dictionary and on each iteration
+        # grab the current weight, apply the formula:
+        # w_i = w_i + α * Δ * f_i(s, a)
+        # and then update the weight table current feature key
+        # with the new updated weight from the formula
+        for current_feature, value in total_features.items():
+            prev_weight = self.get_weight(current_feature)
+            updated_weight = prev_weight + self.learning_rate * delta * value
+            self.weight_table[current_feature] = updated_weight
 
 
 # 6. Feedback
 # Just an approximation is fine.
 feedback_question_1 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I spent around 12 - 15 hours working on this assignment across
+2 weeks given to us.
 """
 
 feedback_question_2 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I found the first part on the QlEARNING Agent to be the most
+challenging as it had required me to formally review the q learning
+alogirthm from the lecture, understand it clearly, before
+trying to code the solution correctly. Specifically, the get_best_policy
+and update functions took the longest to tweak and debug as needed.
 """
 
 feedback_question_3 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I liked part 3 on the bridge cross analysis revisted
+as it was my favortie part from the last homework of trying
+to find an optimal path across the bridge and seeing if my
+guesses on the gui actually worked or not seen any progress.
+The solution that I think I found, was surprising.
 """
