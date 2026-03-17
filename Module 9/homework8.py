@@ -63,8 +63,29 @@ print(tokenize(" 'Medium-rare,' she said."))
 
 
 def ngrams(n, tokens):
-    pass
+    result_list = []
+    # padding used for adding the START and END token characters
+    appended_tokens = ["<START>"] * (n - 1) + tokens + ["<END>"]
+    # iterate through the start and end character lists and for each
+    # element create a context value that is slice of the appended tokens
+    # from i - (n - 1) to i value (n-1 tuple value) to the end of the token
+    # Use this context value with the current token value which is grabbed
+    # from the appended_tokens list above and return it as a tuple like element
+    # in the result list
+    for i in range(n - 1, len(appended_tokens), 1):
+        start_val = i - (n - 1)
+        end_val = i
+        context = tuple(appended_tokens[start_val:end_val])
+        current_token = appended_tokens[i]
+        result_list.append((context, current_token))
+    # return the result list as needed
+    return result_list
 
+
+print(ngrams(1, ["a", "b", "c"]))
+print(ngrams(2, ["a", "b", "c"]))
+print(ngrams(3, ["a", "b", "c"]))
+print(ngrams(2, []))
 
 class NgramModel(object):
 
