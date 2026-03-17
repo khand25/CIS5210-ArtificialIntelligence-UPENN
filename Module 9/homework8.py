@@ -87,6 +87,7 @@ print(ngrams(2, ["a", "b", "c"]))
 print(ngrams(3, ["a", "b", "c"]))
 print(ngrams(2, []))
 
+
 class NgramModel(object):
 
     def __init__(self, n):
