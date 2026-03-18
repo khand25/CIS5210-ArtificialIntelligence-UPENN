@@ -91,13 +91,66 @@ print(ngrams(2, []))
 class NgramModel(object):
 
     def __init__(self, n):
-        pass
+        self.n = n
+        # keep track of number of tokens
+        # as an dictionary map
+        self.num_of_tokens = dict()
+        # keep track of number of context count
+        # as an dictionary map
+        self.num_of_context = dict()
 
     def update(self, sentence):
-        pass
+        # retreive the tokenized sentence from the input sentence
+        # using our tokenize function from above
+        list_of_tokens = tokenize(sentence)
+        # convert our tokenized sentence into a valid
+        # ngrams to be used later
+        ngrams_sentence = ngrams(self.n, list_of_tokens)
+        # iterate through the ngrams and check wheter both the
+        # context and token values of each ngram is already part of
+        # the two dictionaries we defined in the init function
+        for value in ngrams_sentence:
+            current_context = value[0]
+            current_token = value[1]
+            # if the context is not the num_of_tokens map
+            # then add it as a new entire dictionary to be used
+            # later
+            if current_context not in self.num_of_tokens:
+                self.num_of_tokens[current_context] = dict()
+            # if the context is not int the num_of_context map
+            # then add it as a new key value pair of the key being
+            # the context and value being 0. Increment this new key value
+            # pair regardless if value was added or not
+            if current_context not in self.num_of_context:
+                self.num_of_context[current_context] = 0
+            self.num_of_context[current_context] += 1
+            # if the context is not int the num_of_tokens map
+            # then add it as a new key value pair of the key being
+            # the context and the current token and the value being 0.
+            # Increment this new key value
+            # pair regardless if value was added or not by 1
+            if current_token not in self.num_of_tokens[current_context]:
+                self.num_of_tokens[current_context][current_token] = 0
+            self.num_of_tokens[current_context][current_token] += 1
 
     def prob(self, context, token):
-        pass
+        # if the context is not present in our num_of_context
+        # map, then update function before may have not seen the
+        # specific context
+        # value passed into this function so return 0.0
+        if context not in self.num_of_context:
+            return 0.0
+        # if the token is not present in our num_of_tokens
+        # map, then update function before may have not seen the specific token
+        # value passed into this function so return 0.0
+        if token not in self.num_of_tokens[context]:
+            return 0.0
+        # Otherwise if both token and context were already presented in the two
+        # maps, then calculate the P(token | context) as per the assignment
+        # instructions and return this conditional probabiltiy value
+        # accordingly
+        val = self.num_of_tokens[context][token] / self.num_of_context[context]
+        return (val)
 
     def random_token(self, context):
         pass
@@ -107,6 +160,21 @@ class NgramModel(object):
 
     def perplexity(self, sentence):
         pass
+
+
+# Test cases for NgramModel Class:
+m = NgramModel(1)
+m.update("a b c d")
+m.update("a b a b")
+print(m.prob((), "a"))
+print(m.prob((), "c"))
+print(m.prob((), "<END>"))
+m = NgramModel(2)
+m.update("a b c d")
+m.update("a b a b")
+print(m.prob(("<START>", ), "a"))
+print(m.prob(("b",), "c"))
+print(m.prob(("a",), "x"))
 
 
 def create_ngram_model(n, path):
