@@ -176,7 +176,31 @@ class NgramModel(object):
         return likely_tokens[len(likely_tokens) - 1]
 
     def random_text(self, token_count):
-        pass
+        final_result = []
+        # ensure that the starting context is a n-1 tuple
+        intial_context = tuple(["<START>"] * (self.n - 1))
+        new_context = intial_context
+        # iterate token_count number of times
+        for i in range(0, token_count, 1):
+            # generate one random token at a time
+            new_token = self.random_token(new_context)
+            # append that new_token to the final_result list as needed
+            final_result.append(new_token)
+            # Whenever the special token "<END>" is encountered, reset the
+            # current context to the starting context
+            if new_token == "<END>":
+                new_context = intial_context
+            # if n is greater than 1, then move the current context range
+            # forward by one token
+            elif self.n > 1:
+                temp = new_context[1:len(new_context)] + (new_token, )
+                new_context = temp
+            else:
+                # if the n = 1, then our context should be an empty tuple
+                new_context = ()
+        # seperate the result list list of strings by the space character
+        return_val = " ".join(final_result)
+        return return_val
 
     def perplexity(self, sentence):
         pass
@@ -201,6 +225,15 @@ m.update("a b a b")
 random.seed(1)
 val = [m.random_token(()) for i in range(25)]
 print(val)
+m.update("a b c d")
+m.update("a b a b")
+random.seed(1)
+print(f" Test case 1 for problem 5: {m.random_text(13)}")
+m = NgramModel(2)
+m.update("a b c d")
+m.update("a b a b")
+random.seed(2)
+print(f" Test case 2 for problem 5: {m.random_text(15)}")
 
 
 def create_ngram_model(n, path):
