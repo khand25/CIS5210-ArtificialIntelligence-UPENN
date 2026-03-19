@@ -8,6 +8,7 @@
 
 # Include your imports here, if any are used.
 import string
+import random
 
 ############################################################
 
@@ -153,7 +154,26 @@ class NgramModel(object):
         return (val)
 
     def random_token(self, context):
-        pass
+        # grab all the tokens context's and convert them into a list
+        # and sort that list soon after.
+        likely_tokens = list(self.num_of_tokens[context].keys())
+        likely_tokens.sort()
+        # generate some random value to dictate the token value
+        # later
+        random_val = random.random()
+        # keep track of the total accumalted problabiltiy to this point
+        total_prob = 0.0
+        # iterate through our tokens list, use our prob function from above
+        # to get the probabilitly of the token and append its
+        # result to the total_prob variable. If our random val is indeed
+        # less than our total accumalted prob so far, then return the current
+        # token as is
+        for i in range(0, len(likely_tokens), 1):
+            total_prob += self.prob(context, likely_tokens[i])
+            if random_val < total_prob:
+                return likely_tokens[i]
+        # Otherwise return the last token from the list
+        return likely_tokens[len(likely_tokens) - 1]
 
     def random_text(self, token_count):
         pass
@@ -175,6 +195,12 @@ m.update("a b a b")
 print(m.prob(("<START>", ), "a"))
 print(m.prob(("b",), "c"))
 print(m.prob(("a",), "x"))
+m = NgramModel(1)
+m.update("a b c d")
+m.update("a b a b")
+random.seed(1)
+val = [m.random_token(()) for i in range(25)]
+print(val)
 
 
 def create_ngram_model(n, path):
