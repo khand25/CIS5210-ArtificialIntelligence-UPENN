@@ -225,6 +225,7 @@ m.update("a b a b")
 random.seed(1)
 val = [m.random_token(()) for i in range(25)]
 print(val)
+m = NgramModel(1)
 m.update("a b c d")
 m.update("a b a b")
 random.seed(1)
