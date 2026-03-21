@@ -237,12 +237,30 @@ print(f" Test case 2 for problem 5: {m.random_text(15)}")
 
 
 def create_ngram_model(n, path):
-    pass
+    # create a new N-Gram model instance to later return using each
+    # sentences from the input file as a tokenized sentence to later create
+    # an updated n_gram model
+    result_model = NgramModel(n)
+    # read input file from the path and create a valid
+    # n-gram model from it
+    with open(path, "r") as file:
+        for current_line in file:
+            result_model.update(current_line)
+    # return the valid n_gram model from the input file
+    return result_model
+
 
 ############################################################
 # Section 2: Feedback
 ############################################################
-
+m = create_ngram_model(1, "frankenstein.txt")
+print(m.random_text(15))
+m = create_ngram_model(2, "frankenstein.txt")
+print(m.random_text(15))
+m = create_ngram_model(3, "frankenstein.txt")
+print(m.random_text(15))
+m = create_ngram_model(4, "frankenstein.txt")
+print(m.random_text(15))
 
 # Just an approximation is fine.
 feedback_question_1 = """
