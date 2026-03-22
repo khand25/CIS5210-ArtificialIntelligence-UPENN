@@ -9,6 +9,7 @@
 # Include your imports here, if any are used.
 import string
 import random
+import math
 
 ############################################################
 
@@ -59,8 +60,8 @@ def tokenize(text):
 
 
 # test cases for tokenize function above
-print(tokenize("  This is an example.  "))
-print(tokenize(" 'Medium-rare,' she said."))
+# print(tokenize("  This is an example.  "))
+# print(tokenize(" 'Medium-rare,' she said."))
 
 
 def ngrams(n, tokens):
@@ -83,10 +84,10 @@ def ngrams(n, tokens):
     return result_list
 
 
-print(ngrams(1, ["a", "b", "c"]))
-print(ngrams(2, ["a", "b", "c"]))
-print(ngrams(3, ["a", "b", "c"]))
-print(ngrams(2, []))
+# print(ngrams(1, ["a", "b", "c"]))
+# print(ngrams(2, ["a", "b", "c"]))
+# print(ngrams(3, ["a", "b", "c"]))
+# print(ngrams(2, []))
 
 
 class NgramModel(object):
@@ -203,38 +204,64 @@ class NgramModel(object):
         return return_val
 
     def perplexity(self, sentence):
-        pass
+        # convert the input sentence into a list of tokens
+        # for every word and punctutation from the input
+        # sentence
+        list_of_tokens = tokenize(sentence)
+        # recieve the ngrams for the tokenized sentence now
+        n_grams_sentence = ngrams(self.n, list_of_tokens)
+        # keep track of the log sum in continutation of following
+        # the given perplexity formula
+        sum_of_log = 0.0
+        # for every contect and token in every ngram, generate its
+        # probabilty and take the log base of 2 for it and add its value
+        # to the sum of log variable
+        for element in n_grams_sentence:
+            current_context = element[0]
+            current_token = element[1]
+            generated_prob = self.prob(current_context, current_token)
+            # if the generated probabaiblity is 0, then return infinity
+            # marking the perpelxity to be an unlikely value as such
+            if generated_prob == 0:
+                infinity = float("inf")
+                return infinity
+            sum_of_log += math.log(generated_prob)
+        # use the geometric mean formula with the log base of 10 divided
+        # by the k value of the len of the n_grams sentence to later return
+        # the calculated perplexitiy value as needed.
+        final_val = math.exp((-1 * sum_of_log) / len(n_grams_sentence))
+        return final_val
 
 
 # Test cases for NgramModel Class:
-m = NgramModel(1)
-m.update("a b c d")
-m.update("a b a b")
-print(m.prob((), "a"))
-print(m.prob((), "c"))
-print(m.prob((), "<END>"))
-m = NgramModel(2)
-m.update("a b c d")
-m.update("a b a b")
-print(m.prob(("<START>", ), "a"))
-print(m.prob(("b",), "c"))
-print(m.prob(("a",), "x"))
-m = NgramModel(1)
-m.update("a b c d")
-m.update("a b a b")
-random.seed(1)
-val = [m.random_token(()) for i in range(25)]
-print(val)
-m = NgramModel(1)
-m.update("a b c d")
-m.update("a b a b")
-random.seed(1)
-print(f" Test case 1 for problem 5: {m.random_text(13)}")
-m = NgramModel(2)
-m.update("a b c d")
-m.update("a b a b")
-random.seed(2)
-print(f" Test case 2 for problem 5: {m.random_text(15)}")
+# m = NgramModel(1)
+# m.update("a b c d")
+# m.update("a b a b")
+# print(m.prob((), "a"))
+# print(m.prob((), "c"))
+# print(m.prob((), "<END>"))
+# m = NgramModel(2)
+# m.update("a b c d")
+# m.update("a b a b")
+# print(m.prob(("<START>", ), "a"))
+# print(m.prob(("b",), "c"))
+# print(m.prob(("a",), "x"))
+# m = NgramModel(1)
+# m.update("a b c d")
+# m.update("a b a b")
+# random.seed(1)
+# val = [m.random_token(()) for i in range(25)]
+# print(val)
+# m = NgramModel(1)
+# m.update("a b c d")
+# m.update("a b a b")
+# random.seed(1)
+# print(f" Test case 1 for problem 5: {m.random_text(13)}")
+# m = NgramModel(2)
+# m.update("a b c d")
+# m.update("a b a b")
+# random.seed(2)
+# print(f" Test case 2 for problem 5: {m.random_text(15)}")
 
 
 def create_ngram_model(n, path):
@@ -254,20 +281,29 @@ def create_ngram_model(n, path):
 ############################################################
 # Section 2: Feedback
 ############################################################
-m = create_ngram_model(1, "frankenstein.txt")
-print(m.random_text(15))
-m = create_ngram_model(2, "frankenstein.txt")
-print(m.random_text(15))
-m = create_ngram_model(3, "frankenstein.txt")
-print(m.random_text(15))
-m = create_ngram_model(4, "frankenstein.txt")
-print(m.random_text(15))
+# m = create_ngram_model(1, "frankenstein.txt")
+# print(m.random_text(15))
+# m = create_ngram_model(2, "frankenstein.txt")
+# print(m.random_text(15))
+# m = create_ngram_model(3, "frankenstein.txt")
+# print(m.random_text(15))
+# m = create_ngram_model(4, "frankenstein.txt")
+# print(m.random_text(15))
+
+# m = NgramModel(1)
+# m.update("a b c d")
+# m.update("a b a b")
+# print(m.perplexity("a b"))
+
+# m = NgramModel(2)
+# m.update("a b c d")
+# m.update("a b a b")
+# print(m.perplexity("a b"))
 
 # Just an approximation is fine.
 feedback_question_1 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I spent anywhere around 15 - 19 hours working on this assignment throughout
+the week concistently.
 """
 
 feedback_question_2 = """
