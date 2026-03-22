@@ -307,13 +307,21 @@ the week concistently.
 """
 
 feedback_question_2 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I found working on the perplexity function to be the most challenging part of
+this assignment as it requiered me to once again refresh my high school log
+skills to apply it in a way to satisfy the formula
+requierments. I also found it
+a little obstacle to figure out how to read from a text file in python for the
+create_ngram function. I knew how to do it for Java,
+but applying it to this function
+to take every sentence from an input text file and converting it into a
+ngram was quite interesting and challenging.
 """
 
 feedback_question_3 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I liked converting an input sentence into a list of tokens as it was very
+intuative and for some reason challenged me enough to realize the purpose
+of this measure. I had to look in the ed discussion posts as to the reason
+for tokenizing sentences first making it make more sense when working on
+the tokenize function later.
 """
