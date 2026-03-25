@@ -85,11 +85,84 @@ print([p.predict(x) for x in test])
 class MulticlassPerceptron(object):
 
     def __init__(self, examples, iterations):
-        pass
+        # follow iven psuedocode specification very closely
+        # initialize the weight vector mapping scheme and list
+        # for labels
+        self.new_labels = []
+        self.possible_weights = dict()
+        # for each x and y value in the examples
+        # iterable
+        for value in examples:
+            x_val = value[0]
+            y_val = value[1]
+            # Initialize the weight vectors as wlk to
+            # 0 for k = 1, ... m. Append current y value
+            # to the label list
+            if y_val not in self.possible_weights:
+                self.new_labels.append(y_val)
+                self.possible_weights[y_val] = dict()
+        # iterate through the number of iterations iterations number
+        # of times for exact iterations passes over the training set
+        for i in range(0, iterations, 1):
+            # for each x and y value in the examples
+            # iterable
+            for value in examples:
+                x_val = value[0]
+                y_val = value[1]
+                # Compute the predicted label as yi hat = argmax(wlk * xi)
+                new_predication = self.predict(x_val)
+                # if y hat is not eqaul to yi
+                if new_predication != y_val:
+                    # then for each weight from the weight table,
+                    # grab the current score from the preidciation and set
+                    # wyi to wyi + xi increasing the value overall
+                    for feature, val in x_val.items():
+                        self.possible_weights[y_val][feature] = (
+                            self.possible_weights[y_val].get(feature, 0) + val
+                        )
+                    # then for each weight from the weight table,
+                    # grab the current score from the preidciation and set
+                    # wyi to wyi - xi decrasing the value overall
+                    for feature, val in x_val.items():
+                        self.possible_weights[new_predication][feature] = (
+                            self.possible_weights[new_predication].get(
+                                feature, 0) - val
+                        )
 
     def predict(self, x):
-        pass
+        # compute th dot product for each label and return the label
+        # with the highest score goal
+        # capture both the new score and improved
+        # labels as seperate logical variables
+        improved_label = None
+        improved_score = None
+        # iterate through the list of labels and keep track of the current
+        # score
+        for current_label in self.new_labels:
+            current_score = 0
+            # iterate through the given x value map
+            # and for every feature value found, try to retreive that same
+            # feature value from the weights vectors
+            # and mutiply that value by the
+            # current x map value and add it to the current score
+            for feature, val in x.items():
+                tl = self.possible_weights[current_label].get(feature, 0) * val
+                current_score += tl
+            # if there is no current value for the improved score or
+            # current score is bigger than the improved score, assign improved
+            # score to the current score and new label to the current label
+            if improved_score is None or current_score > improved_score:
+                improved_score = current_score
+                improved_label = current_label
+        return improved_label
 
+
+# Test cases
+train = [({"x1": 1}, 1), ({"x1": 1, "x2": 1}, 2), ({"x2": 1}, 3),
+         ({"x1": -1, "x2": 1}, 4), ({"x1": -1}, 5), ({"x1": -1, "x2": -1}, 6),
+         ({"x2": -1}, 7), ({"x1": 1, "x2": -1}, 8)]
+p = MulticlassPerceptron(train, 10)
+print([p.predict(x) for x, y in train])
 ############################################################
 # Section 2: Applications
 ############################################################
