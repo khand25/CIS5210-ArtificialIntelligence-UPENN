@@ -171,10 +171,52 @@ print([p.predict(x) for x, y in train])
 class IrisClassifier(object):
 
     def __init__(self, data):
-        pass
+        # store each of the columns from the iris dataset
+        iris_rows = []
+        # iterate through each of the rows in the iris dataset
+        for value in data:
+            # x_val is a tuple of 4 elements containing
+            # each iris plants measurements for their attributes
+            x_val = value[0]
+            # y_val is the classification of the iris plant based
+            # on its feature value
+            y_val = value[1]
+            attributes = dict()
+            # add all 4 features from each row in the iris dataset
+            # to the attributes dictionary as a valid feature name to value
+            # key value pair
+            attributes["sepal_length"] = x_val[0]
+            attributes["sepal_width"] = x_val[1]
+            attributes["petal_length"] = x_val[2]
+            attributes["petal_width"] = x_val[3]
+            # fully convert each row in the iris dataset into
+            # a clear valid tuple to add to our iris_rows list
+            row_to_add = (attributes, y_val)
+            iris_rows.append(row_to_add)
+        # create a mutliclassperception instance from our class above
+        # to be used as their machine learning model to later classify
+        # the iris dataset values
+        self.model = MulticlassPerceptron(iris_rows, 25)
 
     def classify(self, instance):
-        pass
+        attributes = dict()
+        # add all 4 features from each row in the iris dataset
+        # to the attributes dictionary as a valid feature name to value
+        # key value pair
+        attributes["sepal_length"] = instance[0]
+        attributes["sepal_width"] = instance[1]
+        attributes["petal_length"] = instance[2]
+        attributes["petal_width"] = instance[3]
+        # return the proper predicted iris plant classification
+        # using our MulticlassPerceptron model from above
+        return self.model.predict(attributes)
+
+
+# Test cases for IrisClassifier
+c = IrisClassifier(data.iris)
+print(c.classify((5.1, 3.5, 1.4, 0.2)))
+c = IrisClassifier(data.iris)
+print(c.classify((7.0, 3.2, 4.7, 1.4)))
 
 
 class DigitClassifier(object):
