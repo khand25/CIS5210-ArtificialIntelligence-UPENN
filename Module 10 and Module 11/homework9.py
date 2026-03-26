@@ -199,6 +199,7 @@ class IrisClassifier(object):
         self.model = MulticlassPerceptron(iris_rows, 25)
 
     def classify(self, instance):
+        # store the feature values as a mapping scheme
         attributes = dict()
         # add all 4 features from each row in the iris dataset
         # to the attributes dictionary as a valid feature name to value
@@ -222,10 +223,52 @@ print(c.classify((7.0, 3.2, 4.7, 1.4)))
 class DigitClassifier(object):
 
     def __init__(self, data):
-        pass
+        rows_with_digits = []
+        # iterate through the rows in the digit pixel dataset
+        for value in data:
+            # x_val is a tuple of 64 elements containing
+            # pixel counts between digits 0 -16 inclusively
+            x_val = value[0]
+            # y_val is digit represented by the image in te dataset
+            y_val = value[1]
+            # store the feature values as a mapping scheme
+            attributes = dict()
+            # for every digit in the x tuple,
+            # conctenate with the "pixel_" string
+            # literal and add it as a new key value pair
+            # with the digit as a value
+            # to our feature dict
+            for i in range(0, len(x_val), 1):
+                temp = "pixel_" + str(i)
+                attributes[temp] = x_val[i]
+            # fully convert each row in the pixel dataset into
+            # a clear valid tuple to add to our rows_with_digits list
+            row_val = (attributes, y_val)
+            rows_with_digits.append(row_val)
+        # create a mutliclassperception instance from our class above
+        # to be used as their machine learning model to later classify
+        # the pixel dataset values
+        self.model = MulticlassPerceptron(rows_with_digits, 20)
 
     def classify(self, instance):
-        pass
+        # store the feature values as a mapping scheme
+        attributes = dict()
+        # for every digit in the instance tuple,
+        # conctenate with the "pixel_" string
+        # literal and add it as a new key value
+        # pair with the digit as a value
+        # to our feature dict
+        for i in range(0, len(instance), 1):
+            temp = "pixel_" + str(i)
+            attributes[temp] = instance[i]
+        # return the proper predicted digit pixel classification
+        # using our MulticlassPerceptron model from above
+        return self.model.predict(attributes)
+# Test case
+c = DigitClassifier(data.digits)
+print(c.classify((0,0,5,13,9,1,0,0,0,0,13,15,10,15,5,0,0,3,
+15,2,0,11,8,0,0,4,12,0,0,8,8,0,0,5,8,0,0,9,8,0,0,4,11,
+0,1,12,7,0,0,2,14,5,10,12,0,0,0,0,6,13,10,0,0,0)))
 
 
 class BiasClassifier(object):
