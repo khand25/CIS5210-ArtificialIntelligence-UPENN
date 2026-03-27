@@ -264,9 +264,11 @@ class DigitClassifier(object):
         # return the proper predicted digit pixel classification
         # using our MulticlassPerceptron model from above
         return self.model.predict(attributes)
+
+
 # Test case
 c = DigitClassifier(data.digits)
-print(c.classify((0,0,5,13,9,1,0,0,0,0,13,15,10,15,5,0,0,3,
+print(c.classify((0, 0,5, 13, 9, 1, 0, 0,0,0,13,15,10,15,5,0,0,3,
 15,2,0,11,8,0,0,4,12,0,0,8,8,0,0,5,8,0,0,9,8,0,0,4,11,
 0,1,12,7,0,0,2,14,5,10,12,0,0,0,0,6,13,10,0,0,0)))
 
@@ -274,10 +276,44 @@ print(c.classify((0,0,5,13,9,1,0,0,0,0,13,15,10,15,5,0,0,3,
 class BiasClassifier(object):
 
     def __init__(self, data):
-        pass
+        example_list = []
+        # iterate through the rows in the data.bias
+        # dataset and for each row, add it to our attributes
+        # dictionary mapping scheme to use our BinaryPerception
+        # class model
+        for value in data:
+            x_val = value[0]
+            y_val = value[1]
+            attributes = dict()
+            attributes["x"] = x_val
+            # add a bais feature to each of the rows in the
+            # dataset
+            attributes["bias"] = 1
+            # fully convert each row in the bias dataset into
+            # a clear valid tuple to add to our examples list
+            row_val = (attributes, y_val)
+            example_list.append(row_val)
+        # Use our BinaryPerceptron model from above as compling
+        # with the assingment instructions
+        self.model = BinaryPerceptron(example_list, 15)
 
     def classify(self, instance):
-        pass
+        # dictionary mapping scheme to
+        # store the rows in he bias dataset properly
+        attributes = dict()
+        attributes["x"] = instance
+        # add a bias feature to each of the rows in the
+        # dataset
+        attributes["bias"] = 1
+        # return the proper predicted bias classifier classification
+        # using our BinaryPerceptron model from above
+        result = self.model.predict(attributes)
+        return result
+
+
+# Test case for BiasClassifierClass
+c = BiasClassifier(data.bias)
+print([c.classify(x) for x in (-1, 0, 0.5, 1.5, 2)])
 
 
 class MysteryClassifier1(object):
