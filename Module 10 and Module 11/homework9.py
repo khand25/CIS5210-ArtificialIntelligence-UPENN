@@ -319,10 +319,58 @@ print([c.classify(x) for x in (-1, 0, 0.5, 1.5, 2)])
 class MysteryClassifier1(object):
 
     def __init__(self, data):
-        pass
+        example_list = []
+        # iterate through the rows in the data.mystery1
+        # dataset and for each row, add it to our attributes
+        # dictionary mapping scheme to use our BinaryPerception
+        # class model
+        for value in data:
+            x_val = value[0]
+            y_val = value[1]
+
+            # each x value is a 2 item tuple
+            # consisting of a coordinate pair for a point
+            # y value is the binary classification label of
+            # the feature point
+            attributes = dict()
+            # ensure linear seperation is possible by squaring both x value
+            # tuple values to gether and summing their results
+            higher_dimension = (x_val[0] ** 2) + (x_val[1] ** 2)
+            attributes["higher_dimension"] = higher_dimension
+            # add a bias feature to each of the rows in the
+            # dataset
+            attributes["bias"] = 1
+            # fully convert each row in the mystery1 dataset into
+            # a clear valid tuple to add to our examples list
+            row_val = (attributes, y_val)
+            example_list.append(row_val)
+        # Use our BinaryPerceptron model from above as compling
+        # with the assingment instructions
+        self.model = BinaryPerceptron(example_list, 20)
 
     def classify(self, instance):
-        pass
+        # x_val1 = instance[0]
+        # x_val2 = instance[1]
+        # dictionary mapping scheme to
+        # store the rows in the mystery1 dataset properly
+        attributes = dict()
+        # ensure linear seperation is possible by squaring both x value
+        # tuple values to gether and summing their results
+        higher_dimension = (instance[0] ** 2) + (instance[1] ** 2)
+        attributes["higher_dimension"] = higher_dimension
+        # add a bias feature to each of the rows in the
+        # dataset
+        attributes["bias"] = 1
+        # return the proper predicted bias classifier classification
+        # using our BinaryPerceptron model from above
+        result = self.model.predict(attributes)
+        return result
+
+
+# Test case for MysteryClassifier1 code
+c = MysteryClassifier1(data.mystery1)
+print([c.classify(x) for x in ((0, 0), (0, 1),
+                               (-1, 0), (1, 2), (-3, -4))])
 
 
 class MysteryClassifier2(object):
