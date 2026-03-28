@@ -72,14 +72,14 @@ class BinaryPerceptron(object):
 
 
 # Test case for BinaryPerceptron class
-train = [({"x1": 1}, True), ({"x2": 1}, True),
-         ({"x1": -1}, False), ({"x2": -1}, False)]
+# train = [({"x1": 1}, True), ({"x2": 1}, True),
+# ({"x1": -1}, False), ({"x2": -1}, False)]
 
-test = [{"x1": 1}, {"x1": 1, "x2": 1}, {"x1": -1, "x2": 1.5},
-        {"x1": -0.5, "x2": -2}]
+# test = [{"x1": 1}, {"x1": 1, "x2": 1}, {"x1": -1, "x2": 1.5},
+# {"x1": -0.5, "x2": -2}]
 
-p = BinaryPerceptron(train, 1)
-print([p.predict(x) for x in test])
+# p = BinaryPerceptron(train, 1)
+# print([p.predict(x) for x in test])
 
 
 class MulticlassPerceptron(object):
@@ -158,11 +158,11 @@ class MulticlassPerceptron(object):
 
 
 # Test cases
-train = [({"x1": 1}, 1), ({"x1": 1, "x2": 1}, 2), ({"x2": 1}, 3),
-         ({"x1": -1, "x2": 1}, 4), ({"x1": -1}, 5), ({"x1": -1, "x2": -1}, 6),
-         ({"x2": -1}, 7), ({"x1": 1, "x2": -1}, 8)]
-p = MulticlassPerceptron(train, 10)
-print([p.predict(x) for x, y in train])
+# train = [({"x1": 1}, 1), ({"x1": 1, "x2": 1}, 2), ({"x2": 1}, 3),
+# ({"x1": -1, "x2": 1}, 4), ({"x1": -1}, 5), ({"x1": -1, "x2": -1}, 6),
+# ({"x2": -1}, 7), ({"x1": 1, "x2": -1}, 8)]
+# p = MulticlassPerceptron(train, 10)
+# print([p.predict(x) for x, y in train])
 ############################################################
 # Section 2: Applications
 ############################################################
@@ -214,10 +214,10 @@ class IrisClassifier(object):
 
 
 # Test cases for IrisClassifier
-c = IrisClassifier(data.iris)
-print(c.classify((5.1, 3.5, 1.4, 0.2)))
-c = IrisClassifier(data.iris)
-print(c.classify((7.0, 3.2, 4.7, 1.4)))
+# c = IrisClassifier(data.iris)
+# print(c.classify((5.1, 3.5, 1.4, 0.2)))
+# c = IrisClassifier(data.iris)
+# print(c.classify((7.0, 3.2, 4.7, 1.4)))
 
 
 class DigitClassifier(object):
@@ -267,10 +267,10 @@ class DigitClassifier(object):
 
 
 # Test case
-c = DigitClassifier(data.digits)
-print(c.classify((0, 0,5, 13, 9, 1, 0, 0,0,0,13,15,10,15,5,0,0,3,
-15,2,0,11,8,0,0,4,12,0,0,8,8,0,0,5,8,0,0,9,8,0,0,4,11,
-0,1,12,7,0,0,2,14,5,10,12,0,0,0,0,6,13,10,0,0,0)))
+# c = DigitClassifier(data.digits)
+# print(c.classify((0, 0,5, 13, 9, 1, 0, 0,0,0,13,15,10,15,5,0,0,3,
+# 15,2,0,11,8,0,0,4,12,0,0,8,8,0,0,5,8,0,0,9,8,0,0,4,11,
+# 0,1,12,7,0,0,2,14,5,10,12,0,0,0,0,6,13,10,0,0,0)))
 
 
 class BiasClassifier(object):
@@ -312,8 +312,8 @@ class BiasClassifier(object):
 
 
 # Test case for BiasClassifierClass
-c = BiasClassifier(data.bias)
-print([c.classify(x) for x in (-1, 0, 0.5, 1.5, 2)])
+# c = BiasClassifier(data.bias)
+# print([c.classify(x) for x in (-1, 0, 0.5, 1.5, 2)])
 
 
 class MysteryClassifier1(object):
@@ -368,9 +368,9 @@ class MysteryClassifier1(object):
 
 
 # Test case for MysteryClassifier1 code
-c = MysteryClassifier1(data.mystery1)
-print([c.classify(x) for x in ((0, 0), (0, 1),
-                               (-1, 0), (1, 2), (-3, -4))])
+# c = MysteryClassifier1(data.mystery1)
+# print([c.classify(x) for x in ((0, 0), (0, 1),
+# (-1, 0), (1, 2), (-3, -4))])
 
 
 class MysteryClassifier2(object):
@@ -429,9 +429,9 @@ class MysteryClassifier2(object):
 
 
 # Test case for MysteryClassifier2 class
-c = MysteryClassifier2(data.mystery2)
-print([c.classify(x) for x in ((1, 1, 1), (-1, -1, -1),
-                               (1, 2, -3), (-1, -2, 3))])
+# c = MysteryClassifier2(data.mystery2)
+# print([c.classify(x) for x in ((1, 1, 1), (-1, -1, -1),
+# (1, 2, -3), (-1, -2, 3))])
 
 
 ############################################################
@@ -441,19 +441,29 @@ print([c.classify(x) for x in ((1, 1, 1), (-1, -1, -1),
 
 # Just an approximation is fine.
 feedback_question_1 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I spent anywhere around 13 - 14 hours working
+on this homework assignment
+spread out during this week
 """
 
 feedback_question_2 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I found the creation of the multiclass
+perceptron to be the toughest part of this
+assingment as it had requried be to fully
+understand how basic perceptrons worked
+with the help of outside Youtube videos.
+I had to try to visulize on pen and paper
+how a multiclass perceptron can be drawn
+and applied to a specific dataset which was
+challenging but also very engaging
 """
 
 feedback_question_3 = """
-Type your response here.
-Your response may span multiple lines.
-Do not include these instructions in your response.
+I liked working through the datasets
+from the data file as it gave hands
+on exprience with working on the two models I was able to
+create above. Specifically revisiting the famous iris dataset was fun
+as in my prior Data Mining class, I had applied the KNN algorithm to this
+dataset and comparing and contrasting it with a multiclass Perceptron was
+quite surprising.
 """
