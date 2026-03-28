@@ -254,7 +254,7 @@ class DigitClassifier(object):
         # store the feature values as a mapping scheme
         attributes = dict()
         # for every digit in the instance tuple,
-        # conctenate with the "pixel_" string
+        # concatenate with the "pixel_" string
         # literal and add it as a new key value
         # pair with the digit as a value
         # to our feature dict
@@ -361,7 +361,7 @@ class MysteryClassifier1(object):
         # add a bias feature to each of the rows in the
         # dataset
         attributes["bias"] = 1
-        # return the proper predicted bias classifier classification
+        # return the proper predicted mystery 1 classifier classification
         # using our BinaryPerceptron model from above
         result = self.model.predict(attributes)
         return result
@@ -376,10 +376,63 @@ print([c.classify(x) for x in ((0, 0), (0, 1),
 class MysteryClassifier2(object):
 
     def __init__(self, data):
-        pass
+        example_list = []
+        # iterate through the rows in the data.mystery2
+        # dataset and for each row, add it to our attributes
+        # dictionary mapping scheme to use our BinaryPerception
+        # class model
+        for value in data:
+            x_val = value[0]
+            y_val = value[1]
+            # each x value is a 3 item tuple
+            # consisting of a coordinate pair for a point
+            # y value is the binary classification label of
+            # the feature point
+            attributes = dict()
+            x_val1 = x_val[0]
+            x_val2 = x_val[1]
+            x_val3 = x_val[2]
+            # ensure linear seperation is possible by
+            # taking the product of all three
+            # x values
+            # tuple values to gather their commulative results
+            three_dimensional = x_val1 * x_val2 * x_val3
+            attributes["three_dimensional"] = three_dimensional
+            # add a bias feature to each of the rows in the
+            # dataset
+            attributes["bias"] = 1
+            # fully convert each row in the mystery2 dataset into
+            # a clear valid tuple to add to our examples list
+            row_val = (attributes, y_val)
+            example_list.append(row_val)
+        # Use our BinaryPerceptron model from above compliing
+        # with the assignment instructions
+        self.model = BinaryPerceptron(example_list, 20)
 
     def classify(self, instance):
-        pass
+        # dictionary mapping scheme to
+        # store the rows in the mystery2 dataset properly
+        attributes = dict()
+        # ensure linear seperation is
+        # possible by taking the product of all three
+        # x values
+        # tuple values to gather their results
+        three_dimensional = instance[0] * instance[1] * instance[2]
+        attributes["three_dimensional"] = three_dimensional
+        # add a bias feature to each of the rows in the
+        # dataset
+        attributes["bias"] = 1
+        # return the proper predicted mystery2 classifier classification
+        # using our BinaryPerceptron model from above
+        result = self.model.predict(attributes)
+        return result
+
+
+# Test case for MysteryClassifier2 class
+c = MysteryClassifier2(data.mystery2)
+print([c.classify(x) for x in ((1, 1, 1), (-1, -1, -1),
+                               (1, 2, -3), (-1, -2, 3))])
+
 
 ############################################################
 # Section 3: Feedback
