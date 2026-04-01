@@ -241,6 +241,7 @@ class DigitClassifier(object):
             for i in range(0, len(x_val), 1):
                 temp = "pixel_" + str(i)
                 attributes[temp] = x_val[i]
+            # attributes["bias"] = 1
             # fully convert each row in the pixel dataset into
             # a clear valid tuple to add to our rows_with_digits list
             row_val = (attributes, y_val)
@@ -261,6 +262,7 @@ class DigitClassifier(object):
         for i in range(0, len(instance), 1):
             temp = "pixel_" + str(i)
             attributes[temp] = instance[i]
+        # attributes["bias"] = 1
         # return the proper predicted digit pixel classification
         # using our MulticlassPerceptron model from above
         return self.model.predict(attributes)
