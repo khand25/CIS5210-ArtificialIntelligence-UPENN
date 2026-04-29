@@ -93,8 +93,8 @@ def transpose(matrix):
         result_list.append(temp_list)
         temp_list = []
     return result_list
-# print(transpose([[1,2,3]]))
-# print(transpose([[1,2],[3,4],[5,6]]))
+print(transpose([[1,2,3]]))
+print(transpose([[1,2],[3,4],[5,6]]))
 
 ############################################################
 # Section 3: Sequence Slicing
